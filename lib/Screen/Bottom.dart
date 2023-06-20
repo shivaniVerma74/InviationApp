@@ -109,13 +109,16 @@ class _BottomScreenState extends State<BottomScreen> {
             });
         return true;
       },
+
       child: SafeArea(
         child: Scaffold(
           drawer: getDrawer(),
           appBar: AppBar(
             centerTitle: true,
             backgroundColor:colors.primary,
-            title: Image.asset("assets/images/homeimage.png",height: 50,width: 50,),
+            elevation: 0,
+            title: Image.asset("assets/images/homeimage.png",height: 50,
+                width: 50),
           ),
           body: Center(
             child: pages1.elementAt(currentindex),
@@ -144,6 +147,7 @@ class _BottomScreenState extends State<BottomScreen> {
       ),
     );
   }
+
   getDrawer() {
     return Container(
       color: Colors.white,
@@ -153,7 +157,7 @@ class _BottomScreenState extends State<BottomScreen> {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 12),
             height: 120,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,
@@ -170,7 +174,7 @@ class _BottomScreenState extends State<BottomScreen> {
                     "${getprofile?.data?.first.profilePic}",
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Container(
@@ -182,12 +186,12 @@ class _BottomScreenState extends State<BottomScreen> {
                         children: [
                           Text(
                             "${getprofile?.data?.first.username}",
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 15,
                                 fontWeight: FontWeight.w500),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 3,
                           ),
                         ],
@@ -267,6 +271,23 @@ class _BottomScreenState extends State<BottomScreen> {
               );
             },
           ),
+          ListTile(
+            leading: Image.asset(
+              "assets/images/enquiry.png",
+              color: colors.black54,
+              height: 40,
+              width: 40,
+            ),
+            title: Text(
+              'Enquiry',
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => BottomScreen()),
+              );
+            },
+          ),
 
           // ListTile(
           //   leading: Image.asset(
@@ -333,7 +354,7 @@ class _BottomScreenState extends State<BottomScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => TermsCondition()),
+                MaterialPageRoute(builder: (context) => DragAndDropExample()),
               );
             },
           ),

@@ -263,6 +263,7 @@ class _EventsScreenState extends State<EventsScreen> {
   //     });
   //   }
   // }
+
   _shareQrCode() async {
     iconVisible = true;
     PermissionStatus storagePermission = await Permission.storage.request();
@@ -272,9 +273,7 @@ class _EventsScreenState extends State<EventsScreen> {
         if (image != null) {
           try {
             String fileName = DateTime
-                .now()
-                .microsecondsSinceEpoch
-                .toString();
+                .now().microsecondsSinceEpoch.toString();
             final imagePath = await File('$directory/$fileName.png').create();
             if (imagePath != null) {
               await imagePath.writeAsBytes(image);
@@ -290,7 +289,6 @@ class _EventsScreenState extends State<EventsScreen> {
           SnackBar(content: Text('This Permission is recommended')));
     } else if (storagePermission == PermissionStatus.permanentlyDenied) {
       openAppSettings().then((value) {
-
       });
     }
   }
@@ -313,7 +311,6 @@ class _EventsScreenState extends State<EventsScreen> {
       print("this is a response===========>${finalResult}");
       setState(() {
         _sliderModel = finalResult;
-
       });
     } else {
       print(response.reasonPhrase);

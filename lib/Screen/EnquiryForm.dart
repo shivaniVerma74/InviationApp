@@ -169,7 +169,8 @@ class _EnquiryFormState extends State<EnquiryForm> {
                                     enquirySend();
                                     // Fluttertoast.showToast(msg: "Enquiry submit successfully");
                                     if(_formKey.currentState!.validate())
-                                    setState(() {});
+                                    setState(() {
+                                    });
                                   },
                                   child: Text("Submit")
                               ),

@@ -231,17 +231,9 @@ class _UpdateScreenListCardState extends State<UpdateScreenListCard> {
   _shareQrCode({String? text}) async {
     iconVisible = true ;
     var status =  await Permission.photos.request();
-    //Permission.manageExternalStorage.request();
-
-   //PermissionStatus storagePermission = await Permission.storage.request();
     if ( status.isGranted/*storagePermission == PermissionStatus.denied*/) {
       final directory = (await getApplicationDocumentsDirectory()).path;
-
       RenderRepaintBoundary bound = keyList.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      /*if(bound.debugNeedsPaint){
-        Timer(const Duration(seconds: 2),()=>_shareQrCode());
-        return null;
-      }*/
       ui.Image image = await bound.toImage(pixelRatio: 10);
       ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
 
@@ -256,36 +248,17 @@ class _UpdateScreenListCardState extends State<UpdateScreenListCard> {
         final imagePath = await File('$directory/$fileName.png').create();
         await imagePath.writeAsBytes(pngBytes);
         Share.shareFiles([imagePath.path],text: text);
-        // final resultsave = await ImageGallerySaver.saveImage(Uint8List.fromList(pngBytes),quality: 90,name: 'screenshot-${DateTime.now()}.png');
-        //print(resultsave);
       }
-      /*_screenshotController.capture().then((Uint8List? image) async {
-        if (image != null) {
-          try {
-            String fileName = DateTime
-                .now()
-                .microsecondsSinceEpoch
-                .toString();
-
-            final imagePath = await File('$directory/$fileName.png').create();
-            if (imagePath != null) {
-              await imagePath.writeAsBytes(image);
-              Share.shareFiles([imagePath.path],text: text);
-            }
-          } catch (error) {}
-        }
-      }).catchError((onError) {
-        print('Error --->> $onError');
-      });*/
     } else if (await status.isDenied/*storagePermission == PermissionStatus.denied*/) {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('This Permission is recommended')));
     } else if (await status.isPermanentlyDenied/*storagePermission == PermissionStatus.permanentlyDenied*/) {
       openAppSettings().then((value) {
-
       });
     }
   }
+
+
   getNewWishlistApi(String id) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? userId = preferences.getString('userId');

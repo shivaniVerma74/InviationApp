@@ -69,8 +69,6 @@ class _EventAndWebinerState extends State<EventAndWebiner> {
       final finalResult = json.decode(result);
       print("thi os ojon==========>${finalResult}");
       Fluttertoast.showToast(msg: finalResult['message']);
-
-
     }
     else {
       print(response.reasonPhrase);

@@ -555,8 +555,8 @@ class _HomeScreenState extends State<HomeScreen> {
           autoPlayAnimationDuration: Duration(milliseconds: 500),
           enlargeCenterPage: false,
           scrollDirection: Axis.horizontal,
-          height: 180.0),
-      items: _sliderModel?.data?.map((item) {
+          height: 200.0),
+         items: _sliderModel?.data?.map((item) {
         return CommonSlider(file: item.image ?? '',);
       }).toList(),
     );
@@ -597,6 +597,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
   }
+
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
   new GlobalKey<RefreshIndicatorState>();
   Future<Null> _refresh() {
@@ -704,7 +705,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           : _CarouselSlider1(),
                     ),
                     Positioned(
-                      bottom: 20,
+                     top: 190,
                       // left: 80,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -714,7 +715,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 const SizedBox(
-                  height: 5,
+                  height: 15,
                 ),
                 customTabbar()
                 // SizedBox(height: 100,),
@@ -735,8 +736,8 @@ class _HomeScreenState extends State<HomeScreen> {
         dots.add(
           Container(
             margin: EdgeInsets.all(1.5),
-            width: 6,
-            height: 6,
+            width: 10,
+            height: 10,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: _currentPost == i ? colors.secondary : colors.primary,
@@ -868,6 +869,5 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
 }
 

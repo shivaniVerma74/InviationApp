@@ -682,6 +682,7 @@ searchProduct(String value) {
     }
     return dots;
   }
+
   getPosterList(model, int index){
     return  Card(
         elevation: 4,
@@ -755,18 +756,16 @@ searchProduct(String value) {
                       },icon: getAwareNess?.data.mPoster?[index].isSelected?? false ?Icon(Icons.favorite,color: colors.red,):Icon(Icons.favorite_outline,color: colors.red,)),
                     ],
                   ):SizedBox.shrink()
-
-
                 ],
               ),
-
-              SizedBox(height: 10,)
+              SizedBox(height: 10)
 
             ],
           ),
         )
     );
   }
+
   _shareQrCode() async {
     iconVisible = true;
     iconVisible1 = true;
@@ -790,17 +789,18 @@ searchProduct(String value) {
           } catch (error) {}
         }
       }).catchError((onError) {
-        print('Error --->> $onError');
+        print('Error--->> $onError');
       });
     } else if (storagePermission == PermissionStatus.denied) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('This Permission is recommended')));
     } else if (storagePermission == PermissionStatus.permanentlyDenied) {
       openAppSettings().then((value) {
-
       });
     }
   }
+
+
   bookletsList(model, int index){
     return Card(
         elevation: 4,

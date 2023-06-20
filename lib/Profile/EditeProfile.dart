@@ -349,26 +349,25 @@ class _EditeProfileState extends State<EditeProfile> {
                       ),
 
                     ),
-                    SizedBox(height: 10,),
-
-                    Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Text("City Address", style: TextStyle(
-                          color: colors.black54, fontWeight: FontWeight.bold),),
-                    ),
-                    SizedBox(height: 10,),
-                    TextFormField(
-                      controller: addressController,
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                          hintText: 'City Address',
-                          hintStyle: TextStyle(
-                              fontSize: 15.0, color: colors.secondary),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          contentPadding: EdgeInsets.only(left: 10, top: 10)
-                      ),
-                    ),
+                    // SizedBox(height: 10,),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(5.0),
+                    //   child: Text("City Address", style: TextStyle(
+                    //       color: colors.black54, fontWeight: FontWeight.bold),),
+                    // ),
+                    // SizedBox(height: 10,),
+                    // TextFormField(
+                    //   controller: addressController,
+                    //   keyboardType: TextInputType.text,
+                    //   decoration: InputDecoration(
+                    //       hintText: 'City Address',
+                    //       hintStyle: TextStyle(
+                    //           fontSize: 15.0, color: colors.secondary),
+                    //       border: OutlineInputBorder(
+                    //           borderRadius: BorderRadius.circular(10)),
+                    //       contentPadding: EdgeInsets.only(left: 10, top: 10)
+                    //   ),
+                    // ),
                     const SizedBox(height: 10,),
 
                   ],

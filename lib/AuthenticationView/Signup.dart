@@ -4,6 +4,7 @@ import 'package:doctorapp/AuthenticationView/LoginScreen.dart';
 import 'package:doctorapp/Helper/Color.dart';
 import 'package:doctorapp/New_model/GetCityModel.dart';
 import 'package:doctorapp/New_model/registration_model2.dart';
+import 'package:doctorapp/Screen/Bottom.dart';
 import 'package:doctorapp/api/api_services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 // import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
@@ -70,8 +71,10 @@ class _SignupScreenState extends State<SignupScreen> {
       'mobile': mobileController.text,
       'address': "Indore",
       'city_id': cities.toString(),
+      'lat': "",
+      'lng':"",
     });
-    print('____request.fields______${request.fields}_________');
+    print('____request.fields${request.fields}_________');
 
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
@@ -95,7 +98,6 @@ class _SignupScreenState extends State<SignupScreen> {
       print(response.reasonPhrase);
     }
   }
-
 
   GetCityModel? getCityModel;
   String? city_id;

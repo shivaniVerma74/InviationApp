@@ -22,9 +22,11 @@ class _TemplateScreenState extends State<TemplateScreen> {
   @override
   void initState() {
     super.initState();
-    // getTemplate();
+    //
     getCategory();
   }
+
+  // File? imageShow;
 
   TemplatesModel? templatesModel;
   getTemplate() async {
@@ -84,6 +86,18 @@ class _TemplateScreenState extends State<TemplateScreen> {
     }
   }
 
+
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+  new GlobalKey<RefreshIndicatorState>();
+  Future<Null> _refresh() {
+    return callApi();
+  }
+  Future<Null> callApi() async {
+    getTemplate();
+    getCategory();
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,16 +109,20 @@ class _TemplateScreenState extends State<TemplateScreen> {
         elevation: 0,
         title: Text("Templates"),
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 5,
-            ),
-            customTabbar(),
-            SizedBox(height: 15),
-            templateView(),
-          ],
+      body: RefreshIndicator(
+        key: _refreshIndicatorKey,
+        onRefresh: _refresh,
+        child: SafeArea(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 5,
+              ),
+              customTabbar(),
+              SizedBox(height: 15),
+              templateView(),
+            ],
+          ),
         ),
       ),
     );
@@ -114,7 +132,7 @@ class _TemplateScreenState extends State<TemplateScreen> {
     print("mmmmmmmmmmmmm ${templatesModel}");
     return Container(
       height: 500,
-      child:templatesModel == null ? Center(child: Text("No template to show"))  : GridView.builder(
+      child: templatesModel == null ? Center(child: Text("No template to show"))  : GridView.builder(
         scrollDirection: Axis.vertical,
         itemCount: templatesModel?.data?.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -124,7 +142,7 @@ class _TemplateScreenState extends State<TemplateScreen> {
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Form_Screen()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Form_Screen(image: templatesModel?.data?[index].image)));
             },
             child: Padding(
               padding: EdgeInsets.all(1),
@@ -176,16 +194,14 @@ class _TemplateScreenState extends State<TemplateScreen> {
               getcategoryModel?.data?.forEach((element) {element.select=false;});
               getcategoryModel?.data?[index].select=true;
               setState(() {
-
               });
-
               getTemplate();
               // Navigator.push(context, MaterialPageRoute(builder: (context) => GroceryDetails(id: foodCategoryModel!.product![index].id)));
             },
             child: Padding(
               padding: EdgeInsets.all(5),
               child: Card(
-                color:getcategoryModel?.data?[index].select ?? false ?  colors.primary : Colors.white,
+                color: getcategoryModel?.data?[index].select ?? false ?  colors.primary : Colors.white,
                 // color: _currentIndex == 1 ? colors.primary: colors.secondary,
                 elevation: 3,
                 semanticContainer: true,
@@ -207,7 +223,7 @@ class _TemplateScreenState extends State<TemplateScreen> {
                         Padding(
                           padding: const EdgeInsets.only(left: 3, top: 8),
                           child: Center(
-                            child: Text("${getcategoryModel?.data?[index].cName}"
+                            child: getcategoryModel == null ? Center(child: Text("--")): Text("${getcategoryModel?.data?[index].cName}"
                                 ,style: TextStyle(
                                     color: getcategoryModel?.data?[index].select ?? false ?  Colors.white : Colors.black,
                                     fontWeight: FontWeight.bold,fontSize: 11, fontFamily: 'Afrah')

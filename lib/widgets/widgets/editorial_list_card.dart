@@ -117,7 +117,6 @@ class _EditorialListCardState extends State<EditorialListCard> {
                         },icon: widget.getEdoDataList?.isFav ?? false ? Icon(Icons.favorite,color: colors.red,): widget.getEdoDataList?.isSelected ?? false ?Icon(Icons.favorite,color: colors.red,) :  Icon(Icons.favorite_outline,color: colors.red,))
                       ],
                     ):SizedBox.shrink()
-
                   ],
                 ),
                 Column(
@@ -231,6 +230,7 @@ class _EditorialListCardState extends State<EditorialListCard> {
       });
     }
   }
+
   downloadFile(String url, String filename) async {
     FileDownloader.downloadFile(
         url: "${url}",
@@ -246,7 +246,6 @@ class _EditorialListCardState extends State<EditorialListCard> {
               children: [
                 const Text('doctorapp Saved in your storage'),
                 TextButton(onPressed: (){}, child: Text("View"))
-
               ],
             ),
           );

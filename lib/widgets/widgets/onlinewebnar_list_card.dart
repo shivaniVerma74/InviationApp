@@ -408,7 +408,6 @@ class _OnlineWebinarListCardState extends State<OnlineWebinarListCard> {
               children: [
                 const Text('doctorapp Saved in your storage'),
                 TextButton(onPressed: (){}, child: Text("View"))
-
               ],
             ),
           );

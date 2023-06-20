@@ -237,6 +237,7 @@ class _EventsListCardState extends State<EventsListCard> {
   //     });
   //   }
   // }
+
   _shareQrCode(String text) async {
     iconVisible = true ;
     var status =  await Permission.photos.request();

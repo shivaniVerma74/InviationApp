@@ -94,69 +94,137 @@ class _EventDetailsState extends State<EventDetails> {
                         margin: EdgeInsets.all(10),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                         elevation: 5.0,
-                        child: Container(
-                          height: MediaQuery.of(context).size.width/2,
-                          width: MediaQuery.of(context).size.width/1,
-                          child:Row(
-                            children: [
-                              Padding(padding: EdgeInsets.all(10)),
-                              Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Container(
+                            height: MediaQuery.of(context).size.width/1.1,
+                            width: MediaQuery.of(context).size.width/1,
+                            child:Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+
+                                      borderRadius: BorderRadius.circular(10),
+
+                                      // image: DecorationImage(image: AssetImage('assets/images/img.png'),fit: BoxFit.fill)
+                                    ),
+                                    height: 140,
+                                    width: MediaQuery.of(context).size.width,
+                                    child:
+
+                                    // Image.asset('assets/images/img.png'),
+                                    Image.network("${eventListModel?.data?[index].profileImage}"),
                                   ),
-                                  height: 140,
-                                  width: 140,
-                                  child: Image.network("${eventListModel?.data?[index].profileImage}")
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              Container(
-                                alignment: Alignment.topRight,
-                                margin: EdgeInsets.only(left: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(padding: EdgeInsets.only(top: 25)),
-                                    Row(
+                                ),
+                                // SizedBox(
+                                //   height: 15,
+                                // ),
+                                Container(
+                                  // alignment: Alignment.topRight,
+                                  // margin: EdgeInsets.only(left: 20),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text("Name:",textAlign: TextAlign.right),
-                                        Text("${eventListModel?.data?[index].uname}"),
+                                        Padding(padding: EdgeInsets.only(top: 25)),
+                                        Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                                width: MediaQuery.of(context).size.width/2.2,
+                                                child: Row(
+                                                  children: [
+                                                    Text("Name:",textAlign: TextAlign.right),
+                                                  ],
+                                                )),
+                                            Container(child: Row(
+                                              children: [
+                                                Text("${eventListModel?.data?[index].uname}"),
+                                              ],
+                                            )),
+                                          ],
+                                        ),
+                                        SizedBox(height: 7),
+                                        Row(
+                                          children: [
+                                            Container(
+                                                width: MediaQuery.of(context).size.width/2.2,
+
+                                                child: Row(
+                                                  children: const [
+                                                    Text("Mobile no:",textAlign: TextAlign.right),
+                                                  ],
+                                                )),
+                                            Container(child: Row(
+                                              children: [
+                                                Text("${eventListModel?.data?[index].mobile}"),
+                                              ],
+                                            )),
+                                          ],
+                                        ),
+                                        SizedBox(height: 7),
+                                        Row(
+                                          children: [
+                                            Container(
+                                                width: MediaQuery.of(context).size.width/2.2,
+
+                                                child: Row(
+                                                  children: [
+                                                    Text("KM:",textAlign: TextAlign.right),
+                                                  ],
+                                                )),
+                                            Container(child: Row(
+                                              children: [
+                                                Text("${eventListModel?.data?[index].distance}"),
+                                              ],
+                                            ))
+                                          ],
+                                        ),
+                                        SizedBox(height: 7),
+                                        Row(
+                                          children: [
+                                            Container(
+                                                width: MediaQuery.of(context).size.width/2.2,
+
+                                                child: Row(
+                                                  children: [
+                                                    Text("Event Name:",textAlign: TextAlign.right),
+                                                  ],
+                                                )),
+                                            Container(child: Row(
+                                              children: [
+                                                Text("${eventListModel?.data?[index].eventName}"),
+                                              ],
+                                            ))
+                                          ],
+                                        ),
+                                        SizedBox(height: 7),
+                                        Row(
+                                          children: [
+                                            Container(
+                                                width: MediaQuery.of(context).size.width/2.2,
+
+                                                child: Row(
+                                                  children: [
+                                                    Text("Description:",textAlign: TextAlign.right),
+                                                  ],
+                                                )),
+                                            Container(child: Row(
+                                              children: [
+                                                Text("${eventListModel?.data?[index].description}"),
+                                              ],
+                                            ))
+                                          ],
+                                        ),
                                       ],
                                     ),
-                                    SizedBox(height: 7),
-                                    Row(
-                                      children: [
-                                        Text("Mobile no:",textAlign: TextAlign.right),
-                                        Text("${eventListModel?.data?[index].mobile}"),
-                                      ],
-                                    ),
-                                    SizedBox(height: 7),
-                                    Row(
-                                      children: [
-                                        Text("KM:",textAlign: TextAlign.right),
-                                        Text("${eventListModel?.data?[index].distance}")
-                                      ],
-                                    ),
-                                    SizedBox(height: 7),
-                                    Row(
-                                      children: [
-                                        Text("Event Name:",textAlign: TextAlign.right),
-                                        Text("${eventListModel?.data?[index].eventName}")
-                                      ],
-                                    ),
-                                    SizedBox(height: 7),
-                                    Row(
-                                      children: [
-                                        Text("Description:",textAlign: TextAlign.right),
-                                        Text("${eventListModel?.data?[index].description}")
-                                      ],
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       );
@@ -174,7 +242,7 @@ class _EventDetailsState extends State<EventDetails> {
               //       elevation: 5.0,
               //       child: Container(
               //         height: MediaQuery
-              //             .of(context)
+              // s            .of(context)
               //             .size
               //             .width / 3,
               //         width: MediaQuery
@@ -428,7 +496,7 @@ class _EventDetailsState extends State<EventDetails> {
               // ),
             ),
             SizedBox(
-              height: 390,
+              height: 200,
             ),
             Align(
               alignment: Alignment.bottomCenter,
@@ -436,13 +504,13 @@ class _EventDetailsState extends State<EventDetails> {
                 height: 50,
                 width: MediaQuery.of(context).size.width/1.3,
                 child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(backgroundColor: colors.primary),
-                    onPressed: (){
-                      // Fluttertoast.showToast(msg: "Enquiry submit successfully");
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => EnquiryForm()));
-                    },
-                    child: Text("Enquiry",style: TextStyle(fontSize: 15)
-                    ),
+                  style: ElevatedButton.styleFrom(backgroundColor: colors.primary),
+                  onPressed: (){
+                    // Fluttertoast.showToast(msg: "Enquiry submit successfully");
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => EnquiryForm()));
+                  },
+                  child: Text("Enquiry",style: TextStyle(fontSize: 15)
+                  ),
                 ),
               ),
             ),
