@@ -21,6 +21,10 @@ import '../SubscriptionPlan/subscription_plan.dart';
 import '../api/api_services.dart';
 import 'package:http/http.dart'as http;
 
+import 'ExampleScreen.dart';
+import 'MyEnquiry.dart';
+import 'MyTemplate.dart';
+
 class BottomScreen extends StatefulWidget {
   const BottomScreen({super.key});
 
@@ -124,7 +128,7 @@ class _BottomScreenState extends State<BottomScreen> {
             child: pages1.elementAt(currentindex),
           ),
           bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: colors.primary,
+            backgroundColor: Colors.white,
             //  elevation: 1,
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
@@ -134,8 +138,8 @@ class _BottomScreenState extends State<BottomScreen> {
                   label: 'Profile', icon: Icon(Icons.people_alt_sharp)),
             ],
             currentIndex: currentindex,
-            selectedItemColor: colors.black54,
-            unselectedItemColor: Colors.white,
+            selectedItemColor: colors.primary,
+            unselectedItemColor: colors.secondary,
             onTap: _onItemTapped,
             showUnselectedLabels: true,
             showSelectedLabels: true,
@@ -202,7 +206,7 @@ class _BottomScreenState extends State<BottomScreen> {
                           "${getprofile?.data?.first.email}",
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
                               fontSize: 13),
@@ -214,7 +218,7 @@ class _BottomScreenState extends State<BottomScreen> {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           // Container(
@@ -261,7 +265,7 @@ class _BottomScreenState extends State<BottomScreen> {
               height: 40,
               width: 40,
             ),
-            title: Text(
+            title: const Text(
               'Home',
             ),
             onTap: () {
@@ -278,51 +282,50 @@ class _BottomScreenState extends State<BottomScreen> {
               height: 40,
               width: 40,
             ),
-            title: Text(
-              'Enquiry',
+            title: const Text(
+              'My Enquiry',
             ),
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => BottomScreen()),
+                MaterialPageRoute(builder: (context) => MyEnquiry()),
               );
             },
           ),
-
           // ListTile(
           //   leading: Image.asset(
-          //     "assets/images/Term & Conditions.png",
+          //     "assets/images/enquiry.png",
           //     color: colors.black54,
           //     height: 40,
           //     width: 40,
           //   ),
           //   title: Text(
-          //     'Inquiry',
+          //     'My Enquiry',
           //   ),
           //   onTap: () {
           //     Navigator.push(
           //       context,
-          //       MaterialPageRoute(builder: (context) =>BookingScreen()),
+          //       MaterialPageRoute(builder: (context) => DragAndDropScreen()),
           //     );
           //   },
           // ),
-          // ListTile(
-          //   leading: Image.asset(
-          //     "assets/images/sub.png",
-          //     color: colors.black54,
-          //     height: 40,
-          //     width: 40,
-          //   ),
-          //   title: Text(
-          //     'My Subscription Plan',
-          //   ),
-          //   onTap: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => SubscriptionPlan()),
-          //     );
-          //   },
-          // ),
+          ListTile(
+            leading: Image.asset(
+              "assets/images/card.png",
+              color: colors.black54,
+              height: 40,
+              width: 40,
+            ),
+            title: const Text(
+              'My Template',
+            ),
+            onTap:() {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MyTemplate()),
+              );
+            },
+          ),
           ListTile(
             leading: Image.asset(
               "assets/images/Term & Conditions.png",
@@ -330,7 +333,7 @@ class _BottomScreenState extends State<BottomScreen> {
               width: 40,
               color: colors.black54,
             ),
-            title: Text(
+            title: const Text(
               'Faq',
             ),
             onTap: () {
@@ -348,13 +351,13 @@ class _BottomScreenState extends State<BottomScreen> {
               width: 40,
               color: colors.black54,
             ),
-            title: Text(
-              'Terms &Conditions',
+            title: const Text(
+              'Terms & Conditions',
             ),
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => DragAndDropExample()),
+                MaterialPageRoute(builder: (context) => TermsCondition()),
               );
             },
           ),
@@ -365,7 +368,7 @@ class _BottomScreenState extends State<BottomScreen> {
               height: 40,
               width: 40,
             ),
-            title: Text(
+            title: const Text(
               'Privacy Policy',
             ),
             onTap: () {
@@ -409,8 +412,8 @@ class _BottomScreenState extends State<BottomScreen> {
                   barrierDismissible: false,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text("Confirm Sign out"),
-                      content: Text("Are  sure to sign out from app now?"),
+                      title: const Text("Confirm Sign out"),
+                      content: const Text("Are  sure to sign out from app now?"),
                       actions: <Widget>[
                         ElevatedButton(
                           style:
@@ -436,7 +439,7 @@ class _BottomScreenState extends State<BottomScreen> {
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                        )
+                        ),
                       ],
                     );
                   });

@@ -152,12 +152,13 @@ class _EnquiryFormState extends State<EnquiryForm> {
                                 prefixIcon: Icon(Icons.inbox),
                               ),
                               validator: (value){
-                                if(value==null||value.isEmpty)
+                                if(value==null||value.isEmpty) {
                                   return "Please Enter message";
+                                }
                                 return null;
                               },
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 30,
                             ),
                             Container(
@@ -166,11 +167,11 @@ class _EnquiryFormState extends State<EnquiryForm> {
                               child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(backgroundColor: colors.primary),
                                   onPressed: (){
-                                    enquirySend();
-                                    // Fluttertoast.showToast(msg: "Enquiry submit successfully");
-                                    if(_formKey.currentState!.validate())
-                                    setState(() {
-                                    });
+                                    if (_formKey.currentState!.validate()) {
+                                      enquirySend();
+                                    } else {
+                                      Fluttertoast.showToast(msg: "Pls fill all fields");
+                                    }
                                   },
                                   child: Text("Submit")
                               ),

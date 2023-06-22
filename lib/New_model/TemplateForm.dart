@@ -46,7 +46,7 @@ class _Form_ScreenState extends State<Form_Screen> {
                 margin: EdgeInsets.symmetric(vertical: 20,horizontal: 20),
                 elevation: 5.0,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 borderOnForeground: true,
                 child: Container(
@@ -92,7 +92,7 @@ class _Form_ScreenState extends State<Form_Screen> {
                                   return null;
                                 },
                               ),
-                              SizedBox(height: 15,),
+                              SizedBox(height: 15),
                               TextFormField(
                                 controller: dateinput,
                                 decoration: InputDecoration(
@@ -141,7 +141,6 @@ class _Form_ScreenState extends State<Form_Screen> {
                                                 )),
                                             child: child!);
                                       });
-
                                   if (pickedDate != null) {
                                     //pickedDate output format => 2021-03-10 00:00:00.000
                                     String formattedDate =

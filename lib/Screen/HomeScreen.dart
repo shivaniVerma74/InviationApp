@@ -442,7 +442,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:doctorapp/Helper/Color.dart';
 import 'package:doctorapp/Screen/Histroy.dart';
 import 'package:doctorapp/api/api_services.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -458,10 +457,6 @@ import '../widgets/widgets/commen_slider.dart';
 import 'Events.dart';
 import 'TemplateScreen.dart';
 import 'WishlistScreen.dart';
-
-import '../Static/terms_condition.dart';
-import '../News/update_screen.dart';
-import 'filte_speciality.dart';
 
 class HomeScreen extends StatefulWidget {
   final bool? speciality;
@@ -555,9 +550,14 @@ class _HomeScreenState extends State<HomeScreen> {
           autoPlayAnimationDuration: Duration(milliseconds: 500),
           enlargeCenterPage: false,
           scrollDirection: Axis.horizontal,
-          height: 200.0),
+          height: 180.0),
          items: _sliderModel?.data?.map((item) {
-        return CommonSlider(file: item.image ?? '',);
+        return Container(
+            width: MediaQuery.of(context).size.width/1.1,
+            decoration: BoxDecoration(
+                borderRadius:
+                BorderRadius.circular(20)),
+            child: CommonSlider(file: item.image ?? '',));
       }).toList(),
     );
   }
@@ -705,7 +705,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           : _CarouselSlider1(),
                     ),
                     Positioned(
-                     top: 190,
+                     top: 170,
                       // left: 80,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -740,7 +740,7 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 10,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: _currentPost == i ? colors.secondary : colors.primary,
+              color: _currentPost == i ? Colors.white : Colors.black,
             ),
           ),
         );
@@ -759,53 +759,50 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Container(
             height: 180,
-            child: Expanded(
-              child:
-              InkWell(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => TemplateScreen()));
-                },
-                child: Padding(
-                  padding: EdgeInsets.all(1),
-                  child: Card(
-                    color: Colors.white,
-                    elevation: 5,
-                    semanticContainer: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                      // side: BorderSide(color: Colors.black, width: 2),
-                    ),
-                    // clipBehavior: Clip.antiAlias,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Stack(
-                          children: [
-                            Container(
-                                height: 130,
-                                width: MediaQuery.of(context).size.width/2.3,
-                                child: Image.asset("assets/images/invitation1.jpg", fit: BoxFit.fill,)
-                                // Image.network("${getcategoryModel?.data?[index].img}", height: 80, width: 50, fit: BoxFit.fill,)
-                            ),
-                          ],
-                        ),
-                        // SizedBox(height: 5),
-                        Row(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            Padding(
-                              padding: EdgeInsets.only(left: 55, top: 10),
-                              child: Center(
-                                child: Text("Card"
-                                    ,style: TextStyle( color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16, fontFamily: 'Afrah')
-                                ),
+            child: InkWell(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => TemplateScreen()));
+              },
+              child: Padding(
+                padding: EdgeInsets.all(1),
+                child: Card(
+                  color: Colors.white,
+                  elevation: 5,
+                  semanticContainer: true,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                    // side: BorderSide(color: Colors.black, width: 2),
+                  ),
+                  // clipBehavior: Clip.antiAlias,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Stack(
+                        children: [
+                          Container(
+                              height: 130,
+                              width: MediaQuery.of(context).size.width/2.3,
+                              child: Image.asset("assets/images/invitation1.jpg", fit: BoxFit.fill,)
+                              // Image.network("${getcategoryModel?.data?[index].img}", height: 80, width: 50, fit: BoxFit.fill,)
+                          ),
+                        ],
+                      ),
+                      // SizedBox(height: 5),
+                      Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.only(left: 55, top: 10),
+                            child: Center(
+                              child: Text("Card"
+                                  ,style: TextStyle( color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16, fontFamily: 'Afrah')
                               ),
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -814,52 +811,49 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(width: 1),
           Container(
             height: 180,
-            child: Expanded(
-              child:
-              InkWell(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => EventScreen()));
-                },
-                child: Padding(
-                  padding: EdgeInsets.all(1),
-                  child: Card(
-                    color: Colors.white,
-                    elevation: 5,
-                    semanticContainer: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                      // side: BorderSide(color: Colors.black, width: 2),
-                    ),
-                    // clipBehavior: Clip.antiAlias,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Stack(
-                          children: [
-                            Container(
-                                height: 130,
-                                width: MediaQuery.of(context).size.width/2.4,
-                                child: Image.asset("assets/images/invitation1.png", fit: BoxFit.fill)
-                              // Image.network("${getcategoryModel?.data?[index].img}", height: 80, width: 50, fit: BoxFit.fill,)
-                            ),
-                          ],
-                        ),
-                        // SizedBox(height: 5),
-                        Row(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 55, top: 10),
-                              child: Center(
-                                child: Text("Events", style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16, fontFamily: 'Afrah')
-                                ),
+            child: InkWell(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => EventScreen()));
+              },
+              child: Padding(
+                padding: EdgeInsets.all(1),
+                child: Card(
+                  color: Colors.white,
+                  elevation: 5,
+                  semanticContainer: true,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                    // side: BorderSide(color: Colors.black, width: 2),
+                  ),
+                  // clipBehavior: Clip.antiAlias,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Stack(
+                        children: [
+                          Container(
+                              height: 130,
+                              width: MediaQuery.of(context).size.width/2.4,
+                              child: Image.asset("assets/images/invitation1.png", fit: BoxFit.fill)
+                            // Image.network("${getcategoryModel?.data?[index].img}", height: 80, width: 50, fit: BoxFit.fill,)
+                          ),
+                        ],
+                      ),
+                      // SizedBox(height: 5),
+                      Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 55, top: 10),
+                            child: Center(
+                              child: Text("Events", style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16, fontFamily: 'Afrah')
                               ),
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),

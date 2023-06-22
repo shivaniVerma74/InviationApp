@@ -143,7 +143,7 @@ class _EventScreenState extends State<EventScreen> {
                                       children: [
                                         Text("City:",textAlign: TextAlign.right),
                                         SizedBox(width: 3),
-                                        Text("${eventListModel?.data?[index].distance}")
+                                        Text("${eventListModel?.data?[index].cityName}")
                                       ],
                                     ),
                                   ],

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -30,6 +29,7 @@ class _TemplateScreenState extends State<TemplateScreen> {
 
   TemplatesModel? templatesModel;
   getTemplate() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     print("Get Template Apiiii");
     var headers = {
       'Cookie': 'ci_session=a36a8335f024c7b97f4162931f63227153359896'
@@ -39,14 +39,17 @@ class _TemplateScreenState extends State<TemplateScreen> {
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       var  result = await response.stream.bytesToString();
-      var finalResult = TemplatesModel.fromJson(jsonDecode(result));
-      if(finalResult.responseCode == "1"){
+      final jsonResponse = TemplatesModel.fromJson(json.decode(result));
+      String? template_id = jsonResponse.data?.first.id ?? "";
+      preferences.setString("template_id", template_id);
+      print("Temaplteeee Idddd ${template_id}");
+      if(jsonResponse.responseCode == "1"){
       }else{
         // Navigator.push(context, MaterialPageRoute(builder: (context)=>SubscriptionPlan()));
       }
-      print('Templateee Apiii Responsee______${finalResult}');
+      print('Templateee Apiii Responsee______${jsonResponse}');
       setState(() {
-        templatesModel =  finalResult;
+        templatesModel =  jsonResponse;
       });
     }
     else {

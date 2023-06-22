@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 import '../Helper/Appbar.dart';
+import '../Helper/Color.dart';
 import '../New_model/GetSettingModel.dart';
 import 'package:http/http.dart'as http;
 
@@ -25,40 +26,35 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
     return callApi();
   }
   Future<Null> callApi() async {
-    getSettingApi();
+    getPrivacyPolicyApiApi();
   }
   void initState() {
-    // TODO: implement initState
     super.initState();
-    getSettingApi();
+    getPrivacyPolicyApiApi();
   }
   var privacyPolicy;
-  GetSettingModel? settingModel;
-  getSettingApi() async {
-    print("Privancy Policy Apiiii");
+  var privacyPolicyTitle;
+  getPrivacyPolicyApiApi() async {
     var headers = {
-      'Cookie': 'ci_session=eb651cdce0850614d296b81363913b2ca08fe641'
+      'Cookie': 'ci_session=0972dd56b7dcbe1d24736525bf2ee593c03d46de'
     };
-    var request = http.Request('POST', Uri.parse('${ApiService.privacyPolicy}'));
+    var request = http.Request('GET', Uri.parse('${ApiService.privacyPolicy}'));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
+      print('_______sdfsdfsdf___${response.statusCode}_________');
       final result =  await response.stream.bytesToString();
       final jsonResponse = json.decode(result);
+      print('______asdsadsa____${result}_________');
       setState(() {
-        privacyPolicy = jsonResponse['setting']['privacy_policy'];
-      });
-      var FinalResult = GetSettingModel.fromJson(jsonDecode(result));
-      print("thi osoks0  ============>${FinalResult}");
-      setState(() {
-        settingModel = FinalResult;
+        privacyPolicy = jsonResponse['setting']['html'];
+        privacyPolicyTitle = jsonResponse['setting']['title'];
       });
     }
     else {
       print(response.reasonPhrase);
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -68,7 +64,12 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
           appBar:  customAppBar(text: "Privacy Policy",isTrue: true, context: context),
           body: ListView(
             children: [
-              privacyPolicy == null ? Center(child: CircularProgressIndicator()) :Html(
+              Padding(
+                padding: const EdgeInsets.only(left: 8,top: 5),
+                child: Text("${privacyPolicyTitle}",style: TextStyle(fontSize: 16,color: colors.blackTemp,fontWeight: FontWeight.bold),),
+              ),
+              privacyPolicy == null || privacyPolicy == "" ? Center(child: CircularProgressIndicator(color: colors.secondary,)) :
+              Html(
                   data:"${privacyPolicy}"
               )
             ],

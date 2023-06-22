@@ -688,14 +688,15 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:doctorapp/Helper/Color.dart';
+import 'package:doctorapp/Screen/CardView.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart'as http;
 // import 'package:image_downloader/image_downloader.dart';
 import 'package:path_provider/path_provider.dart';
@@ -703,6 +704,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:screenshot/screenshot.dart';
 
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../New_model/GetSettingModel.dart';
 import '../api/api_services.dart';
@@ -727,13 +729,13 @@ class _CardScreenState extends State<CardScreen> {
   var locationn;
   var datte;
   var timmm;
-  GlobalKey keyList = GlobalKey() ;
+  GlobalKey keyList = GlobalKey();
 
-  double _scaleFactor = 0.0;
-  double _baseScaleFactor = 0.0;
+  double _scaleFactor = 1.0;
+  double _baseScaleFactor = 1.0;
 
-  double _scaleFactor1 = 0.0;
-  double _baseScaleFactor1 = 0.0;
+  double _scaleFactor1 = 1.0;
+  double _baseScaleFactor1 = 1.0;
 
   double _scaleFactor2 = 1.0;
   double _baseScaleFactor2 = 1.0;
@@ -750,6 +752,7 @@ class _CardScreenState extends State<CardScreen> {
   bool _showContainer = false;
   Color selectedColor = Colors.black;
   Offset offset = Offset.zero;
+  Offset draggableTextPosition = Offset(0, 0);
 
   late Color screenPickerColor; // Color for picker shown in Card on the screen.
   late Color dialogPickerColor;
@@ -788,17 +791,42 @@ class _CardScreenState extends State<CardScreen> {
       timmm = widget.timee.toString();
     });
   }
-
   Future _refresh() {
     return callAPI();
   }
-
   callAPI(){
     // getSettingApi();
   }
 
+  saveCard(image) async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? userId = preferences.getString('userId');
+    String? template_id = preferences.getString('template_id');
+    var headers = {
+      'Cookie': 'ci_session=79b222a1b7a3dc18c150b1366e8f9ceb03aaa932'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse('${ApiService.savemycard}'));
+    request.fields.addAll({
+      'user_id': '$userId',
+      'template_id': '$template_id'
+    });
+    request.files.add(await http.MultipartFile.fromPath('image', '${image}'));
+    print("save Cardddd paraa${request.fields}");
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(msg: "card save successfully");
+      Navigator.push(context, MaterialPageRoute(builder: (context) => CardView(image: image)));
+      print(await response.stream.bytesToString());
+    }
+    else {
+      print(response.reasonPhrase);
+    }
+  }
+
   GetSettingModel? getSettingModel;
   var termAndCondition;
+
   // getSettingApi() async {
   //   var headers = {
   //     'Cookie': 'ci_session=eb651cdce0850614d296b81363913b2ca08fe641'
@@ -845,207 +873,353 @@ class _CardScreenState extends State<CardScreen> {
                       fit: BoxFit.fill,
                     ),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    child:  Padding(
+                      padding: const EdgeInsets.only(top: 160, left: 140),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            left: draggableTextPosition.dx,
+                            top: draggableTextPosition.dy,
+                            // right: draggableTextPosition.dx,
+                            child: Draggable(
+                              feedback: Text(newInvitationText.toString(), style: TextStyle(fontSize: 19),),
+                              childWhenDragging: Container(),
+                              onDraggableCanceled: (velocity, offset) {
+                                setState(() {
+                                  draggableTextPosition = offset;
+                                });
+                              },
+                              child: GestureDetector(
+                                // onPanUpdate: (details) {
+                                //   setState(() {
+                                //     offset = Offset(
+                                //         offset.dx + details.delta.dx, offset.dy + details.delta.dy);
+                                //   });
+                                // },
+                                onTap: () {
+                                  _editInvitationText(context);
+                                  setState(() {
+                                    _showContainer = true;
+                                  });
+                                  // if (_showContainer) {
+                                  //   Container(
+                                  //     decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+                                  //     width: 100,
+                                  //     height: 100,
+                                  //     color: Colors.red,
+                                  //   );
+                                  // }
+                                },
+                                onScaleStart: (details) {
+                                  _baseScaleFactor = _scaleFactor1;
+                                },
+                                onScaleUpdate: (details) {
+                                  setState(() {
+                                    _scaleFactor1 = _baseScaleFactor * details.scale;
+                                  });
+                                },
+                                child: Container(
+                                  child: Center(
+                                    child: Text(
+                                      newInvitationText.toString(),
+                                      textScaleFactor: _scaleFactor1, style: TextStyle(color: dialogPickerColor, fontSize: 19),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Positioned(
+                                left: draggableTextPosition.dx,
+                                top: draggableTextPosition.dy,
+                                child: Draggable(
+                                  feedback: Text("${locationn.toString()}", style: TextStyle(fontSize: 19),),
+                                  childWhenDragging: Container(),
+                                  onDraggableCanceled: (velocity, offset) {
+                                    setState(() {
+                                      draggableTextPosition = offset;
+                                    });
+                                  },
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _editInvitationText1(context);
+                                    },
+                                    onScaleStart: (details) {
+                                      _baseScaleFactor1 = _scaleFactor1;
+                                    },
+                                    onScaleUpdate: (details) {
+                                      setState(() {
+                                        _scaleFactor1 = _baseScaleFactor1 * details.scale;
+                                      });
+                                    },
+                                    child: Container(
+                                      child: Center(
+                                        child: Text(
+                                          locationn.toString(),
+                                          textScaleFactor: _scaleFactor1,
+                                          style: TextStyle(color: dialogPickerColor, fontSize: 19),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                      //     SizedBox(height: 20),
+                      //     Positioned(
+                      //    left: draggableTextPosition.dx,
+                      //    top: draggableTextPosition.dy,
+                      //   child: Draggable(
+                      //     feedback: Text("${datte.toString()}", style: TextStyle(fontSize: 19),),
+                      //     childWhenDragging: Container(),
+                      //     onDraggableCanceled: (velocity, offset) {
+                      //       setState(() {
+                      //         draggableTextPosition = offset;
+                      //       });
+                      //     },
+                      //     child: GestureDetector(
+                      //             onTap: () {
+                      //               _editInvitationText3(context);
+                      //             },
+                      //             onScaleStart: (details) {
+                      //               _baseScaleFactor3 = _scaleFactor3;
+                      //             },
+                      //             onScaleUpdate: (details) {
+                      //               setState(() {
+                      //                 _scaleFactor3 = _baseScaleFactor3 * details.scale;
+                      //               });
+                      //             },
+                      //             child: Container(
+                      //               child: Center(
+                      //                 child: Text(
+                      //                   datte.toString(),
+                      //                   textScaleFactor: _scaleFactor3,
+                      //                   style: TextStyle(color: dialogPickerColor, fontSize: 19),
+                      //                 ),
+                      //               ),
+                      //             ),
+                      //           ),
+                      //   ),
+                      // ),
+                      //     SizedBox(height: 20),
+                      //    Positioned(
+                      //      left: draggableTextPosition.dx,
+                      //      top: draggableTextPosition.dy,
+                      //      child: Draggable(
+                      //        feedback: Text("${timmm.toString()}", style: TextStyle(fontSize: 19),),
+                      //        childWhenDragging: Container(),
+                      //        onDraggableCanceled: (velocity, offset) {
+                      //          setState(() {
+                      //            draggableTextPosition = offset;
+                      //          });
+                      //        },
+                      //        child: GestureDetector(
+                      //             onTap: () {
+                      //               _editInvitationText4(context);
+                      //             },
+                      //             onScaleStart: (details) {
+                      //               _baseScaleFactor4 = _scaleFactor4;
+                      //             },
+                      //             onScaleUpdate: (details) {
+                      //               setState(() {
+                      //                 _scaleFactor4 = _baseScaleFactor4 * details.scale;
+                      //               });
+                      //             },
+                      //             child: Container(
+                      //               child: Center(
+                      //                 child: Text(
+                      //                   timmm.toString(),
+                      //                   textScaleFactor: _scaleFactor4,
+                      //                   style: TextStyle(color: dialogPickerColor, fontSize: 19),
+                      //                 ),
+                      //               ),
+                      //             ),
+                      //           ),
+                      //      ),
+                      //    ),
+                        ],
+                      ),
+                    ),
+                    // ListView(children: [
+                    //
+                    //     SizedBox(height: 20),
+                    //     GestureDetector(
+                    //       onTap: () {
+                    //         _editInvitationText1(context);
+                    //       },
+                    //       onScaleStart: (details) {
+                    //         _baseScaleFactor1 = _scaleFactor1;
+                    //       },
+                    //       onScaleUpdate: (details) {
+                    //         setState(() {
+                    //           _scaleFactor1 = _baseScaleFactor1 * details.scale;
+                    //         });
+                    //       },
+                    //       child: Container(
+                    //         child: Center(
+                    //           child: Text(
+                    //             locationn.toString(),
+                    //             textScaleFactor: _scaleFactor1,
+                    //             style: TextStyle(color: dialogPickerColor, fontSize: 19),
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     SizedBox(height: 20),
+                    //     GestureDetector(
+                    //       onTap: () {
+                    //         _editInvitationText3(context);
+                    //       },
+                    //       onScaleStart: (details) {
+                    //         _baseScaleFactor3 = _scaleFactor3;
+                    //       },
+                    //       onScaleUpdate: (details) {
+                    //         setState(() {
+                    //           _scaleFactor3 = _baseScaleFactor3 * details.scale;
+                    //         });
+                    //       },
+                    //       child: Container(
+                    //         child: Center(
+                    //           child: Text(
+                    //             datte.toString(),
+                    //             textScaleFactor: _scaleFactor3,
+                    //             style: TextStyle(color: dialogPickerColor, fontSize: 19),
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     SizedBox(height: 20),
+                    //     GestureDetector(
+                    //       onTap: () {
+                    //         _editInvitationText4(context);
+                    //       },
+                    //       onScaleStart: (details) {
+                    //         _baseScaleFactor4 = _scaleFactor4;
+                    //       },
+                    //       onScaleUpdate: (details) {
+                    //         setState(() {
+                    //           _scaleFactor4 = _baseScaleFactor4 * details.scale;
+                    //         });
+                    //       },
+                    //       child: Container(
+                    //         child: Center(
+                    //           child: Text(
+                    //             timmm.toString(),
+                    //             textScaleFactor: _scaleFactor4,
+                    //             style: TextStyle(color: dialogPickerColor, fontSize: 19),
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 5),
+                child: ListTile(
+                  title: Row(
                     children: [
-                      GestureDetector(
-                        // onPanUpdate: (details) {
-                        //   setState(() {
-                        //     offset = Offset(
-                        //         offset.dx + details.delta.dx, offset.dy + details.delta.dy);
-                        //   });
-                        // },
-                        onTap: () {
-                          _editInvitationText(context);
-                          setState(() {
-                            _showContainer = true;
-                          });
-                          // if (_showContainer) {
-                          //   Container(
-                          //     decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-                          //     width: 100,
-                          //     height: 100,
-                          //     color: Colors.red,
-                          //   );
-                          // }
+                      const Text("Change Text Color", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                      const SizedBox(width: 10),
+                      ColorIndicator(
+                        width: 30,
+                        height: 30,
+                        borderRadius: 4,
+                        color: dialogPickerColor,
+                        onSelectFocus: false,
+                        onSelect: () async {
+                          // Store current color before we open the dialog.
+                          final Color colorBeforeDialog = dialogPickerColor;
+                          // Wait for the picker to close, if dialog was dismissed,
+                          // then restore the color we had before it was opened.
+                          if (!(await colorPickerDialog())) {
+                            setState(() {
+                              dialogPickerColor = colorBeforeDialog;
+                            });
+                          }
                         },
-                        onScaleStart: (details) {
-                          _baseScaleFactor = _scaleFactor;
-                        },
-                        onScaleUpdate: (details) {
-                          setState(() {
-                            _scaleFactor = _baseScaleFactor * details.scale;
-                          });
-                        },
-                        child: Container(
-                          child: Center(
-                            child: Text(
-                              newInvitationText.toString(),
-                              textScaleFactor: _scaleFactor, style: TextStyle(color: dialogPickerColor, fontSize: 19),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      GestureDetector(
-                        onTap: () {
-                          _editInvitationText1(context);
-                        },
-                        onScaleStart: (details) {
-                          _baseScaleFactor1 = _scaleFactor1;
-                        },
-                        onScaleUpdate: (details) {
-                          setState(() {
-                            _scaleFactor1 = _baseScaleFactor1 * details.scale;
-                          });
-                        },
-                        child: Container(
-                          child: Center(
-                            child: Text(
-                              locationn.toString(),
-                              textScaleFactor: _scaleFactor1,
-                              style: TextStyle(color: dialogPickerColor, fontSize: 19),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      GestureDetector(
-                        onTap: () {
-                          _editInvitationText3(context);
-                        },
-                        onScaleStart: (details) {
-                          _baseScaleFactor3 = _scaleFactor3;
-                        },
-                        onScaleUpdate: (details) {
-                          setState(() {
-                            _scaleFactor3 = _baseScaleFactor3 * details.scale;
-                          });
-                        },
-                        child: Container(
-                          child: Center(
-                            child: Text(
-                              datte.toString(),
-                              textScaleFactor: _scaleFactor3,
-                              style: TextStyle(color: dialogPickerColor, fontSize: 19),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      GestureDetector(
-                        onTap: () {
-                          _editInvitationText4(context);
-                        },
-                        onScaleStart: (details) {
-                          _baseScaleFactor4 = _scaleFactor4;
-                        },
-                        onScaleUpdate: (details) {
-                          setState(() {
-                            _scaleFactor4 = _baseScaleFactor4 * details.scale;
-                          });
-                        },
-                        child: Container(
-                          child: Center(
-                            child: Text(
-                              timmm.toString(),
-                              textScaleFactor: _scaleFactor4,
-                              style: TextStyle(color: dialogPickerColor, fontSize: 19),
-                            ),
-                          ),
-                        ),
                       ),
                     ],
                   ),
+                  // title: const Text('Click this color to modify it in a dialog.'),
+                  // subtitle: Text(
+                  //   // ignore: lines_longer_than_80_chars
+                  //   '${ColorTools.materialNameAndCode(dialogPickerColor, colorSwatchNameMap: colorsNameMap)} '
+                  //       'aka ${ColorTools.nameThatColor(dialogPickerColor)}',
+                  // ),
+                  // trailing:
+                  // ColorIndicator(
+                  //   width: 34,
+                  //   height: 34,
+                  //   borderRadius: 4,
+                  //   color: dialogPickerColor,
+                  //   onSelectFocus: false,
+                  //   onSelect: () async {
+                  //     // Store current color before we open the dialog.
+                  //     final Color colorBeforeDialog = dialogPickerColor;
+                  //     // Wait for the picker to close, if dialog was dismissed,
+                  //     // then restore the color we had before it was opened.
+                  //     if (!(await colorPickerDialog())) {
+                  //       setState(() {
+                  //         dialogPickerColor = colorBeforeDialog;
+                  //       });
+                  //     }
+                  //   },
+                  // ),
                 ),
               ),
-              ListTile(
-                title: Row(
-                  children: [
-                    Text("Change Text Color", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,),),
-                    SizedBox(width: 10),
-                    ColorIndicator(
-                      width: 30,
-                      height: 30,
-                      borderRadius: 4,
-                      color: dialogPickerColor,
-                      onSelectFocus: false,
-                      onSelect: () async {
-                        // Store current color before we open the dialog.
-                        final Color colorBeforeDialog = dialogPickerColor;
-                        // Wait for the picker to close, if dialog was dismissed,
-                        // then restore the color we had before it was opened.
-                        if (!(await colorPickerDialog())) {
-                          setState(() {
-                            dialogPickerColor = colorBeforeDialog;
-                          });
-                        }
-                      },
+              SizedBox(height: 40),
+              InkWell(
+                onTap: () {
+                 save();
+                },
+                child: Container(
+                  height: 40,
+                    width: MediaQuery.of(context).size.width/1.1,
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: colors.primary),
+                    child: Center(
+                        child: Text("Save Card",
+                            style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700)
+                        ),
                     ),
-                  ],
-                ),
-                // title: const Text('Click this color to modify it in a dialog.'),
-                // subtitle: Text(
-                //   // ignore: lines_longer_than_80_chars
-                //   '${ColorTools.materialNameAndCode(dialogPickerColor, colorSwatchNameMap: colorsNameMap)} '
-                //       'aka ${ColorTools.nameThatColor(dialogPickerColor)}',
-                // ),
-                // trailing:
-                // ColorIndicator(
-                //   width: 34,
-                //   height: 34,
-                //   borderRadius: 4,
-                //   color: dialogPickerColor,
-                //   onSelectFocus: false,
-                //   onSelect: () async {
-                //     // Store current color before we open the dialog.
-                //     final Color colorBeforeDialog = dialogPickerColor;
-                //     // Wait for the picker to close, if dialog was dismissed,
-                //     // then restore the color we had before it was opened.
-                //     if (!(await colorPickerDialog())) {
-                //       setState(() {
-                //         dialogPickerColor = colorBeforeDialog;
-                //       });
-                //     }
-                //   },
-                // ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: Row(
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Share", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800,),),
-                    SizedBox(width: 8,),
-                    Container(
-                      height: 45,
-                      width: 45,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
-                      child: IconButton(
-                          onPressed: () {
-                            // setState(() {
-                            // });
-                            _share();
-                          },
-                          icon: const Icon(Icons.share, color: Colors.white)),
-                    ),
-                    SizedBox(width: MediaQuery.of(context).size.width/3),
-                    Text("Download", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800,),),
-                    SizedBox(width: 8),
-                    Container(
-                      height: 45,
-                      width: 45,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
-                      child: IconButton(
-                          onPressed:() async {
-                            saveImage();
-                            // downloadFile();
-                          },
-                          icon: const Icon(Icons.download, color: Colors.white)),
-                    ),
-                  ],
                 ),
               ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              //   child: Row(
+              //     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       Text("Share", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800,),),
+              //       SizedBox(width: 8,),
+              //       Container(
+              //         height: 45,
+              //         width: 45,
+              //         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+              //         child: IconButton(
+              //             onPressed: () {
+              //               // setState(() {
+              //               // });
+              //               _share();
+              //             },
+              //             icon: const Icon(Icons.share, color: Colors.white)),
+              //       ),
+              //       SizedBox(width: MediaQuery.of(context).size.width/3),
+              //       Text("Download", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800,),),
+              //       SizedBox(width: 8),
+              //       Container(
+              //         height: 45,
+              //         width: 45,
+              //         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+              //         child: IconButton(
+              //             onPressed:() async {
+              //               saveImage();
+              //               // downloadFile();
+              //             },
+              //             icon: const Icon(Icons.download, color: Colors.white)),
+              //       ),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -1095,6 +1269,32 @@ class _CardScreenState extends State<CardScreen> {
     }
   }
 
+  save() async {
+    var status =  await Permission.photos.request();
+    if (/*storagePermission == PermissionStatus.granted*/ status.isGranted) {
+      final directory = (await getApplicationDocumentsDirectory()).path;
+      RenderRepaintBoundary bound = keyList.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      ui.Image image = await bound.toImage();
+      ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      print('${byteData?.buffer.lengthInBytes}___________');
+      // this will save image screenshot in gallery
+      if(byteData != null){
+        Uint8List pngBytes = byteData.buffer.asUint8List();
+        String fileName = DateTime.now().microsecondsSinceEpoch.toString();
+        final imagePath = await File('$directory/$fileName.png').create();
+        await imagePath.writeAsBytes(pngBytes);
+        // Share.shareFiles([imagePath.path]);
+        saveCard(imagePath.path.toString());
+      }
+    } else if (await status.isDenied) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('This Permission is recommended')));
+    } else if (await status.isPermanentlyDenied/*storagePermission == PermissionStatus.permanentlyDenied*/) {
+      openAppSettings().then((value) {
+      });
+    }
+  }
+
   void saveImage() async {
     print("Download Functionnnnnn");
     ui.Image? image = await captureImage();
@@ -1135,7 +1335,6 @@ class _CardScreenState extends State<CardScreen> {
       });
     }
   }
-
 
   void _editInvitationText(BuildContext context) {
     showDialog(

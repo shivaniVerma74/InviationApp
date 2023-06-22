@@ -223,7 +223,12 @@ class _EditeProfileState extends State<EditeProfile> {
           ),
         ),
       ),
-      appBar: customAppBar(text: "",isTrue: true, context: context),
+      appBar: AppBar(
+        elevation: 0,
+        title: Text("Update profile", style: TextStyle(fontSize: 16)),
+        centerTitle: true,
+        backgroundColor: colors.secondary,
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

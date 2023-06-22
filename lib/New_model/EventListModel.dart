@@ -1,6 +1,6 @@
 /// status : true
 /// message : "Event Manager List"
-/// data : [{"uname":"Khandelwal delivery","email":"ksh@gmail.com","mobile":"9192939495","event_name":"","description":"","profile_image":"https://developmentalphawizz.com/invitation_design/uploads/profile.png","status":"1","distance":"1 KM"}]
+/// data : [{"city_name":"Jaipur","uname":"Khandelwal Delivery","email":"Ksh@gmail.com","mobile":"9192939495","event_name":"Birthday","description":"today is my birthday","profile_image":"https://developmentalphawizz.com/invitation_design/uploads/profile_pics/649052332055a.png","status":"1","distance":"1 KM"}]
 
 class EventListModel {
   EventListModel({
@@ -48,17 +48,19 @@ EventListModel copyWith({  bool? status,
 
 }
 
-/// uname : "Khandelwal delivery"
-/// email : "ksh@gmail.com"
+/// city_name : "Jaipur"
+/// uname : "Khandelwal Delivery"
+/// email : "Ksh@gmail.com"
 /// mobile : "9192939495"
-/// event_name : ""
-/// description : ""
-/// profile_image : "https://developmentalphawizz.com/invitation_design/uploads/profile.png"
+/// event_name : "Birthday"
+/// description : "today is my birthday"
+/// profile_image : "https://developmentalphawizz.com/invitation_design/uploads/profile_pics/649052332055a.png"
 /// status : "1"
 /// distance : "1 KM"
 
 class Data {
   Data({
+      String? cityName, 
       String? uname, 
       String? email, 
       String? mobile, 
@@ -67,6 +69,7 @@ class Data {
       String? profileImage, 
       String? status, 
       String? distance,}){
+    _cityName = cityName;
     _uname = uname;
     _email = email;
     _mobile = mobile;
@@ -78,6 +81,7 @@ class Data {
 }
 
   Data.fromJson(dynamic json) {
+    _cityName = json['city_name'];
     _uname = json['uname'];
     _email = json['email'];
     _mobile = json['mobile'];
@@ -87,6 +91,7 @@ class Data {
     _status = json['status'];
     _distance = json['distance'];
   }
+  String? _cityName;
   String? _uname;
   String? _email;
   String? _mobile;
@@ -95,7 +100,8 @@ class Data {
   String? _profileImage;
   String? _status;
   String? _distance;
-Data copyWith({  String? uname,
+Data copyWith({  String? cityName,
+  String? uname,
   String? email,
   String? mobile,
   String? eventName,
@@ -103,7 +109,8 @@ Data copyWith({  String? uname,
   String? profileImage,
   String? status,
   String? distance,
-}) => Data(  uname: uname ?? _uname,
+}) => Data(  cityName: cityName ?? _cityName,
+  uname: uname ?? _uname,
   email: email ?? _email,
   mobile: mobile ?? _mobile,
   eventName: eventName ?? _eventName,
@@ -112,6 +119,7 @@ Data copyWith({  String? uname,
   status: status ?? _status,
   distance: distance ?? _distance,
 );
+  String? get cityName => _cityName;
   String? get uname => _uname;
   String? get email => _email;
   String? get mobile => _mobile;
@@ -123,6 +131,7 @@ Data copyWith({  String? uname,
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    map['city_name'] = _cityName;
     map['uname'] = _uname;
     map['email'] = _email;
     map['mobile'] = _mobile;

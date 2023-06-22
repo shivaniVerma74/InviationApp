@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   static const String baseUrl = "https://developmentalphawizz.com/invitation_design/api/";
-  static const String imageUrl = "https://developmentalphawizz.com/invitation_design/";
+  static const String imageUrl = "https://developmentalphawizz.com/invitation_design/uploads/profile_pics/";
   static const String baseUrl1 = "https://developmentalphawizz.com/invitation_design/api/";
   static const String baseUrl2 = "https://developmentalphawizz.com/invitation_design/api/static_pages/";
 
@@ -18,9 +18,15 @@ class ApiService {
   static const String getservices = baseUrl+'get_services';
   static const String privacyPolicy = baseUrl2+'privacy-policy';
   static const String faq = baseUrl+"faq";
+  static const String termsconditions = baseUrl2+"terms-conditions";
   static const String getcitylist = baseUrl+"get_city_list";
   static const String geteventmanagers = baseUrl+"get_event_managers";
   static const String submitquery = baseUrl+"submit_query";
+  static const String savemycard = baseUrl+"save_my_card";
+  static const String getenquiries = baseUrl+"get_enquiries";
+  static const String savedcard = baseUrl+"saved_card";
+  static const String purchasepayment = baseUrl+"purchase_payment";
+
 
   static const String getPharmaSlider = baseUrl + 'get_slider';
   static const String getEvents = baseUrl+'get_events';

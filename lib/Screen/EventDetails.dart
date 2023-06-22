@@ -105,15 +105,12 @@ class _EventDetailsState extends State<EventDetails> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
                                     decoration: BoxDecoration(
-
                                       borderRadius: BorderRadius.circular(10),
-
                                       // image: DecorationImage(image: AssetImage('assets/images/img.png'),fit: BoxFit.fill)
                                     ),
                                     height: 140,
                                     width: MediaQuery.of(context).size.width,
                                     child:
-
                                     // Image.asset('assets/images/img.png'),
                                     Image.network("${eventListModel?.data?[index].profileImage}"),
                                   ),
@@ -170,15 +167,14 @@ class _EventDetailsState extends State<EventDetails> {
                                           children: [
                                             Container(
                                                 width: MediaQuery.of(context).size.width/2.2,
-
                                                 child: Row(
                                                   children: [
-                                                    Text("KM:",textAlign: TextAlign.right),
+                                                    Text("City",textAlign: TextAlign.right),
                                                   ],
                                                 )),
                                             Container(child: Row(
                                               children: [
-                                                Text("${eventListModel?.data?[index].distance}"),
+                                                Text("${eventListModel?.data?[index].cityName}"),
                                               ],
                                             ))
                                           ],
@@ -216,7 +212,7 @@ class _EventDetailsState extends State<EventDetails> {
                                               children: [
                                                 Text("${eventListModel?.data?[index].description}"),
                                               ],
-                                            ))
+                                            )),
                                           ],
                                         ),
                                       ],
