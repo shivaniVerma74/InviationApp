@@ -73,7 +73,8 @@ class _FaqScreenState extends State<FaqScreen> {
         ),
       ),
       body: SingleChildScrollView(
-        child: FutureBuilder(
+        child: FaqModel == null || FaqModel == "" ? Center(child: CircularProgressIndicator(color: colors.primary,),):
+        FutureBuilder(
             future: getFaq(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               FaqModel faqsList = snapshot.data;
@@ -103,7 +104,7 @@ class _FaqScreenState extends State<FaqScreen> {
                                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                       child: Text(
                                         faqsList.setting![index].title ?? "",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             color: Colors.black
                                         ),
                                       )),
@@ -118,7 +119,7 @@ class _FaqScreenState extends State<FaqScreen> {
                                                   horizontal: 8.0),
                                               child: Text(
                                                 faqsList.setting![index].description ?? "",
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     color: Colors.black
                                                 ),
                                                 maxLines: 1,

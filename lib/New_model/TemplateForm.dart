@@ -50,7 +50,7 @@ class _Form_ScreenState extends State<Form_Screen> {
                 ),
                 borderOnForeground: true,
                 child: Container(
-                  height: MediaQuery.of(context).size.height/1.8,
+                  height: MediaQuery.of(context).size.height/1.6,
                   width: MediaQuery.of(context).size.width/1,
                   decoration: BoxDecoration(
                   ),
@@ -58,7 +58,7 @@ class _Form_ScreenState extends State<Form_Screen> {
                     child: Form(
                         key: _formKey,
                         child: Padding(
-                          padding: EdgeInsets.only(top: 50,left: 15,right: 15),
+                          padding: EdgeInsets.only(top: 30,left: 15,right: 15),
                           child: Column(
                             children: [
                               TextFormField(

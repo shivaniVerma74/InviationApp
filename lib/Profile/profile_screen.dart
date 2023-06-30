@@ -39,7 +39,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onPressed: () {
                   // _getFromCamera();
                 },
-
                 child: Text('Camera'),
               ),
               const SizedBox(
@@ -59,6 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     ) ??
         false; //if showDialouge had returned null, then return false
   }
+
   GetUserProfileModel? getprofile;
   getuserProfile() async {
     setState(() {
@@ -67,7 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     print("This Is User profilel============>");
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? userId = preferences.getString('userId');
-    print('this is getProfile==========Data----------->${userId} ');
+    print('this is getProfile==========Data----------->${userId}');
     var headers = {
       'Cookie': 'ci_session=9aba5e78ffa799cbe054723c796d2bd8f2f7d120'
     };
@@ -87,6 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       print(response.reasonPhrase);
     }
   }
+
   CheckPlanModel? checkPlanModel;
   checkSubscriptionApi() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -101,7 +102,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
-
     if (response.statusCode == 200) {
       var  result = await response.stream.bytesToString();
       var finalResult = CheckPlanModel.fromJson(jsonDecode(result));
@@ -117,7 +117,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
   void initState() {
     super.initState();
-    checkSubscriptionApi();
+    // checkSubscriptionApi();
     Future.delayed(Duration(milliseconds:300), () {
       return getuserProfile();
     });
@@ -145,7 +145,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ).then((value) => getuserProfile());
             },
-            child: Center(child: Text("Edit Profile",style: TextStyle(color: colors.whiteTemp),))
+            child: Center(
+                child: Text("Edit Profile",style:
+                TextStyle(color: colors.whiteTemp)))
           ),
         ),
       ),
@@ -216,7 +218,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Text("${getprofile?.data?.first.username}",style: TextStyle(color: colors.blackTemp,fontWeight: FontWeight.bold),),
                 ],
               ),
-
               const SizedBox(
                 height: 40,
               ),

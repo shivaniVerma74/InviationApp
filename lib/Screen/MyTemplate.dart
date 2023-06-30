@@ -46,6 +46,7 @@ class _MyTemplateState extends State<MyTemplate> {
     request.fields.addAll({
       'user_id': '$userId'
     });
+    print("rrrrrrrrrrrrrrrrrrrrr${request.fields}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
 
@@ -80,92 +81,182 @@ class _MyTemplateState extends State<MyTemplate> {
           onRefresh: refreshFunction,
           child: Column(
             children: [
-              savedCardModel == null ? Center(
-                  child: CircularProgressIndicator(color: colors.primary)
-              ):
               Container(
                 height: MediaQuery.of(context).size.height/1.1,
-                child: ListView.builder(
-                    // shrinkWrap: true,
-                    itemCount: savedCardModel?.data?.length,
-                    scrollDirection: Axis.vertical,
-                    // physics: AlwaysScrollableScrollPhysics(),
-                    itemBuilder: (BuildContext context, int index){
-                      return Column(
+                child: savedCardModel?.data?.length == null || savedCardModel?.data?.length == "" ? Center(child: CircularProgressIndicator(color: colors.primary,),):
+                ListView.builder(
+                  itemCount: savedCardModel?.data?.length,
+                    itemBuilder: (context,i) {
+                  return Card(
+                    elevation: 6,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
                         children: [
-                          RepaintBoundary(
-                            key: keyList,
-                            child: Container(
-                              height: MediaQuery.of(context).size.height/1.9,
-                              child: Card(
-                                child: Image.network("${savedCardModel?.data?[index].image}", scale: 1),
+                          Image.network("${savedCardModel?.data?[i].image}",height: 250,width: 450),
+                          Container(
+                            height: 90,
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Card(
+                              elevation: 5,
+                              child: Column(
+                                children: [
+                                Padding(
+                                  padding: EdgeInsets.only(left: 8, right: 8),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text("Price:- ",
+                                          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15, color: Colors.black, decoration: TextDecoration.underline)
+                                      ),
+                                      Text("₹ ${savedCardModel?.data?[i].price}",
+                                          style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15, color: Colors.black, decoration: TextDecoration.underline)
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8, top: 15),
+                                  child: Row(
+                                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text("Share",
+                                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800),
+                                      ),
+                                      const SizedBox(width: 5),
+                                      Container(
+                                        height: 40,
+                                        width: 40,
+                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                                        child: IconButton(
+                                            onPressed: () {
+                                              // setState(() {
+                                              // });
+                                              _share();
+                                            },
+                                            icon: const Icon(Icons.share, color: Colors.white)),
+                                      ),
+                                      SizedBox(width: MediaQuery.of(context).size.width/2.7),
+                                      Text("Download", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                                      SizedBox(width: 5),
+                                      Container(
+                                        height: 40,
+                                        width: 40,
+                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                                        child: IconButton(
+                                          onPressed:() async {
+                                            saveImage();
+                                            // downloadFile();
+                                          },
+                                          icon: const Icon(Icons.download, color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                               ),
                             ),
                           ),
-                         Padding(
-                           padding: const EdgeInsets.only(left: 5, right:5),
-                           child: Container(
-                             height: 90,
-                             decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                             child: Card(
-                               elevation: 5,
-                               child: Column(children: [
-                                 Padding(
-                                   padding: EdgeInsets.only(left: 8, right: 8),
-                                   child: Row(
-                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                     children: [
-                                       Text("Price:- ", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15, color: Colors.black, decoration: TextDecoration.underline,)),
-                                       Text("₹ ${savedCardModel?.data?[index].price}", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15, color: Colors.black, decoration: TextDecoration.underline,))
-                                     ],
-                                   ),
-                                 ),
-                                 Padding(
-                                   padding: const EdgeInsets.only(left: 8, top: 15),
-                                   child: Row(
-                                     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                     children: [
-                                       const Text("Share", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
-                                       const SizedBox(width: 5),
-                                       Container(
-                                         height: 45,
-                                         width: 45,
-                                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
-                                         child: IconButton(
-                                             onPressed: () {
-                                               // setState(() {
-                                               // });
-                                               _share();
-                                             },
-                                             icon: const Icon(Icons.share, color: Colors.white)),
-                                       ),
-                                       SizedBox(width: MediaQuery.of(context).size.width/2.9),
-                                       Text("Download", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
-                                       SizedBox(width: 5),
-                                       Container(
-                                         height: 45,
-                                         width: 45,
-                                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
-                                         child: IconButton(
-                                           onPressed:() async {
-                                             saveImage();
-                                             // downloadFile();
-                                           },
-                                           icon: const Icon(Icons.download, color: Colors.white),
-                                         ),
-                                       ),
-                                     ],
-                                   ),
-                                 ),
-                               ],)
-                             ),
-                           ),
-                         ),
                         ],
-                      );
-                    }
-                ),
+                      ),
+                    ),
+                  );
+                }),
               ),
+              // Container(
+              //   height: MediaQuery.of(context).size.height/1.0,
+              //   child: ListView.builder(
+              //     // shrinkWrap: true,
+              //       itemCount: savedCardModel!.data!.length,
+              //       physics: NeverScrollableScrollPhysics(),
+              //       itemBuilder: (BuildContext context, int index){
+              //         return Column(
+              //           children: [
+              //             RepaintBoundary(
+              //               key: keyList,
+              //               child: Container(
+              //                  height: MediaQuery.of(context).size.height/2.5,
+              //                 child: Card(
+              //                   child: Image.network("${savedCardModel!.data![index].image}", scale: 1),
+              //                 ),
+              //               ),
+              //             ),
+              //             // Padding(
+              //             //   padding: const EdgeInsets.only(left: 5, right:5),
+              //             //   child: Container(
+              //             //     height: 90,
+              //             //     decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+              //             //     ),
+              //             //     child: Card(
+              //             //       elevation: 5,
+              //             //       child: Column(children: [
+              //             //         Padding(
+              //             //           padding: EdgeInsets.only(left: 8, right: 8),
+              //             //           child: Row(
+              //             //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //             //             children: [
+              //             //               const Text("Price:- ",
+              //             //                   style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15, color: Colors.black, decoration: TextDecoration.underline)
+              //             //               ),
+              //             //               Text("₹ ${savedCardModel?.data?[index].price}",
+              //             //                   style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15, color: Colors.black, decoration: TextDecoration.underline)
+              //             //               ),
+              //             //             ],
+              //             //           ),
+              //             //         ),
+              //             //         Padding(
+              //             //           padding: const EdgeInsets.only(left: 8, top: 15),
+              //             //           child: Row(
+              //             //             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //             //             children: [
+              //             //               const Text("Share",
+              //             //                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
+              //             //               ),
+              //             //               const SizedBox(width: 5),
+              //             //               Container(
+              //             //                 height: 45,
+              //             //                 width: 45,
+              //             //                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+              //             //                 child: IconButton(
+              //             //                     onPressed: () {
+              //             //                       // setState(() {
+              //             //                       // });
+              //             //                       _share();
+              //             //                     },
+              //             //                     icon: const Icon(Icons.share, color: Colors.white)),
+              //             //               ),
+              //             //               SizedBox(width: MediaQuery.of(context).size.width/2.9),
+              //             //               Text("Download", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
+              //             //               SizedBox(width: 5),
+              //             //               Container(
+              //             //                 height: 45,
+              //             //                 width: 45,
+              //             //                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+              //             //                 child: IconButton(
+              //             //                   onPressed:() async {
+              //             //                     saveImage();
+              //             //                     // downloadFile();
+              //             //                   },
+              //             //                   icon: const Icon(Icons.download, color: Colors.white),
+              //             //                 ),
+              //             //               ),
+              //             //             ],
+              //             //           ),
+              //             //         ),
+              //             //       ],)
+              //             //     ),
+              //             //   ),
+              //             // ),
+              //           ],
+              //         );
+              //       }
+              //   ),
+              // ),
+              // savedCardModel == null ? Center(
+              //     child: CircularProgressIndicator(color: colors.primary)
+              // ):
             ],
           ),
         ),

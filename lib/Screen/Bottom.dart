@@ -275,23 +275,6 @@ class _BottomScreenState extends State<BottomScreen> {
               );
             },
           ),
-          ListTile(
-            leading: Image.asset(
-              "assets/images/enquiry.png",
-              color: colors.black54,
-              height: 40,
-              width: 40,
-            ),
-            title: const Text(
-              'My Enquiry',
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MyEnquiry()),
-              );
-            },
-          ),
           // ListTile(
           //   leading: Image.asset(
           //     "assets/images/enquiry.png",
@@ -299,16 +282,33 @@ class _BottomScreenState extends State<BottomScreen> {
           //     height: 40,
           //     width: 40,
           //   ),
-          //   title: Text(
+          //   title: const Text(
           //     'My Enquiry',
           //   ),
           //   onTap: () {
           //     Navigator.push(
           //       context,
-          //       MaterialPageRoute(builder: (context) => DragAndDropScreen()),
+          //       MaterialPageRoute(builder: (context) => MyEnquiry()),
           //     );
           //   },
           // ),
+          ListTile(
+            leading: Image.asset(
+              "assets/images/enquiry.png",
+              color: colors.black54,
+              height: 40,
+              width: 40,
+            ),
+            title: Text(
+              'My Enquiry',
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MultipleDragScreen()),
+              );
+            },
+          ),
           ListTile(
             leading: Image.asset(
               "assets/images/card.png",

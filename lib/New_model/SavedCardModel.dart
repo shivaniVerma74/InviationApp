@@ -1,6 +1,6 @@
 /// status : true
 /// message : "Template saved success"
-/// data : [{"id":"2","user_id":"21","template_id":"24","image":"https://developmentalphawizz.com/invitation_design/uploads/profile_pics/6492915a84702.png","price":"100.00","created_at":"2023-06-21 05:57:46","updated_at":"2023-06-21 05:57:46"},{"id":"3","user_id":"21","template_id":"24","image":"https://developmentalphawizz.com/invitation_design/uploads/profile_pics/64929341e4455.png","price":"100.00","created_at":"2023-06-21 06:05:53","updated_at":"2023-06-21 06:05:53"}]
+/// data : [{"id":"67","user_id":"21","template_id":"24","image":"https://developmentalphawizz.com/invitation_design/uploads/profile_pics/649d3f08ca55e.png","price":"100.00","is_paid":"1","transaction_id":"rzp_test_1DP5mmOlF5G5ag","created_at":"2023-06-29 08:23:38","updated_at":"2023-06-29 08:21:28"},{"id":"71","user_id":"21","template_id":"24","image":"https://developmentalphawizz.com/invitation_design/uploads/profile_pics/649d40309660d.png","price":"100.00","is_paid":"1","transaction_id":"rzp_test_1DP5mmOlF5G5ag","created_at":"2023-06-29 08:27:05","updated_at":"2023-06-29 08:26:24"}]
 
 class SavedCardModel {
   SavedCardModel({
@@ -48,13 +48,15 @@ SavedCardModel copyWith({  bool? status,
 
 }
 
-/// id : "2"
+/// id : "67"
 /// user_id : "21"
 /// template_id : "24"
-/// image : "https://developmentalphawizz.com/invitation_design/uploads/profile_pics/6492915a84702.png"
+/// image : "https://developmentalphawizz.com/invitation_design/uploads/profile_pics/649d3f08ca55e.png"
 /// price : "100.00"
-/// created_at : "2023-06-21 05:57:46"
-/// updated_at : "2023-06-21 05:57:46"
+/// is_paid : "1"
+/// transaction_id : "rzp_test_1DP5mmOlF5G5ag"
+/// created_at : "2023-06-29 08:23:38"
+/// updated_at : "2023-06-29 08:21:28"
 
 class Data {
   Data({
@@ -63,6 +65,8 @@ class Data {
       String? templateId, 
       String? image, 
       String? price, 
+      String? isPaid, 
+      String? transactionId, 
       String? createdAt, 
       String? updatedAt,}){
     _id = id;
@@ -70,6 +74,8 @@ class Data {
     _templateId = templateId;
     _image = image;
     _price = price;
+    _isPaid = isPaid;
+    _transactionId = transactionId;
     _createdAt = createdAt;
     _updatedAt = updatedAt;
 }
@@ -80,6 +86,8 @@ class Data {
     _templateId = json['template_id'];
     _image = json['image'];
     _price = json['price'];
+    _isPaid = json['is_paid'];
+    _transactionId = json['transaction_id'];
     _createdAt = json['created_at'];
     _updatedAt = json['updated_at'];
   }
@@ -88,6 +96,8 @@ class Data {
   String? _templateId;
   String? _image;
   String? _price;
+  String? _isPaid;
+  String? _transactionId;
   String? _createdAt;
   String? _updatedAt;
 Data copyWith({  String? id,
@@ -95,6 +105,8 @@ Data copyWith({  String? id,
   String? templateId,
   String? image,
   String? price,
+  String? isPaid,
+  String? transactionId,
   String? createdAt,
   String? updatedAt,
 }) => Data(  id: id ?? _id,
@@ -102,6 +114,8 @@ Data copyWith({  String? id,
   templateId: templateId ?? _templateId,
   image: image ?? _image,
   price: price ?? _price,
+  isPaid: isPaid ?? _isPaid,
+  transactionId: transactionId ?? _transactionId,
   createdAt: createdAt ?? _createdAt,
   updatedAt: updatedAt ?? _updatedAt,
 );
@@ -110,6 +124,8 @@ Data copyWith({  String? id,
   String? get templateId => _templateId;
   String? get image => _image;
   String? get price => _price;
+  String? get isPaid => _isPaid;
+  String? get transactionId => _transactionId;
   String? get createdAt => _createdAt;
   String? get updatedAt => _updatedAt;
 
@@ -120,6 +136,8 @@ Data copyWith({  String? id,
     map['template_id'] = _templateId;
     map['image'] = _image;
     map['price'] = _price;
+    map['is_paid'] = _isPaid;
+    map['transaction_id'] = _transactionId;
     map['created_at'] = _createdAt;
     map['updated_at'] = _updatedAt;
     return map;

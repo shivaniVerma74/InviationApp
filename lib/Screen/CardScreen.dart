@@ -684,12 +684,12 @@
 // // }
 //
 
-
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:doctorapp/Helper/Color.dart';
 import 'package:doctorapp/Screen/CardView.dart';
+import 'package:doctorapp/Screen/ExampleScreen.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -702,12 +702,23 @@ import 'package:http/http.dart'as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:screenshot/screenshot.dart';
-
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../New_model/GetSettingModel.dart';
 import '../api/api_services.dart';
+
+extension GlobalKeyExtension on GlobalKey {
+  Rect? get globalPaintBounds {
+    // print("Paint Boundssss ${globalPaintBounds}");
+    final renderObject = currentContext?.findRenderObject();
+    var translation = renderObject?.getTransformTo(null).getTranslation();
+    if (translation != null && renderObject?.paintBounds != null) {
+      return renderObject!.paintBounds.shift(Offset(translation.x, translation.y));
+    } else {
+      return null;
+    }
+  }
+}
 
 class CardScreen extends StatefulWidget {
   final String name;
@@ -716,20 +727,26 @@ class CardScreen extends StatefulWidget {
   final String datee;
   final String timee;
   CardScreen({Key? key, required this.name, required this.address, required this.datee, required this.timee, this.image}) : super(key: key);
-
   @override
   State<CardScreen> createState() => _CardScreenState();
 }
 
 class _CardScreenState extends State<CardScreen> {
-
   ScreenshotController screenshotController = ScreenshotController();
 
   var newInvitationText;
   var locationn;
   var datte;
   var timmm;
-  GlobalKey keyList = GlobalKey();
+  final GlobalKey keyList = GlobalKey();
+
+  var _x1 = 0.0;
+  var _y1 = 0.0;
+  final GlobalKey stackKey1 = GlobalKey();
+  String updateName = '';
+  String updatedlocation = '';
+  String updatedTime = '';
+  String updatedDate = '';
 
   double _scaleFactor = 1.0;
   double _baseScaleFactor = 1.0;
@@ -750,13 +767,13 @@ class _CardScreenState extends State<CardScreen> {
   Offset _textPosition = Offset(20, 20);
 
   bool _showContainer = false;
+
   Color selectedColor = Colors.black;
   Offset offset = Offset.zero;
-  Offset draggableTextPosition = Offset(0, 0);
 
-  late Color screenPickerColor; // Color for picker shown in Card on the screen.
+  late Color screenPickerColor;
   late Color dialogPickerColor;
-  late Color dialogPickerColor1;// Color for picker in dialog using onChanged
+  late Color dialogPickerColor1;
   late Color dialogSelectColor;
 
   static const Color guidePrimary = Color(0xFF6200EE);
@@ -768,7 +785,7 @@ class _CardScreenState extends State<CardScreen> {
   static const Color blueBlues = Color(0xFF174378);
 
   final Map<ColorSwatch<Object>, String> colorsNameMap =
-  <ColorSwatch<Object>, String>{
+  <ColorSwatch<Object>, String> {
     ColorTools.createPrimarySwatch(guidePrimary): 'Guide Purple',
     ColorTools.createPrimarySwatch(guidePrimaryVariant): 'Guide Purple Variant',
     ColorTools.createAccentSwatch(guideSecondary): 'Guide Teal',
@@ -778,10 +795,13 @@ class _CardScreenState extends State<CardScreen> {
     ColorTools.createPrimarySwatch(blueBlues): 'Blue blues',
   };
 
+  List<DraggableText> draggableTexts = [
+
+  ];
   @override
   void initState() {
     screenPickerColor = Colors.blue;
-    dialogPickerColor = Colors.red;
+    dialogPickerColor = Colors.yellow;
     dialogSelectColor = const Color(0xFFA239CA);
     super.initState();
     setState(() {
@@ -789,6 +809,10 @@ class _CardScreenState extends State<CardScreen> {
       locationn = widget.address.toString();
       datte = widget.datee.toString();
       timmm = widget.timee.toString();
+      draggableTexts.add(DraggableText(text: '${newInvitationText}', color: dialogPickerColor,x: 120, y: 150));
+      draggableTexts.add(DraggableText(text: '${locationn}', color: dialogPickerColor,x: 120, y: 200));
+      draggableTexts.add(DraggableText(text: '${datte}', color: dialogPickerColor,x: 120, y: 250));
+      draggableTexts.add(DraggableText(text: '${timmm}', color: dialogPickerColor,x: 120, y: 300));
     });
   }
   Future _refresh() {
@@ -847,6 +871,12 @@ class _CardScreenState extends State<CardScreen> {
   //     print(response.reasonPhrase);
   //   }
   // }
+  // Color caughtColor = Colors.red;
+
+  var _x = 0.0;
+  var _y = 0.0;
+  final GlobalKey stackKey = GlobalKey();
+
 
   @override
   Widget build(BuildContext context) {
@@ -867,308 +897,163 @@ class _CardScreenState extends State<CardScreen> {
                 key: keyList,
                 child: Container(
                   height: MediaQuery.of(context).size.height/1.5,
+                  width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: NetworkImage("${widget.image}"),
                       fit: BoxFit.fill,
                     ),
                   ),
-                    child:  Padding(
-                      padding: const EdgeInsets.only(top: 160, left: 140),
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            left: draggableTextPosition.dx,
-                            top: draggableTextPosition.dy,
-                            // right: draggableTextPosition.dx,
-                            child: Draggable(
-                              feedback: Text(newInvitationText.toString(), style: TextStyle(fontSize: 19),),
-                              childWhenDragging: Container(),
-                              onDraggableCanceled: (velocity, offset) {
-                                setState(() {
-                                  draggableTextPosition = offset;
-                                });
-                              },
-                              child: GestureDetector(
-                                // onPanUpdate: (details) {
-                                //   setState(() {
-                                //     offset = Offset(
-                                //         offset.dx + details.delta.dx, offset.dy + details.delta.dy);
-                                //   });
-                                // },
-                                onTap: () {
-                                  _editInvitationText(context);
-                                  setState(() {
-                                    _showContainer = true;
-                                  });
-                                  // if (_showContainer) {
-                                  //   Container(
-                                  //     decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-                                  //     width: 100,
-                                  //     height: 100,
-                                  //     color: Colors.red,
-                                  //   );
-                                  // }
-                                },
-                                onScaleStart: (details) {
-                                  _baseScaleFactor = _scaleFactor1;
-                                },
-                                onScaleUpdate: (details) {
-                                  setState(() {
-                                    _scaleFactor1 = _baseScaleFactor * details.scale;
-                                  });
-                                },
-                                child: Container(
-                                  child: Center(
-                                    child: Text(
-                                      newInvitationText.toString(),
-                                      textScaleFactor: _scaleFactor1, style: TextStyle(color: dialogPickerColor, fontSize: 19),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                 child: Stack(
+                   key: stackKey,
+                   fit: StackFit.expand,
+                   children: [
+                     for (var draggableText in draggableTexts)
+                      Positioned(
+                        left: draggableText.x,
+                        top: draggableText.y,
+                        child: Draggable(
+                          child: GestureDetector(
+                            onTap: (){
+                              setState(() {
+                                _editInvitationText1(context);
+                              });
+                            },
+                            child: Text(
+                              draggableText.text,
+                              style: TextStyle(color: dialogPickerColor, fontSize: 18),
+                              textAlign: TextAlign.center,
                             ),
                           ),
-                          SizedBox(height: 20),
-                          Positioned(
-                                left: draggableTextPosition.dx,
-                                top: draggableTextPosition.dy,
-                                child: Draggable(
-                                  feedback: Text("${locationn.toString()}", style: TextStyle(fontSize: 19),),
-                                  childWhenDragging: Container(),
-                                  onDraggableCanceled: (velocity, offset) {
-                                    setState(() {
-                                      draggableTextPosition = offset;
-                                    });
-                                  },
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      _editInvitationText1(context);
-                                    },
-                                    onScaleStart: (details) {
-                                      _baseScaleFactor1 = _scaleFactor1;
-                                    },
-                                    onScaleUpdate: (details) {
-                                      setState(() {
-                                        _scaleFactor1 = _baseScaleFactor1 * details.scale;
-                                      });
-                                    },
-                                    child: Container(
-                                      child: Center(
-                                        child: Text(
-                                          locationn.toString(),
-                                          textScaleFactor: _scaleFactor1,
-                                          style: TextStyle(color: dialogPickerColor, fontSize: 19),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                      //     SizedBox(height: 20),
-                      //     Positioned(
-                      //    left: draggableTextPosition.dx,
-                      //    top: draggableTextPosition.dy,
-                      //   child: Draggable(
-                      //     feedback: Text("${datte.toString()}", style: TextStyle(fontSize: 19),),
-                      //     childWhenDragging: Container(),
-                      //     onDraggableCanceled: (velocity, offset) {
-                      //       setState(() {
-                      //         draggableTextPosition = offset;
-                      //       });
-                      //     },
-                      //     child: GestureDetector(
-                      //             onTap: () {
-                      //               _editInvitationText3(context);
-                      //             },
-                      //             onScaleStart: (details) {
-                      //               _baseScaleFactor3 = _scaleFactor3;
-                      //             },
-                      //             onScaleUpdate: (details) {
-                      //               setState(() {
-                      //                 _scaleFactor3 = _baseScaleFactor3 * details.scale;
-                      //               });
-                      //             },
-                      //             child: Container(
-                      //               child: Center(
-                      //                 child: Text(
-                      //                   datte.toString(),
-                      //                   textScaleFactor: _scaleFactor3,
-                      //                   style: TextStyle(color: dialogPickerColor, fontSize: 19),
-                      //                 ),
-                      //               ),
-                      //             ),
-                      //           ),
-                      //   ),
-                      // ),
-                      //     SizedBox(height: 20),
-                      //    Positioned(
-                      //      left: draggableTextPosition.dx,
-                      //      top: draggableTextPosition.dy,
-                      //      child: Draggable(
-                      //        feedback: Text("${timmm.toString()}", style: TextStyle(fontSize: 19),),
-                      //        childWhenDragging: Container(),
-                      //        onDraggableCanceled: (velocity, offset) {
-                      //          setState(() {
-                      //            draggableTextPosition = offset;
-                      //          });
-                      //        },
-                      //        child: GestureDetector(
-                      //             onTap: () {
-                      //               _editInvitationText4(context);
-                      //             },
-                      //             onScaleStart: (details) {
-                      //               _baseScaleFactor4 = _scaleFactor4;
-                      //             },
-                      //             onScaleUpdate: (details) {
-                      //               setState(() {
-                      //                 _scaleFactor4 = _baseScaleFactor4 * details.scale;
-                      //               });
-                      //             },
-                      //             child: Container(
-                      //               child: Center(
-                      //                 child: Text(
-                      //                   timmm.toString(),
-                      //                   textScaleFactor: _scaleFactor4,
-                      //                   style: TextStyle(color: dialogPickerColor, fontSize: 19),
-                      //                 ),
-                      //               ),
-                      //             ),
-                      //           ),
-                      //      ),
-                      //    ),
-                        ],
-                      ),
-                    ),
-                    // ListView(children: [
-                    //
-                    //     SizedBox(height: 20),
-                    //     GestureDetector(
-                    //       onTap: () {
-                    //         _editInvitationText1(context);
-                    //       },
-                    //       onScaleStart: (details) {
-                    //         _baseScaleFactor1 = _scaleFactor1;
-                    //       },
-                    //       onScaleUpdate: (details) {
-                    //         setState(() {
-                    //           _scaleFactor1 = _baseScaleFactor1 * details.scale;
-                    //         });
-                    //       },
-                    //       child: Container(
-                    //         child: Center(
-                    //           child: Text(
-                    //             locationn.toString(),
-                    //             textScaleFactor: _scaleFactor1,
-                    //             style: TextStyle(color: dialogPickerColor, fontSize: 19),
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     SizedBox(height: 20),
-                    //     GestureDetector(
-                    //       onTap: () {
-                    //         _editInvitationText3(context);
-                    //       },
-                    //       onScaleStart: (details) {
-                    //         _baseScaleFactor3 = _scaleFactor3;
-                    //       },
-                    //       onScaleUpdate: (details) {
-                    //         setState(() {
-                    //           _scaleFactor3 = _baseScaleFactor3 * details.scale;
-                    //         });
-                    //       },
-                    //       child: Container(
-                    //         child: Center(
-                    //           child: Text(
-                    //             datte.toString(),
-                    //             textScaleFactor: _scaleFactor3,
-                    //             style: TextStyle(color: dialogPickerColor, fontSize: 19),
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     SizedBox(height: 20),
-                    //     GestureDetector(
-                    //       onTap: () {
-                    //         _editInvitationText4(context);
-                    //       },
-                    //       onScaleStart: (details) {
-                    //         _baseScaleFactor4 = _scaleFactor4;
-                    //       },
-                    //       onScaleUpdate: (details) {
-                    //         setState(() {
-                    //           _scaleFactor4 = _baseScaleFactor4 * details.scale;
-                    //         });
-                    //       },
-                    //       child: Container(
-                    //         child: Center(
-                    //           child: Text(
-                    //             timmm.toString(),
-                    //             textScaleFactor: _scaleFactor4,
-                    //             style: TextStyle(color: dialogPickerColor, fontSize: 19),
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5),
-                child: ListTile(
-                  title: Row(
-                    children: [
-                      const Text("Change Text Color", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                      const SizedBox(width: 10),
-                      ColorIndicator(
-                        width: 30,
-                        height: 30,
-                        borderRadius: 4,
-                        color: dialogPickerColor,
-                        onSelectFocus: false,
-                        onSelect: () async {
-                          // Store current color before we open the dialog.
-                          final Color colorBeforeDialog = dialogPickerColor;
-                          // Wait for the picker to close, if dialog was dismissed,
-                          // then restore the color we had before it was opened.
-                          if (!(await colorPickerDialog())) {
+                          // onDragStarted: () {
+                          //   setState(() {
+                          //     draggableText.scale = 1.2;
+                          //   });
+                          // },
+                          // onDraggableCanceled: (_, __) {
+                          //   setState(() {
+                          //     draggableText.scale = 1.0;
+                          //   });
+                          // },
+                          feedback: Text(
+                            draggableText.text,
+                            style: TextStyle(color: dialogPickerColor, fontSize: 18),
+                          ),
+                          childWhenDragging: Container(),
+                          onDragEnd: (dragDetails) {
                             setState(() {
-                              dialogPickerColor = colorBeforeDialog;
+                              final parentPos = context.findRenderObject()?.paintBounds;
+                              if (parentPos == null) return;
+                              draggableText.x = dragDetails.offset.dx - parentPos.left;
+                              draggableText.y = dragDetails.offset.dy - parentPos.top;
                             });
-                          }
-                        },
+                          },
+                        ),
                       ),
-                    ],
-                  ),
-                  // title: const Text('Click this color to modify it in a dialog.'),
-                  // subtitle: Text(
-                  //   // ignore: lines_longer_than_80_chars
-                  //   '${ColorTools.materialNameAndCode(dialogPickerColor, colorSwatchNameMap: colorsNameMap)} '
-                  //       'aka ${ColorTools.nameThatColor(dialogPickerColor)}',
-                  // ),
-                  // trailing:
-                  // ColorIndicator(
-                  //   width: 34,
-                  //   height: 34,
-                  //   borderRadius: 4,
-                  //   color: dialogPickerColor,
-                  //   onSelectFocus: false,
-                  //   onSelect: () async {
-                  //     // Store current color before we open the dialog.
-                  //     final Color colorBeforeDialog = dialogPickerColor;
-                  //     // Wait for the picker to close, if dialog was dismissed,
-                  //     // then restore the color we had before it was opened.
-                  //     if (!(await colorPickerDialog())) {
-                  //       setState(() {
-                  //         dialogPickerColor = colorBeforeDialog;
-                  //       });
-                  //     }
-                  //   },
-                  // ),
+                   ],
+                 ),
                 ),
               ),
-              SizedBox(height: 40),
+              ListTile(
+                title: Row(
+                  children: [
+                    const Text("Change Text Color", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                    const SizedBox(width: 4),
+                    ColorIndicator(
+                      width: 30,
+                      height: 30,
+                      borderRadius: 4,
+                      color: dialogPickerColor,
+                      onSelectFocus: false,
+                      onSelect: () async {
+                        final Color colorBeforeDialog = dialogPickerColor;
+                        if (!(await colorPickerDialog())) {
+                          setState(() {
+                            dialogPickerColor = colorBeforeDialog;
+                          });
+                        }
+                      },
+                    ),
+                    SizedBox(width: 70),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: colors.primary, // background
+                      ),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            List<TextEditingController> textControllers = [];
+                            for (var draggableText in draggableTexts) {
+                              textControllers.add(TextEditingController(text: draggableText.text));
+                            }
+                            return AlertDialog(
+                              title: const Text('Edit Texts'),
+                              content: Column(
+                                children: [
+                                  for (int i = 0; i < draggableTexts.length; i++)
+                                    TextField(
+                                      controller: textControllers[i],
+                                      onChanged: (value) {
+                                        draggableTexts[i].text = value;
+                                      },
+                                    ),
+                                ],
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      for (int i = 0; i < draggableTexts.length; i++) {
+                                        draggableTexts[i].text = textControllers[i].text;
+                                      }
+                                    });
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('Save'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Text('Edit Texts'),
+                    ),
+                  ],
+                ),
+                // title: const Text('Click this color to modify it in a dialog.'),
+                // subtitle: Text(
+                //   // ignore: lines_longer_than_80_chars
+                //   '${ColorTools.materialNameAndCode(dialogPickerColor, colorSwatchNameMap: colorsNameMap)} '
+                //       'aka ${ColorTools.nameThatColor(dialogPickerColor)}',
+                // ),
+                // trailing:
+                // ColorIndicator(
+                //   width: 34,
+                //   height: 34,
+                //   borderRadius: 4,
+                //   color: dialogPickerColor,
+                //   onSelectFocus: false,
+                //   onSelect: () async {
+                //     // Store current color before we open the dialog.
+                //     final Color colorBeforeDialog = dialogPickerColor;
+                //     // Wait for the picker to close, if dialog was dismissed,
+                //     // then restore the color we had before it was opened.
+                //     if (!(await colorPickerDialog())) {
+                //       setState(() {
+                //         dialogPickerColor = colorBeforeDialog;
+                //       });
+                //     }
+                //   },
+                // ),
+              ),
+              const SizedBox(height: 40),
               InkWell(
                 onTap: () {
                  save();
@@ -1177,49 +1062,13 @@ class _CardScreenState extends State<CardScreen> {
                   height: 40,
                     width: MediaQuery.of(context).size.width/1.1,
                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: colors.primary),
-                    child: Center(
+                    child: const Center(
                         child: Text("Save Card",
                             style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700)
                         ),
                     ),
                 ),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              //   child: Row(
-              //     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //     children: [
-              //       Text("Share", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800,),),
-              //       SizedBox(width: 8,),
-              //       Container(
-              //         height: 45,
-              //         width: 45,
-              //         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
-              //         child: IconButton(
-              //             onPressed: () {
-              //               // setState(() {
-              //               // });
-              //               _share();
-              //             },
-              //             icon: const Icon(Icons.share, color: Colors.white)),
-              //       ),
-              //       SizedBox(width: MediaQuery.of(context).size.width/3),
-              //       Text("Download", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800,),),
-              //       SizedBox(width: 8),
-              //       Container(
-              //         height: 45,
-              //         width: 45,
-              //         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
-              //         child: IconButton(
-              //             onPressed:() async {
-              //               saveImage();
-              //               // downloadFile();
-              //             },
-              //             icon: const Icon(Icons.download, color: Colors.white)),
-              //       ),
-              //     ],
-              //   ),
-              // ),
             ],
           ),
         ),
@@ -1227,36 +1076,6 @@ class _CardScreenState extends State<CardScreen> {
     );
   }
 
-  // downloadFile(String url, String filename) async {
-  //   try {
-  //     RenderRepaintBoundary boundary =  keyList.currentContext!.findRenderObject() as RenderRepaintBoundary;
-  //     ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-  //     return image;
-  //   } catch (exception) {
-  //     print(exception);
-  //     return null;
-  //   }
-  //   // FileDownloader.downloadFile(
-  //   //     url: "${url}",
-  //   //     name: "${filename}",
-  //   //     onDownloadCompleted: (path) {
-  //   //       print(path);
-  //   //       String tempPath = path.toString().replaceAll("Download", "Imageee");
-  //   //       final File file = File(tempPath);
-  //   //       print("path here ${file}");
-  //   //       var snackBar = SnackBar(
-  //   //         backgroundColor: colors.primary,
-  //   //         content: Row(
-  //   //           children: [
-  //   //             const Text('Imagee Saved in your storage'),
-  //   //             TextButton(onPressed: (){}, child: Text("View"))
-  //   //           ],
-  //   //         ),
-  //   //       );
-  //   //       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  //   //       //This will be the path of the downloaded file
-  //   //     });
-  // }
 
   Future<ui.Image?> captureImage() async {
     try {
@@ -1277,7 +1096,6 @@ class _CardScreenState extends State<CardScreen> {
       ui.Image image = await bound.toImage();
       ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
       print('${byteData?.buffer.lengthInBytes}___________');
-      // this will save image screenshot in gallery
       if(byteData != null){
         Uint8List pngBytes = byteData.buffer.asUint8List();
         String fileName = DateTime.now().microsecondsSinceEpoch.toString();
@@ -1375,33 +1193,73 @@ class _CardScreenState extends State<CardScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        String newvaluee= "";
-        return AlertDialog(
-          title: Text('Edit Invitation Text'),
-          content: TextFormField(
-            initialValue: locationn,
-            onChanged: (value) {
-              newvaluee = value;
-            },
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  locationn = newvaluee.toString();
-                });
-                Navigator.of(context).pop();
-              },
-              child: Text('Save'),
+        return StatefulBuilder(builder: (c,setState){
+          return  AlertDialog(
+            title: Text('Edit Invitation Text'),
+            content: Column(
+              children: [
+                TextFormField(
+                  initialValue: newInvitationText,
+                  onChanged: (value) {
+                    setState(() {
+                      updateName = value;
+                    });
+                  },
+                ),
+                TextFormField(
+                  initialValue: locationn,
+                  onChanged: (value) {
+                    setState(() {
+                      updatedlocation = value;
+                    });
+                  },
+                ),
+                TextFormField(
+                  initialValue: datte,
+                  onChanged: (value) {
+                    setState(() {
+                      updatedDate = value;
+                    });
+                  },
+                ),
+                TextFormField(
+                  initialValue: timmm,
+                  onChanged: (value) {
+                    setState(() {
+                      updatedTime = value;
+                    });
+                  },
+                ),
+              ],
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
-            ),
-          ],
-        );
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    newInvitationText = updateName == "" ? newInvitationText : updateName;
+                    locationn = updatedlocation == "" ? locationn : updatedlocation;
+                    datte = updatedDate == "" ? datte : updatedDate;
+                    timmm = updatedTime == "" ? timmm : updatedTime;
+                    draggableTexts.add(DraggableText(text: '${newInvitationText}', color: dialogPickerColor,x: 150,y: 150));
+                    draggableTexts.add(DraggableText(text: '${locationn}', color: dialogPickerColor,x: 150,y: 200));
+                    draggableTexts.add(DraggableText(text: '${datte}', color: dialogPickerColor,x: 150,y: 250));
+                    draggableTexts.add(DraggableText(text: '${timmm}', color: dialogPickerColor,x: 150,y: 300));
+                    //  locationn = newvaluee.toString();
+                  });
+                  print("final updated valued here ${newInvitationText} and ${locationn} and ${datte} and ${timmm}");
+                  Navigator.of(context).pop();
+                },
+                child: Text('Save'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('Cancel'),
+              ),
+            ],
+          );
+        });
       },
     );
   }

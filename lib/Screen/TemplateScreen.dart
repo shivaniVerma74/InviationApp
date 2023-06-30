@@ -135,7 +135,7 @@ class _TemplateScreenState extends State<TemplateScreen> {
     print("mmmmmmmmmmmmm ${templatesModel}");
     return Container(
       height: 500,
-      child: templatesModel == null ? Center(child: Text("No template to show"))  : GridView.builder(
+      child: templatesModel == null ? Center(child: Text("No template to show")) : GridView.builder(
         scrollDirection: Axis.vertical,
         itemCount: templatesModel?.data?.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -177,7 +177,6 @@ class _TemplateScreenState extends State<TemplateScreen> {
     );
   }
 
-
   int _currentIndex = 0;
   customTabbar(){
     return Padding(
@@ -187,7 +186,7 @@ class _TemplateScreenState extends State<TemplateScreen> {
       child: GridView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: getcategoryModel?.data?.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           childAspectRatio:3 /7,
           crossAxisCount: 1,
         ),
@@ -210,7 +209,7 @@ class _TemplateScreenState extends State<TemplateScreen> {
                 semanticContainer: true,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0),
-                  side: BorderSide(
+                  side: const BorderSide(
                       color:  colors.primary, width: 2
                   ),
                 ),

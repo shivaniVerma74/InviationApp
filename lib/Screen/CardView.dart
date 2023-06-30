@@ -52,7 +52,7 @@ class _CardViewState extends State<CardView> {
   }
 
   Future<void> _handlePaymentSuccess(PaymentSuccessResponse response) async {
-    Fluttertoast.showToast(msg: "Subscription added successfully");
+    Fluttertoast.showToast(msg: "Card added successfully");
     purchaseCard();
     // Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
   }
@@ -87,12 +87,12 @@ class _CardViewState extends State<CardView> {
     if (response.statusCode == 200) {
       var finalResponse = await response.stream.bytesToString();
       final jsonResponse = SaveMyCardModel.fromJson(json.decode(finalResponse));
-      String? card_id = jsonResponse.data?.first.id ??"";
+      card_id = jsonResponse.data?.first.id ??"";
+      preferences.setString("card_id", card_id!);
+      print("carddddd idddd isssss ${card_id}");
       setState(() {
         saveMyCardModel =  jsonResponse;
       });
-      preferences.setString("card_id", card_id);
-     print("carddddd idddd isssss ${card_id}");
     }
     else {
       print(response.reasonPhrase);
@@ -209,7 +209,7 @@ class _CardViewState extends State<CardView> {
     };
     var request = http.MultipartRequest('POST', Uri.parse('${ApiService.purchasepayment}'));
     request.fields.addAll({
-      'id': '${card_id.toString()}',
+      'id': '${card_id}',
       'transaction_id': 'rzp_test_1DP5mmOlF5G5ag'
     });
      print("Purchase parameter ${request.fields}");
