@@ -4,6 +4,7 @@ import 'package:doctorapp/Screen/Bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Helper/Color.dart';
 import '../api/api_services.dart';
 
@@ -22,6 +23,9 @@ class _EnquiryFormState extends State<EnquiryForm> {
 
   bool load = false;
   enquirySend() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? userId = preferences.getString('userId');
+    String? vendor_id = preferences.getString("vendor_id");
     print("Enquiry Sumbit Successfullyyyyyyy");
     var headers = {
       'Cookie': 'ci_session=88d269d5bf30ff6f1a646d5b9653424dd6bc7552'
@@ -29,11 +33,13 @@ class _EnquiryFormState extends State<EnquiryForm> {
     var request = http.MultipartRequest('POST', Uri.parse('${ApiService.submitquery}'));
     request.fields.addAll({
       'name': namectr.text,
+      'user_id': '$userId',
       'mobile': mobileCtr.text,
       'email': emailCtr.text,
       'message': messageCtr.text,
-      'vendor_id': '1'
+      'vendor_id': '${vendor_id.toString()}'
     });
+    print("Enquiry Formmm parameter${request.fields}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Helper/Color.dart';
 import '../Helper/Constant.dart';
@@ -9,7 +10,8 @@ import '../New_model/GetEnquiryModel.dart';
 import '../api/api_services.dart';
 
 class MyEnquiry extends StatefulWidget {
-  const MyEnquiry({Key? key}) : super(key: key);
+  final MOBILE;
+  MyEnquiry({Key? key, this.MOBILE}) : super(key: key);
 
   @override
   State<MyEnquiry> createState() => _MyEnquiryState();
@@ -28,21 +30,28 @@ class _MyEnquiryState extends State<MyEnquiry> {
 
   GetEnquiryModel? getEnquiryModel;
   _getEnquiry() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? userId = preferences.getString('userId');
     print("Enquiryyyy Apiiiii");
     var headers = {
       'Cookie': 'ci_session=1db2867fc5f287b9d5f70d2589a2e26f9e99c911'
     };
-    var request = http.MultipartRequest('POST', Uri.parse('${ApiService.getenquiries}'));
-
+    var request = http.MultipartRequest('GET', Uri.parse('${ApiService.getenquiries}'));
+    request.fields.addAll({
+      'mobile': '$userId',
+    });
+    print("get enquiry para ${request.fields}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       var finalResponse = await response.stream.bytesToString();
       final jsonResponse = GetEnquiryModel.fromJson(json.decode(finalResponse));
+      print("final responseeee ${finalResponse}");
       print("Get Enquiry****$jsonResponse");
       setState(() {
         getEnquiryModel = GetEnquiryModel.fromJson(json.decode(finalResponse));
       });
+      print("respmoseee ${getEnquiryModel}");
     }
     else {
       print(response.reasonPhrase);
@@ -62,11 +71,12 @@ class _MyEnquiryState extends State<MyEnquiry> {
       body: SingleChildScrollView(
         child: RefreshIndicator(
           onRefresh: refreshFunction,
-          child: Column(
+          child: getEnquiryModel?.status == false ? Center(child: Text("No Enquiry Found", style: TextStyle(fontSize: 15, color: Colors.black),),):
+          Column(
             children: [
-              SizedBox(height: 10,),
+              SizedBox(height: 10),
               getEnquiryModel == null ? Center(
-                  child: CircularProgressIndicator(color: colors.primary,)
+                  child: CircularProgressIndicator(color: colors.primary)
               ):
               Container(
                 height: MediaQuery.of(context).size.height/1.1,
@@ -74,8 +84,7 @@ class _MyEnquiryState extends State<MyEnquiry> {
                     // shrinkWrap: true,
                     itemCount: getEnquiryModel?.data?.length,
                     scrollDirection: Axis.vertical,
-                    // physics: const AlwaysScrollableScrollPhysics(),
-                    itemBuilder: (BuildContext context, int index){
+                    itemBuilder: (BuildContext context, int index) {
                       return  Card(
                         margin: EdgeInsets.all(10),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -102,8 +111,6 @@ class _MyEnquiryState extends State<MyEnquiry> {
                                   ),
                                 ),
                                 Container(
-                                  // alignment: Alignment.topRight,
-                                  // margin: EdgeInsets.only(left: 20),
                                   child: Padding(
                                     padding: const EdgeInsets.all(10),
                                     child: Column(

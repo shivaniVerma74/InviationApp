@@ -61,7 +61,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
       key: _refreshIndicatorKey,
       onRefresh: _refresh,
       child: Scaffold(
-          appBar:  customAppBar(text: "Privacy Policy",isTrue: true, context: context),
+          appBar: customAppBar(text: "Privacy Policy",isTrue: true, context: context),
           body: ListView(
             children: [
               Padding(

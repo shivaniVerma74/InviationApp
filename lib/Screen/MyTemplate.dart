@@ -57,7 +57,7 @@ class _MyTemplateState extends State<MyTemplate> {
       setState(() {
         savedCardModel = SavedCardModel.fromJson(json.decode(finalResponse));
       });
-      print(await response.stream.bytesToString());
+      // print(await response.stream.bytesToString());
     }
     else {
       print(response.reasonPhrase);
@@ -79,7 +79,8 @@ class _MyTemplateState extends State<MyTemplate> {
       body: SingleChildScrollView(
         child: RefreshIndicator(
           onRefresh: refreshFunction,
-          child: Column(
+          child: savedCardModel?.status == false ? Center(child: Text("No Template Found", style: TextStyle(fontSize: 15, color: Colors.black),),):
+          Column(
             children: [
               Container(
                 height: MediaQuery.of(context).size.height/1.1,
@@ -138,7 +139,7 @@ class _MyTemplateState extends State<MyTemplate> {
                                             icon: const Icon(Icons.share, color: Colors.white)),
                                       ),
                                       SizedBox(width: MediaQuery.of(context).size.width/2.7),
-                                      Text("Download", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                                      const Text("Download", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
                                       SizedBox(width: 5),
                                       Container(
                                         height: 40,
@@ -286,12 +287,10 @@ class _MyTemplateState extends State<MyTemplate> {
       String fileName = DateTime.now().microsecondsSinceEpoch.toString();
       final file = await File('$directory/$fileName.png').create();
       await file.writeAsBytes(pngBytes);
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Card Download Successfully')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Card Download Successfully')));
       print('Image saved in this destination: ${file.path}');
     }
   }
-
 
   _share() async {
     var status =  await Permission.photos.request();

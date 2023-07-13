@@ -27,18 +27,18 @@ class _EventScreenState extends State<EventScreen> {
     });
   }
 
-  String? cities;
+  String? city_id;
   EventListModel? eventListModel;
   nearByEvevt() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    cities = preferences.getString("cities");
-    print("Citiesss id noww ${cities}");
+    city_id = preferences.getString("city_id");
+    print("Citiesss id noww ${city_id}");
     var headers = {
       'Cookie': 'ci_session=e6545df7c1714023144b9f63cc94cd2118c2e751'
     };
     var request = http.MultipartRequest('POST', Uri.parse('${ApiService.geteventmanagers}'));
     request.fields.addAll({
-      'city_id': cities.toString(),
+      'city_id': "${city_id.toString()}"
     });
     print("City id in event manager page ${request.fields}");
     request.headers.addAll(headers);
@@ -79,27 +79,26 @@ class _EventScreenState extends State<EventScreen> {
         onRefresh: refreshFunction,
         child: Column(
           children: [
-        Positioned(
-        child: eventListModel == null ? Center(
-        child: CircularProgressIndicator(color: colors.primary,)
-      ):
-            InkWell(
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetails()));
-              },
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: eventListModel?.data?.length,
-                  scrollDirection: Axis.vertical,
-                  physics: AlwaysScrollableScrollPhysics(),
-                  itemBuilder: (BuildContext context, int index){
-                    return  Card(
+          eventListModel == null ? Center(
+          child: CircularProgressIndicator(color: colors.primary,)
+          ):
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: eventListModel?.data?.length,
+                scrollDirection: Axis.vertical,
+                physics: AlwaysScrollableScrollPhysics(),
+                itemBuilder: (BuildContext context, int index){
+                  return  InkWell(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetails(data: eventListModel!.data![index])));
+                    },
+                    child: Card(
                         margin: EdgeInsets.all(10),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                         elevation: 5.0,
                         child: Container(
                           height: MediaQuery.of(context).size.width/3,
-                          width: MediaQuery.of(context).size.width/1 ,
+                          width: MediaQuery.of(context).size.width/1,
                           child:Row(
                             children: [
                               Padding(padding: EdgeInsets.all(10)),
@@ -152,274 +151,10 @@ class _EventScreenState extends State<EventScreen> {
                             ],
                           ),
                         ),
-                    );
-                  }
-              ),
+                    ),
+                  );
+                }
             ),
-            // InkWell(
-            //   onTap: (){
-            //     Navigator.push(context, MaterialPageRoute(builder:(context)=>EventDetails()));
-            //   },
-            //   child: Card(
-            //       margin: EdgeInsets.all(10),
-            //       shape: RoundedRectangleBorder(
-            //           borderRadius: BorderRadius.circular(20)),
-            //       elevation: 5.0,
-            //       child: Container(
-            //         height: MediaQuery
-            //             .of(context)
-            //             .size
-            //             .width / 3,
-            //         width: MediaQuery
-            //             .of(context)
-            //             .size
-            //             .width / 1,
-            //         child: Row(
-            //           children: [
-            //             Padding(padding: EdgeInsets.all(10)),
-            //             Container(
-            //               decoration: BoxDecoration(
-            //                 borderRadius: BorderRadius.circular(10),
-            //               ),
-            //               height: 140,
-            //               width: 140,
-            //               child: Image.asset("assets/images/food.png"),
-            //             ),
-            //             SizedBox(
-            //               height: 20,
-            //             ),
-            //             Container(
-            //               alignment: Alignment.topRight,
-            //               margin: EdgeInsets.only(left: 10),
-            //               child: Column(
-            //                 crossAxisAlignment: CrossAxisAlignment.start,
-            //                 children: [
-            //                   Padding(padding: EdgeInsets.only(top: 20)),
-            //                   Row(
-            //                     crossAxisAlignment: CrossAxisAlignment.start,
-            //                     children: [
-            //                       Text("Name: ", textAlign: TextAlign.right,),
-            //                       Text(" First User"),
-            //                     ],
-            //                   ),
-            //                   SizedBox(height: 3,),
-            //                   Row(
-            //                     children: [
-            //                       Text("Mobile no:", textAlign: TextAlign.right,),
-            //                       Text(" 9012345678"),
-            //                     ],
-            //                   ),
-            //                   SizedBox(height: 3,),
-            //
-            //                   Row(
-            //                     children: [
-            //                       Text("KM:", textAlign: TextAlign.right),
-            //                       Text(" 4 KM")
-            //                     ],
-            //                   )
-            //                 ],
-            //               ),
-            //             )
-            //           ],
-            //         ),
-            //       ),
-            //   ),
-            // ),
-            // InkWell(
-            //     onTap: (){
-            //       Navigator.push(context, MaterialPageRoute(builder:(context)=>EventDetails()));
-            //     },
-            //     child:
-            //     Card(
-            //         margin: EdgeInsets.all(10),
-            //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            //         elevation: 5.0,
-            //         child: Container(
-            //           height: MediaQuery.of(context).size.width/3,
-            //           width: MediaQuery.of(context).size.width/1 ,
-            //           child:Row(
-            //             children: [
-            //               Padding(padding: EdgeInsets.all(10)),
-            //               Container(
-            //                 decoration: BoxDecoration(
-            //                   borderRadius: BorderRadius.circular(10),
-            //                 ),
-            //                 height: 140,
-            //                 width: 140,
-            //                 child: Image.asset("assets/images/tent.png"),
-            //               ),
-            //               SizedBox(
-            //                 height: 20,
-            //               ),
-            //               Container(
-            //                 alignment: Alignment.topRight,
-            //                 margin: EdgeInsets.only(left: 10),
-            //                 child: Column(
-            //                   crossAxisAlignment: CrossAxisAlignment.start,
-            //                   children: [
-            //                     Padding(padding: EdgeInsets.only(top: 20),),
-            //                     Row(
-            //                       crossAxisAlignment: CrossAxisAlignment.start,
-            //                       children: [
-            //                         Text("Name: ",textAlign: TextAlign.right,),
-            //                         Text(" First User"),
-            //                       ],
-            //                     ),
-            //                     SizedBox(height: 3,),
-            //                     Row(
-            //                       children: [
-            //                         Text("Mobile no:",textAlign: TextAlign.right,),
-            //                         Text(" 9012345678"),
-            //                       ],
-            //                     ),
-            //                     SizedBox(height: 3,),
-            //
-            //                     Row(
-            //                       children: [
-            //                         Text("KM:",textAlign: TextAlign.right),
-            //                         Text(" 4 KM")
-            //                       ],
-            //                     )
-            //                   ],
-            //                 ),
-            //               )
-            //             ],
-            //           ) ,
-            //         )
-            //     ),
-            // ),
-            // InkWell(
-            //   onTap: (){
-            //     Navigator.push(context, MaterialPageRoute(builder:(context)=>EventDetails()));
-            //   },
-            //   child: Card(
-            //     margin: EdgeInsets.all(10),
-            //     shape: RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.circular(20)),
-            //     elevation: 5.0,
-            //     child: Container(
-            //       height: MediaQuery
-            //           .of(context)
-            //           .size
-            //           .width / 3,
-            //       width: MediaQuery
-            //           .of(context)
-            //           .size
-            //           .width / 1,
-            //       child: Row(
-            //         children: [
-            //           Padding(padding: EdgeInsets.all(10)),
-            //           Container(
-            //             decoration: BoxDecoration(
-            //               borderRadius: BorderRadius.circular(10),
-            //             ),
-            //             height: 140,
-            //             width: 140,
-            //             child: Image.asset("assets/images/food.png"),
-            //           ),
-            //           SizedBox(
-            //             height: 20,
-            //           ),
-            //           Container(
-            //             alignment: Alignment.topRight,
-            //             margin: EdgeInsets.only(left: 10),
-            //             child: Column(
-            //               crossAxisAlignment: CrossAxisAlignment.start,
-            //               children: [
-            //                 Padding(padding: EdgeInsets.only(top: 20)),
-            //                 Row(
-            //                   crossAxisAlignment: CrossAxisAlignment.start,
-            //                   children: [
-            //                     Text("Name: ", textAlign: TextAlign.right,),
-            //                     Text(" First User"),
-            //                   ],
-            //                 ),
-            //                 SizedBox(height: 3,),
-            //                 Row(
-            //                   children: [
-            //                     Text("Mobile no:", textAlign: TextAlign.right,),
-            //                     Text(" 9012345678"),
-            //                   ],
-            //                 ),
-            //                 SizedBox(height: 3,),
-            //
-            //                 Row(
-            //                   children: [
-            //                     Text("KM:", textAlign: TextAlign.right),
-            //                     Text(" 4 KM")
-            //                   ],
-            //                 )
-            //               ],
-            //             ),
-            //           )
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // InkWell(
-            //   onTap: (){
-            //     Navigator.push(context, MaterialPageRoute(builder:(context)=>EventDetails()));
-            //   },
-            //   child:Card(
-            //       margin: EdgeInsets.all(10),
-            //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            //       elevation: 5.0,
-            //       child: Container(
-            //         height: MediaQuery.of(context).size.width/3,
-            //         width: MediaQuery.of(context).size.width/1 ,
-            //         child:Row(
-            //           children: [
-            //             Padding(padding: EdgeInsets.all(10)),
-            //             Container(
-            //               decoration: BoxDecoration(
-            //                 borderRadius: BorderRadius.circular(10),
-            //               ),
-            //               height: 140,
-            //               width: 140,
-            //               child: Image.asset("assets/images/tent.png"),
-            //             ),
-            //             SizedBox(
-            //               height: 20,
-            //             ),
-            //             Container(
-            //               alignment: Alignment.topRight,
-            //               margin: EdgeInsets.only(left: 10),
-            //               child: Column(
-            //                 crossAxisAlignment: CrossAxisAlignment.start,
-            //                 children: [
-            //                   Padding(padding: EdgeInsets.only(top: 20)),
-            //                   Row(
-            //                     crossAxisAlignment: CrossAxisAlignment.start,
-            //                     children: [
-            //                       Text("Name: ",textAlign: TextAlign.right,),
-            //                       Text(" First User"),
-            //                     ],
-            //                   ),
-            //                   SizedBox(height: 3),
-            //                   Row(
-            //                     children: [
-            //                       Text("Mobile no:",textAlign: TextAlign.right,),
-            //                       Text(" 9012345678"),
-            //                     ],
-            //                   ),
-            //                   SizedBox(height: 3,),
-            //
-            //                   Row(
-            //                     children: [
-            //                       Text("KM:",textAlign: TextAlign.right),
-            //                       Text(" 4 KM")
-            //                     ],
-            //                   )
-            //                 ],
-            //               ),
-            //             )
-            //           ],
-            //         ) ,
-            //       )
-            //   ),
-            // ),
-          ),
           ],
         ),
       ),

@@ -111,9 +111,7 @@ class _SignupScreenState extends State<SignupScreen> {
     var request = http.MultipartRequest('POST', Uri.parse('${ApiService.getcitylist}'));
 
     request.headers.addAll(headers);
-
     http.StreamedResponse response = await request.send();
-
     if (response.statusCode == 200) {
       var finalResponse = await response.stream.bytesToString();
       final jsonResponse = GetCityModel.fromJson(json.decode(finalResponse));

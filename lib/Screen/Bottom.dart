@@ -305,7 +305,7 @@ class _BottomScreenState extends State<BottomScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MultipleDragScreen()),
+                MaterialPageRoute(builder: (context) => MyEnquiry()),
               );
             },
           ),
@@ -374,7 +374,8 @@ class _BottomScreenState extends State<BottomScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PrivacyPolicy()),
+                MaterialPageRoute(builder: (context) => PrivacyPolicy()
+                ),
               );
             },
           ),

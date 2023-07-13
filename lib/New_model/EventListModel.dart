@@ -1,6 +1,6 @@
 /// status : true
 /// message : "Event Manager List"
-/// data : [{"city_name":"Jaipur","uname":"Khandelwal Delivery","email":"Ksh@gmail.com","mobile":"9192939495","event_name":"Birthday","description":"today is my birthday","profile_image":"https://developmentalphawizz.com/invitation_design/uploads/profile_pics/649052332055a.png","status":"1","distance":"1 KM"}]
+/// data : [{"city_name":"Jaipur","uname":"Devesh","email":"Devesh33@gmail.com","mobile":"9993224906","event_name":"devesh store","vendor_id":"130","description":"demo","profile_image":"https://developmentalphawizz.com/invitation_design/uploads/profile_pics/64895dff60108.jpg","status":"0","distance":"1 KM"},{"city_name":"Baran","uname":"Wasim","email":"Wasim@gmail.com","mobile":"9977252525","event_name":"New Year","vendor_id":"133","description":"sdv  erg ser","profile_image":"https://developmentalphawizz.com/invitation_design/uploads/profile_pics/64afcbcc7d39e.jpeg","status":"0","distance":"1 KM"},{"city_name":"Jaipur","uname":"Khandelwal Delivery","email":"Ksh@gmail.com","mobile":"9192939495","event_name":"Birthday","vendor_id":"128","description":"today is my birthday","profile_image":"https://developmentalphawizz.com/invitation_design/uploads/profile_pics/649052332055a.png","status":"1","distance":"1 KM"},{"city_name":"Jaipur","uname":"Atul","email":"Gautam@gmail.com","mobile":"7979878778","event_name":"New year","vendor_id":"129","description":"ehyrth drh","profile_image":"https://developmentalphawizz.com/invitation_design/uploads/profile_pics/643540018ade0.jpg","status":"0","distance":"1 KM"}]
 
 class EventListModel {
   EventListModel({
@@ -49,13 +49,14 @@ EventListModel copyWith({  bool? status,
 }
 
 /// city_name : "Jaipur"
-/// uname : "Khandelwal Delivery"
-/// email : "Ksh@gmail.com"
-/// mobile : "9192939495"
-/// event_name : "Birthday"
-/// description : "today is my birthday"
-/// profile_image : "https://developmentalphawizz.com/invitation_design/uploads/profile_pics/649052332055a.png"
-/// status : "1"
+/// uname : "Devesh"
+/// email : "Devesh33@gmail.com"
+/// mobile : "9993224906"
+/// event_name : "devesh store"
+/// vendor_id : "130"
+/// description : "demo"
+/// profile_image : "https://developmentalphawizz.com/invitation_design/uploads/profile_pics/64895dff60108.jpg"
+/// status : "0"
 /// distance : "1 KM"
 
 class Data {
@@ -65,6 +66,7 @@ class Data {
       String? email, 
       String? mobile, 
       String? eventName, 
+      String? vendorId, 
       String? description, 
       String? profileImage, 
       String? status, 
@@ -74,6 +76,7 @@ class Data {
     _email = email;
     _mobile = mobile;
     _eventName = eventName;
+    _vendorId = vendorId;
     _description = description;
     _profileImage = profileImage;
     _status = status;
@@ -86,6 +89,7 @@ class Data {
     _email = json['email'];
     _mobile = json['mobile'];
     _eventName = json['event_name'];
+    _vendorId = json['vendor_id'];
     _description = json['description'];
     _profileImage = json['profile_image'];
     _status = json['status'];
@@ -96,6 +100,7 @@ class Data {
   String? _email;
   String? _mobile;
   String? _eventName;
+  String? _vendorId;
   String? _description;
   String? _profileImage;
   String? _status;
@@ -105,6 +110,7 @@ Data copyWith({  String? cityName,
   String? email,
   String? mobile,
   String? eventName,
+  String? vendorId,
   String? description,
   String? profileImage,
   String? status,
@@ -114,6 +120,7 @@ Data copyWith({  String? cityName,
   email: email ?? _email,
   mobile: mobile ?? _mobile,
   eventName: eventName ?? _eventName,
+  vendorId: vendorId ?? _vendorId,
   description: description ?? _description,
   profileImage: profileImage ?? _profileImage,
   status: status ?? _status,
@@ -124,6 +131,7 @@ Data copyWith({  String? cityName,
   String? get email => _email;
   String? get mobile => _mobile;
   String? get eventName => _eventName;
+  String? get vendorId => _vendorId;
   String? get description => _description;
   String? get profileImage => _profileImage;
   String? get status => _status;
@@ -136,6 +144,7 @@ Data copyWith({  String? cityName,
     map['email'] = _email;
     map['mobile'] = _mobile;
     map['event_name'] = _eventName;
+    map['vendor_id'] = _vendorId;
     map['description'] = _description;
     map['profile_image'] = _profileImage;
     map['status'] = _status;
