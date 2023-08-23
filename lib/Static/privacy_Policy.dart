@@ -34,6 +34,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
   }
   var privacyPolicy;
   var privacyPolicyTitle;
+
   getPrivacyPolicyApiApi() async {
     var headers = {
       'Cookie': 'ci_session=0972dd56b7dcbe1d24736525bf2ee593c03d46de'

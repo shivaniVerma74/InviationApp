@@ -21,7 +21,8 @@ import '../api/api_services.dart';
 
 class CardView extends StatefulWidget {
   final String? image;
-  const CardView({Key? key, this.image}) : super(key: key);
+  final String? id;
+  const CardView({Key? key, this.image, this.id}) : super(key: key);
 
   @override
   State<CardView> createState() => _CardViewState();
@@ -78,8 +79,9 @@ class _CardViewState extends State<CardView> {
     var request = http.MultipartRequest('POST', Uri.parse('${ApiService.savemycard}'));
     request.fields.addAll({
       'user_id': '$userId',
-      'template_id': '$template_id'
+      'template_id': '${widget.id}'
     });
+    print("parameterr ${request.fields}");
     request.files.add(await http.MultipartFile.fromPath('image', '${widget.image}'));
     print("save Cardddd parameterrrrr${request.fields}");
     request.headers.addAll(headers);
@@ -227,6 +229,7 @@ class _CardViewState extends State<CardView> {
   }
 
   bool areTextFieldsVisible = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -270,18 +273,17 @@ class _CardViewState extends State<CardView> {
             SizedBox(height: MediaQuery.of(context).size.height/11.9),
             Align(
               alignment: Alignment.bottomCenter,
-              child: Container(
+              child:
+              Container(
                 height: 40,
                 width: MediaQuery.of(context).size.width/1.1,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: colors.primary),
-                  onPressed:(){
+                  onPressed:() {
                     openCheckout(saveMyCardModel?.data?[0].price);
                     setState(() {
                      // areTextFieldsVisible = !areTextFieldsVisible;
                     });
-                    // Fluttertoast.showToast(msg: "Enquiry submit successfully");
-                    // Navigator.push(context, MaterialPageRoute(builder: (context) => EnquiryForm()));
                   },
                   child: const Text("Pay Now",style: TextStyle(fontSize: 15)
                   ),
@@ -294,7 +296,6 @@ class _CardViewState extends State<CardView> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 child: Row(
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text("Share", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
                     const SizedBox(width: 5),
@@ -330,7 +331,9 @@ class _CardViewState extends State<CardView> {
               ),
             ),
           ],
-      ))),
+      ),
+          ),
+        ),
     );
   }
 }

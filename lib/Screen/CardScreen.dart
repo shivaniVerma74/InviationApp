@@ -726,7 +726,8 @@ class CardScreen extends StatefulWidget {
   final String? image;
   final String datee;
   final String timee;
-  CardScreen({Key? key, required this.name, required this.address, required this.datee, required this.timee, this.image}) : super(key: key);
+  final String id;
+  CardScreen({Key? key, required this.name, required this.address, required this.datee, required this.timee, this.image, required this.id}) : super(key: key);
   @override
   State<CardScreen> createState() => _CardScreenState();
 }
@@ -747,26 +748,6 @@ class _CardScreenState extends State<CardScreen> {
   String updatedlocation = '';
   String updatedTime = '';
   String updatedDate = '';
-
-  double _scaleFactor = 1.0;
-  double _baseScaleFactor = 1.0;
-
-  double _scaleFactor1 = 1.0;
-  double _baseScaleFactor1 = 1.0;
-
-  double _scaleFactor2 = 1.0;
-  double _baseScaleFactor2 = 1.0;
-
-  double _scaleFactor3 = 1.0;
-  double _baseScaleFactor3 = 1.0;
-
-  double _scaleFactor4 = 1.0;
-  double _baseScaleFactor4 = 1.0;
-
-  double _textSize = 18.0;
-  Offset _textPosition = Offset(20, 20);
-
-  bool _showContainer = false;
 
   Color selectedColor = Colors.black;
   Offset offset = Offset.zero;
@@ -832,7 +813,7 @@ class _CardScreenState extends State<CardScreen> {
     var request = http.MultipartRequest('POST', Uri.parse('${ApiService.savemycard}'));
     request.fields.addAll({
       'user_id': '$userId',
-      'template_id': '$template_id'
+      'template_id': '${widget.id}'
     });
     request.files.add(await http.MultipartFile.fromPath('image', '${image}'));
     print("save Cardddd paraa${request.fields}");
@@ -840,7 +821,7 @@ class _CardScreenState extends State<CardScreen> {
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       Fluttertoast.showToast(msg: "card save successfully");
-      Navigator.push(context, MaterialPageRoute(builder: (context) => CardView(image: image)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => CardView(image: image, id:widget.id.toString())));
       print(await response.stream.bytesToString());
     }
     else {
@@ -873,10 +854,7 @@ class _CardScreenState extends State<CardScreen> {
   // }
   // Color caughtColor = Colors.red;
 
-  var _x = 0.0;
-  var _y = 0.0;
   final GlobalKey stackKey = GlobalKey();
-
 
   @override
   Widget build(BuildContext context) {

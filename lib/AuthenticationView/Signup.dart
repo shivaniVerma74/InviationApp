@@ -23,6 +23,7 @@ import '../Helper/AppBtn.dart';
 import '../Helper/Appbar.dart';
 import 'package:http/http.dart' as http;
 
+import '../New_model/GetStateModel.dart';
 import '../Registration/drverification.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -54,6 +55,14 @@ class _SignupScreenState extends State<SignupScreen> {
     Future.delayed(Duration(milliseconds: 400),(){
       return addCities();
     });
+
+  }
+
+ String ? cuooooo;
+  getCity_id()async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setString('citi', "${cities}");
+    print("citiescitiescitiescitiescities ${cities}");
   }
 
   RegistrationModel2? detailsData;
@@ -82,8 +91,9 @@ class _SignupScreenState extends State<SignupScreen> {
       print("Apiiiii workinggggg");
      var result =  await response.stream.bytesToString();
      var finalResult =  jsonDecode(result);
+      getCity_id();
      Fluttertoast.showToast(msg: finalResult['message']);
-     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen(cityId:cities)));
      setState(() {
        isLoading = false;
      });
@@ -108,8 +118,11 @@ class _SignupScreenState extends State<SignupScreen> {
     var headers = {
       'Cookie': 'ci_session=47a33758cb5f8f90b12340c2f31188b7fc5f9f92'
     };
-    var request = http.MultipartRequest('POST', Uri.parse('${ApiService.getcitylist}'));
 
+    var request = http.MultipartRequest('POST', Uri.parse('${ApiService.getcitylist}'));
+    request.fields.addAll({
+      'state_id': '2'
+    });
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -121,12 +134,29 @@ class _SignupScreenState extends State<SignupScreen> {
       setState(() {
         getCityModel = jsonResponse;
       });
-      print("City Herererre ${getCityModel!.data![0].name}");
+      // print("City Herererre ${getCityModel!.data![0].name}");
     }
     else {
       print(response.reasonPhrase);
     }
   }
+
+  GetStateModel? getStateModel;
+  getState() async {
+    var headers = {
+      'Cookie': 'ci_session=d01e57d25f187766341c297a71e6a3ab1679cf1e'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse('${ApiService.getStates}'));
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+    }
+    else {
+    print(response.reasonPhrase);
+    }
+  }
+
 
   String? cities;
   @override

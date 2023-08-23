@@ -16,8 +16,9 @@ import '../api/api_services.dart';
 import 'VerifyOtp.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({Key? key,this.id}) : super(key: key);
-  final id;
+  LoginScreen({Key? key,this.id,this.cityId}) : super(key: key);
+  final   id;
+  final   cityId;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -74,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
         String mobile = jsonresponse['data'][0]['mobile'];
         print('____App_________${mobile}__${otp}___');
         Fluttertoast.showToast(msg: '${jsonresponse['message']}');
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => VerifyOtp(OTP: otp,MOBILE:mobile,)
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => VerifyOtp(OTP: otp,MOBILE:mobile,cityId: widget.cityId,)
         ));
       }
       else{
@@ -98,6 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("jnjjnjn${widget.cityId}");
     return SafeArea(
       child: Scaffold(
         backgroundColor: colors.primary,

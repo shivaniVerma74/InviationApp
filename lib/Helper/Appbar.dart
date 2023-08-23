@@ -17,7 +17,7 @@ class getAppbar extends StatelessWidget {
       children: [
         Container(
           height: MediaQuery.of(context).size.height /10,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
                 begin: Alignment.bottomLeft,
                 end: Alignment.bottomRight,
@@ -50,11 +50,8 @@ class getAppbar extends StatelessWidget {
                     ),
                   ):SizedBox()
               ),
-
               Text('${text}',style: TextStyle(color: Colors.white,fontSize: 20),),
-
               // Icon(Icons.chat_rounded,color: Colors.white,),
-
               InkWell(
                 onTap: (){
                   Navigator.pop(context);
@@ -74,7 +71,6 @@ class getAppbar extends StatelessWidget {
               ),
             ],
           ),
-
           // Padding(
           //     padding: const EdgeInsets.only(left: 0, right: 0),
           //     child: AppBar(

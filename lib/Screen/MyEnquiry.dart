@@ -36,7 +36,7 @@ class _MyEnquiryState extends State<MyEnquiry> {
     var headers = {
       'Cookie': 'ci_session=1db2867fc5f287b9d5f70d2589a2e26f9e99c911'
     };
-    var request = http.MultipartRequest('GET', Uri.parse('${ApiService.getenquiries}'));
+    var request = http.MultipartRequest('POST', Uri.parse('${ApiService.getenquiries}'));
     request.fields.addAll({
       'mobile': '$userId',
     });

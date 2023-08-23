@@ -36,25 +36,26 @@ class _EventDetailsState extends State<EventDetails> {
 
   String? vendor_id;
   String? cities;
+  String? city_id;
   EventListModel? eventListModel;
   nearByEvevt() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    cities = preferences.getString("cities");
-    print("Citiesss id noww ${cities}");
+    city_id = preferences.getString("city_id");
+    print("Citiesss id nowwwwwwwwwww ${city_id}");
     var headers = {
       'Cookie': 'ci_session=e6545df7c1714023144b9f63cc94cd2118c2e751'
     };
     var request = http.MultipartRequest('POST', Uri.parse('${ApiService.geteventmanagers}'));
     request.fields.addAll({
-      'city_id': cities.toString(),
+      'city_id': "${city_id.toString()}"
     });
-    print("City id in event manager page ${request.fields}");
+    print("City id in event detailsss page ${request.fields}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       var finalResponse = await response.stream.bytesToString();
       final jsonResponse = EventListModel.fromJson(json.decode(finalResponse));
-      String? vendor_id = jsonResponse.data![0].vendorId;
+      String? vendor_id = jsonResponse.data?[0].vendorId;
       preferences.setString("vendor_id", vendor_id!);
       print("vendor id ${vendor_id}");
       setState(() {

@@ -22,11 +22,14 @@ import '../api/api_services.dart';
 import 'package:http/http.dart'as http;
 
 import 'ExampleScreen.dart';
+import 'MyCardTemplate.dart';
 import 'MyEnquiry.dart';
 import 'MyTemplate.dart';
+import 'NewScreen.dart';
 
 class BottomScreen extends StatefulWidget {
-  const BottomScreen({super.key});
+  const BottomScreen({super.key,this.cityId});
+  final cityId;
 
   @override
   State<BottomScreen> createState() => _BottomScreenState();
@@ -36,6 +39,7 @@ class _BottomScreenState extends State<BottomScreen> {
   int currentindex = 0;
   List<Widget> pages1 = <Widget>[
     HomeScreen(),
+    MyCardTemplate(),
     // ProfileScreen(),
     ProfileScreen(),
 
@@ -52,6 +56,8 @@ class _BottomScreenState extends State<BottomScreen> {
     super.initState();
     getuserProfile();
   }
+
+
   GetUserProfileModel? getprofile;
   getuserProfile() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -65,9 +71,7 @@ class _BottomScreenState extends State<BottomScreen> {
     request.fields.addAll({'id': '$userId'});
     print("getProfile--------------->${request.fields}");
     request.headers.addAll(headers);
-
     http.StreamedResponse response = await request.send();
-
     if (response.statusCode == 200) {
       var finalResult = await response.stream.bytesToString();
       final jsonResponse =
@@ -84,6 +88,7 @@ class _BottomScreenState extends State<BottomScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("aaaaaaaaaaaaaaaaaaaa${widget.cityId}");
     return WillPopScope(
       onWillPop: () async {
         showDialog(
@@ -132,10 +137,15 @@ class _BottomScreenState extends State<BottomScreen> {
             //  elevation: 1,
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                  label: 'Home', icon: Icon(Icons.home)),
+                  label: 'Home', icon: Icon(Icons.home)
+              ),
               // BottomNavigationBarItem(label: 'Accessories', icon: Icon(Icons.calendar_today_rounded)),
               BottomNavigationBarItem(
-                  label: 'Profile', icon: Icon(Icons.people_alt_sharp)),
+                  label: 'My Card', icon: Icon(Icons.card_giftcard_outlined)
+              ),
+              BottomNavigationBarItem(
+                  label: 'Profile', icon: Icon(Icons.people_alt_sharp)
+              ),
             ],
             currentIndex: currentindex,
             selectedItemColor: colors.primary,
@@ -168,10 +178,11 @@ class _BottomScreenState extends State<BottomScreen> {
                 colors: [colors.primary, colors.secondary],
               ),
             ),
-            child: Row(
+            child:
+            Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              // main
               children: [
+                getprofile?.data?.first.profilePic == null || getprofile?.data?.first.profilePic == "" ? Center(child: CircularProgressIndicator(color: colors.primary,),):
                 CircleAvatar(
                   radius: 40,
                   backgroundImage: NetworkImage(
@@ -275,23 +286,23 @@ class _BottomScreenState extends State<BottomScreen> {
               );
             },
           ),
-          // ListTile(
-          //   leading: Image.asset(
-          //     "assets/images/enquiry.png",
-          //     color: colors.black54,
-          //     height: 40,
-          //     width: 40,
-          //   ),
-          //   title: const Text(
-          //     'My Enquiry',
-          //   ),
-          //   onTap: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => MyEnquiry()),
-          //     );
-          //   },
-          // ),
+          ListTile(
+            leading: Image.asset(
+              "assets/images/enquiry.png",
+              color: colors.black54,
+              height: 40,
+              width: 40,
+            ),
+            title: const Text(
+              'My Enquiry',
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => BirthdayCardScreen()),
+              );
+            },
+          ),
           ListTile(
             leading: Image.asset(
               "assets/images/enquiry.png",

@@ -75,87 +75,90 @@ class _EventScreenState extends State<EventScreen> {
           )
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: refreshFunction,
-        child: Column(
-          children: [
-          eventListModel == null ? Center(
-          child: CircularProgressIndicator(color: colors.primary,)
-          ):
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: eventListModel?.data?.length,
-                scrollDirection: Axis.vertical,
-                physics: AlwaysScrollableScrollPhysics(),
-                itemBuilder: (BuildContext context, int index){
-                  return  InkWell(
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetails(data: eventListModel!.data![index])));
-                    },
-                    child: Card(
-                        margin: EdgeInsets.all(10),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        elevation: 5.0,
-                        child: Container(
-                          height: MediaQuery.of(context).size.width/3,
-                          width: MediaQuery.of(context).size.width/1,
-                          child:Row(
-                            children: [
-                              Padding(padding: EdgeInsets.all(10)),
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
+      body: SingleChildScrollView(
+        child: RefreshIndicator(
+          onRefresh: refreshFunction,
+          child:
+          Column(
+            children: [
+            eventListModel == null ? Center(
+            child: CircularProgressIndicator(color: colors.primary,)
+            ):
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: eventListModel?.data?.length,
+                  scrollDirection: Axis.vertical,
+                  // physics: AlwaysScrollableScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index){
+                    return  InkWell(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetails(data: eventListModel!.data![index])));
+                      },
+                      child: Card(
+                          margin: EdgeInsets.all(10),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          elevation: 5.0,
+                          child: Container(
+                            height: MediaQuery.of(context).size.width/3,
+                            width: MediaQuery.of(context).size.width/1,
+                            child: Row(
+                              children: [
+                                Padding(padding: EdgeInsets.all(10)),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  height: 140,
+                                  width: 140,
+                                  child: Image.network("${eventListModel?.data?[index].profileImage}")
                                 ),
-                                height: 140,
-                                width: 140,
-                                child: Image.network("${eventListModel?.data?[index].profileImage}")
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              Container(
-                                alignment: Alignment.topRight,
-                                margin: EdgeInsets.only(left: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(padding: EdgeInsets.only(top: 15)),
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text("Name:",textAlign: TextAlign.right),
-                                        SizedBox(width: 3,),
-                                        Container(
-                                          width: 80,
-                                            child: Text("${eventListModel?.data?[index].uname}", overflow: TextOverflow.ellipsis,)),
-                                      ],
-                                    ),
-                                    // SizedBox(height: 5),
-                                    // Row(
-                                    //   children: [
-                                    //     Text("Mobile no:",textAlign: TextAlign.right),
-                                    //     Text("${eventListModel?.data?[index].mobile}"),
-                                    //   ],
-                                    // ),
-                                    SizedBox(height: 5),
-                                    Row(
-                                      children: [
-                                        Text("City:",textAlign: TextAlign.right),
-                                        SizedBox(width: 3),
-                                        Text("${eventListModel?.data?[index].cityName}")
-                                      ],
-                                    ),
-                                  ],
+                                SizedBox(
+                                  height: 15,
                                 ),
-                              ),
-                            ],
+                                Container(
+                                  alignment: Alignment.topRight,
+                                  margin: EdgeInsets.only(left: 10),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(padding: EdgeInsets.only(top: 15)),
+                                      Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text("Name:",textAlign: TextAlign.right),
+                                          SizedBox(width: 3,),
+                                          Container(
+                                            width: 80,
+                                              child: Text("${eventListModel?.data?[index].uname}", overflow: TextOverflow.ellipsis,)),
+                                        ],
+                                      ),
+                                      // SizedBox(height: 5),
+                                      // Row(
+                                      //   children: [
+                                      //     Text("Mobile no:",textAlign: TextAlign.right),
+                                      //     Text("${eventListModel?.data?[index].mobile}"),
+                                      //   ],
+                                      // ),
+                                      SizedBox(height: 5),
+                                      Row(
+                                        children: [
+                                          Text("City:",textAlign: TextAlign.right),
+                                          SizedBox(width: 3),
+                                          Text("${eventListModel?.data?[index].cityName}")
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                    ),
-                  );
-                }
-            ),
-          ],
+                      ),
+                    );
+                  }
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -18,8 +18,9 @@ final int timeOut = 50;
 const int perPage = 10;
 
 // final String baseUrl = 'https://vizzvefoods.com/app/v1/api/';
-final String baseUrl = 'https://alphawizzserver.com/car_wash/api/';
+// final String baseUrl = 'https://alphawizzserver.com/car_wash/api/';
 // final String imageUrl = 'https://developmentalphawizz.com/';
+
 final String jwtKey = "78084f1698c9fcff5a668b68dcd103db39be2605";
 //cart
 // List<User> addressList = [];

@@ -7,9 +7,10 @@ import '../Screen/CardScreen.dart';
 
 
 class Form_Screen extends StatefulWidget {
-  Form_Screen({Key? key, this.image}) : super(key: key);
+  Form_Screen({Key? key, this.image, this.id}) : super(key: key);
 
   String? image;
+  String? id;
   @override
   State<Form_Screen> createState() => _Form_ScreenState();
 }
@@ -24,7 +25,7 @@ class _Form_ScreenState extends State<Form_Screen> {
   final _formKey= GlobalKey<FormState>();
   String? selectedDate;
   var selectedTime=TimeOfDay.now();
-
+  // String? template_id = widget.id;
   var selecttimee;
   Widget build(BuildContext context) {
     return Scaffold(
@@ -168,15 +169,15 @@ class _Form_ScreenState extends State<Form_Screen> {
                                             setState(() {
                                               selecttimee=value!;
                                               timecon.text=selecttimee.format(context).toString();
-
                                             });
                                           });
                                         },
-                                        icon: Icon(Icons.watch_later_rounded)       ),
-                                    border: OutlineInputBorder(
+                                        icon: Icon(Icons.watch_later_rounded),
+                                    ),
+                                        border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10))
                                 ),
-                                onTap:() {
+                                onTap: () {
                                   showTimePicker(context: context, initialTime: selectedTime,).then((value) {
                                     setState(() {
                                       selecttimee=value!;
@@ -190,7 +191,7 @@ class _Form_ScreenState extends State<Form_Screen> {
                                   return null;
                                 },
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 30,
                               ),
                               ElevatedButton(
@@ -200,7 +201,7 @@ class _Form_ScreenState extends State<Form_Screen> {
                                     final address = addressCtr.text;
                                     if(_formKey.currentState!.validate())
                                       Navigator.push(context, MaterialPageRoute(builder: (context) => CardScreen(
-                                          name: name, address: address, image: widget.image, datee: dateinput.text.toString(), timee: timecon.text
+                                          name: name, address: address, image: widget.image, datee: dateinput.text.toString(), timee: timecon.text, id:widget.id.toString()
                                       ),
                                       ),
                                       );

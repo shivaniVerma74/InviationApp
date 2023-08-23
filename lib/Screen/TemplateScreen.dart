@@ -40,7 +40,7 @@ class _TemplateScreenState extends State<TemplateScreen> {
     if (response.statusCode == 200) {
       var  result = await response.stream.bytesToString();
       final jsonResponse = TemplatesModel.fromJson(json.decode(result));
-      String? template_id = jsonResponse.data?.first.id ?? "";
+      String? template_id = jsonResponse.data?[0].id ?? "";
       preferences.setString("template_id", template_id);
       print("Temaplteeee Idddd ${template_id}");
       if(jsonResponse.responseCode == "1"){
@@ -133,7 +133,8 @@ class _TemplateScreenState extends State<TemplateScreen> {
 
   templateView() {
     print("mmmmmmmmmmmmm ${templatesModel}");
-    return Container(
+    return
+      Container(
       height: 500,
       child: templatesModel == null ? Center(child: Text("No template to show")) : GridView.builder(
         scrollDirection: Axis.vertical,
@@ -145,7 +146,7 @@ class _TemplateScreenState extends State<TemplateScreen> {
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Form_Screen(image: templatesModel?.data?[index].image)));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Form_Screen (image: templatesModel?.data?[index].image)));
             },
             child: Padding(
               padding: EdgeInsets.all(1),
@@ -178,6 +179,7 @@ class _TemplateScreenState extends State<TemplateScreen> {
   }
 
   int _currentIndex = 0;
+
   customTabbar(){
     return Padding(
       padding: const EdgeInsets.all(8.0),

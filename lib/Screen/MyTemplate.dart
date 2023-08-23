@@ -49,7 +49,6 @@ class _MyTemplateState extends State<MyTemplate> {
     print("rrrrrrrrrrrrrrrrrrrrr${request.fields}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
-
     if (response.statusCode == 200) {
       var finalResponse = await response.stream.bytesToString();
       final jsonResponse = SavedCardModel.fromJson(json.decode(finalResponse));
@@ -64,7 +63,7 @@ class _MyTemplateState extends State<MyTemplate> {
     }
   }
 
-  GlobalKey keyList = GlobalKey();
+  // List<GlobalKey> keyList = [GlobalKey()];
 
   @override
   Widget build(BuildContext context) {
@@ -88,82 +87,7 @@ class _MyTemplateState extends State<MyTemplate> {
                 ListView.builder(
                   itemCount: savedCardModel?.data?.length,
                     itemBuilder: (context,i) {
-                  return Card(
-                    elevation: 6,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          Image.network("${savedCardModel?.data?[i].image}",height: 250,width: 450),
-                          Container(
-                            height: 90,
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Card(
-                              elevation: 5,
-                              child: Column(
-                                children: [
-                                Padding(
-                                  padding: EdgeInsets.only(left: 8, right: 8),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text("Price:- ",
-                                          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15, color: Colors.black, decoration: TextDecoration.underline)
-                                      ),
-                                      Text("₹ ${savedCardModel?.data?[i].price}",
-                                          style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15, color: Colors.black, decoration: TextDecoration.underline)
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8, top: 15),
-                                  child: Row(
-                                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text("Share",
-                                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800),
-                                      ),
-                                      const SizedBox(width: 5),
-                                      Container(
-                                        height: 40,
-                                        width: 40,
-                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
-                                        child: IconButton(
-                                            onPressed: () {
-                                              // setState(() {
-                                              // });
-                                              _share();
-                                            },
-                                            icon: const Icon(Icons.share, color: Colors.white)),
-                                      ),
-                                      SizedBox(width: MediaQuery.of(context).size.width/2.7),
-                                      const Text("Download", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                                      SizedBox(width: 5),
-                                      Container(
-                                        height: 40,
-                                        width: 40,
-                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
-                                        child: IconButton(
-                                          onPressed:() async {
-                                            saveImage();
-                                            // downloadFile();
-                                          },
-                                          icon: const Icon(Icons.download, color: Colors.white),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+                  return templateCard(i);
                 }),
               ),
               // Container(
@@ -265,8 +189,90 @@ class _MyTemplateState extends State<MyTemplate> {
     );
   }
 
+  templateCard(int index){
+    GlobalKey keyList = GlobalKey();
+   return  Card(
+      elevation: 6,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            RepaintBoundary(
+                key: keyList,
+                child: Container(
+                    child: Image.network("${savedCardModel?.data?[index].image}",height: 280,width: 490))),
+            Container(
+              height: 90,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+              ),
+              child: Card(
+                elevation: 0,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8, right: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text("Price:- ",
+                              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15, color: Colors.black, decoration: TextDecoration.underline)
+                          ),
+                          Text("₹ ${savedCardModel?.data?[index].price}",
+                              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15, color: Colors.black, decoration: TextDecoration.underline)
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8, top: 15),
+                      child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text("Share",
+                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800),
+                          ),
+                          const SizedBox(width: 5),
+                          Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                            child: IconButton(
+                                onPressed: () {
+                                  // setState(() {
+                                  // });
+                                  _share(keyList);
+                                },
+                                icon: const Icon(Icons.share, color: Colors.white)),
+                          ),
+                          SizedBox(width: MediaQuery.of(context).size.width/2.7),
+                          const Text("Download", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                          SizedBox(width: 5),
+                          Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                            child: IconButton(
+                              onPressed:() async {
+                                saveImage(keyList);
+                                // downloadFile();
+                              },
+                              icon: const Icon(Icons.download, color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-  Future<ui.Image?> captureImage() async {
+  Future<ui.Image?> captureImage(GlobalKey keyList) async {
     try {
       RenderRepaintBoundary boundary = keyList.currentContext!.findRenderObject() as RenderRepaintBoundary;
       ui.Image image = await boundary.toImage(pixelRatio: 3.0);
@@ -277,9 +283,9 @@ class _MyTemplateState extends State<MyTemplate> {
     }
   }
 
-  void saveImage() async {
+  void saveImage(GlobalKey keyList) async {
     print("Download Functionnnnnn");
-    ui.Image? image = await captureImage();
+    ui.Image? image = await captureImage(keyList);
     if (image != null) {
       final directory = (await getApplicationDocumentsDirectory()).path;
       ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
@@ -292,14 +298,15 @@ class _MyTemplateState extends State<MyTemplate> {
     }
   }
 
-  _share() async {
+  _share(GlobalKey keyList) async {
     var status =  await Permission.photos.request();
     if (/*storagePermission == PermissionStatus.granted*/ status.isGranted) {
       final directory = (await getApplicationDocumentsDirectory()).path;
+      // RenderRepaintBoundary bound = keyList.c
       RenderRepaintBoundary bound = keyList.currentContext!.findRenderObject() as RenderRepaintBoundary;
       ui.Image image = await bound.toImage();
       ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-      print('${byteData?.buffer.lengthInBytes}_________');
+      print('screenhortttttttttt${byteData?.buffer.lengthInBytes}_________');
       // this will save image screenshot in gallery
       if(byteData != null){
         Uint8List pngBytes = byteData.buffer.asUint8List();

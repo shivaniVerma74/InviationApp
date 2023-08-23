@@ -11,6 +11,7 @@ class ApiService {
   static const String verifyOtp = baseUrl+'verify_otp';
   static const String login = baseUrl+'login';
   static const String userRegister = baseUrl+'signup';
+  static const String getStates = baseUrl+'get_states';
   static const String getUserProfile = baseUrl+'profile';
   static const String getSlider = baseUrl + 'get_slider';
   static const String getupdateUser = baseUrl+'update_profile';

@@ -15,7 +15,8 @@ import 'package:http/http.dart'as http;
 class VerifyOtp extends StatefulWidget {
   final OTP;
   final MOBILE;
-  VerifyOtp({Key? key,this.OTP,this.MOBILE}) : super(key: key);
+  final cityId;
+  VerifyOtp({Key? key,this.OTP,this.MOBILE,this.cityId}) : super(key: key);
   @override
   State<VerifyOtp> createState() => _VerifyOtpState();
 }
@@ -49,7 +50,7 @@ class _VerifyOtpState extends State<VerifyOtp> {
         preferences.setString('userId',userId);
         preferences.setString('userMobile',mobile);
         Fluttertoast.showToast(msg: '${jsonresponse['message']}');
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomScreen()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomScreen(cityId: widget.cityId,)));
       }
       else{
         Fluttertoast.showToast(msg: "${jsonresponse['message']}");
