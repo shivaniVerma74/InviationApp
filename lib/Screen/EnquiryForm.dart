@@ -51,8 +51,7 @@ class _EnquiryFormState extends State<EnquiryForm> {
         setState(() {
           load = true;
         });
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => BottomScreen()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => BottomScreen()));
       } else {
         Fluttertoast.showToast(msg: "${jsonResponse['message']}");
       }

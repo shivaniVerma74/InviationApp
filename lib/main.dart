@@ -13,6 +13,7 @@ Future<void> backgroundHandler(RemoteMessage message) async {
   print(message.data.toString());
   print(message.notification!.title);
 }
+
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +21,7 @@ void main() async {
   LocalNotificationService.initialize();
   try{
     String? token = await FirebaseMessaging.instance.getToken();
-    print("-----------token:-----${token}");
+    print("-----------token:-----$token");
   } on FirebaseException{
     print('__________FirebaseException_____________');
   }
@@ -40,9 +41,8 @@ class MyApp extends StatelessWidget {
   void initState() {
     // TODO: implement initState
     // super.initState();
-    Future.delayed(Duration.zero, () async { //to run async code in initState
+    Future.delayed(Duration.zero, () async {
       await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-      //enables secure mode for app, disables screenshot, screen recording
     });
   }
 
@@ -51,13 +51,12 @@ class MyApp extends StatelessWidget {
     await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
     // super.dispose();
   }
-    // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Atithi',
       theme: ThemeData(
-
       ),
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
@@ -66,7 +65,7 @@ class MyApp extends StatelessWidget {
         //Splash(),
         // '/home': (context) => Dashboard(),
       },
-          );
+    );
   }
 }
 

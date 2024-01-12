@@ -7,15 +7,22 @@ import '../Screen/CardScreen.dart';
 
 
 class Form_Screen extends StatefulWidget {
-  Form_Screen({Key? key, this.image, this.id}) : super(key: key);
-
+  Form_Screen({Key? key, this.image, this.temp_Id}) : super(key: key);
   String? image;
-  String? id;
+  String? temp_Id;
   @override
   State<Form_Screen> createState() => _Form_ScreenState();
 }
 
 class _Form_ScreenState extends State<Form_Screen> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    print("=========image is ======${widget.image}===========");
+    super.initState();
+  }
+
   TextEditingController namectr = TextEditingController();
   TextEditingController addressCtr = TextEditingController();
   TextEditingController dateinput = TextEditingController();
@@ -32,19 +39,25 @@ class _Form_ScreenState extends State<Form_Screen> {
         backgroundColor: Colors.white,
         resizeToAvoidBottomInset : false,
         appBar: AppBar(
-          elevation: 0,
-          backgroundColor: colors.primary,
-          centerTitle: true,
-          title: Text("Birthday Form"),
-        ),
+            elevation: 0,
+            centerTitle: true,
+            foregroundColor: colors.whiteTemp,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(25),
+                bottomRight: Radius.circular(25),
+              ),
+            ),
+            title: const Text('Birthday Form'),
+            backgroundColor: colors.secondary),
         body:SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
-                height: 40,
+              const SizedBox(
+                height: 20,
               ),
               Card(
-                margin: EdgeInsets.symmetric(vertical: 20,horizontal: 20),
+                margin: const EdgeInsets.symmetric(vertical: 20,horizontal: 20),
                 elevation: 5.0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -54,29 +67,31 @@ class _Form_ScreenState extends State<Form_Screen> {
                   height: MediaQuery.of(context).size.height/1.6,
                   width: MediaQuery.of(context).size.width/1,
                   decoration: BoxDecoration(
-                  ),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.black, width: 1)),
                   child: Center(
                     child: Form(
                         key: _formKey,
                         child: Padding(
-                          padding: EdgeInsets.only(top: 30,left: 15,right: 15),
+                          padding: const EdgeInsets.only(top: 30,left: 15,right: 15),
                           child: Column(
                             children: [
                               TextFormField(
                                 controller: namectr,
                                 decoration: InputDecoration(
                                     hintText: "Name",
-                                    prefixIcon: Icon(Icons.person),
+                                    prefixIcon: const Icon(Icons.person, color: colors.secondary,),
                                     border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10))
+                                        borderRadius: BorderRadius.circular(10),
+                                    ),
                                 ),
                                 validator: (value){
-                                  if(value==null||value.isEmpty)
+                                  if(value == null || value.isEmpty)
                                     return "Please Enter name";
                                   return null;
                                 },
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 15,
                               ),
                               TextFormField(
@@ -85,7 +100,7 @@ class _Form_ScreenState extends State<Form_Screen> {
                                   border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10)),
                                   hintText: "Address",
-                                  prefixIcon: Icon(Icons.location_on),
+                                  prefixIcon: Icon(Icons.location_on, color: colors.secondary,),
                                 ),
                                 validator: (value){
                                   if(value==null||value.isEmpty)
@@ -93,7 +108,7 @@ class _Form_ScreenState extends State<Form_Screen> {
                                   return null;
                                 },
                               ),
-                              SizedBox(height: 15),
+                              const SizedBox(height: 15),
                               TextFormField(
                                 controller: dateinput,
                                 decoration: InputDecoration(
@@ -123,11 +138,12 @@ class _Form_ScreenState extends State<Form_Screen> {
                                             });
                                           }
                                         },
-                                        icon: Icon(Icons.calendar_today_outlined)
+                                        icon: const Icon(Icons.calendar_today_outlined, color: colors.secondary,)
                                     ),
                                     hintText: 'dd-mm-yyyy',
                                     border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10))),
+                                        borderRadius: BorderRadius.circular(10)),
+                                ),
                                 onTap: () async {
                                   DateTime? pickedDate = await showDatePicker(
                                       context: context,
@@ -137,9 +153,10 @@ class _Form_ScreenState extends State<Form_Screen> {
                                       builder: (context, child) {
                                         return Theme(
                                             data: Theme.of(context).copyWith(
-                                                colorScheme: ColorScheme.light(
+                                                colorScheme: const ColorScheme.light(
                                                   primary: colors.primary,
-                                                )),
+                                                ),
+                                            ),
                                             child: child!);
                                       });
                                   if (pickedDate != null) {
@@ -158,7 +175,7 @@ class _Form_ScreenState extends State<Form_Screen> {
                                   return null;
                                 },
                               ),
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
                               TextFormField(
                                 controller: timecon,
                                 decoration: InputDecoration(
@@ -172,7 +189,7 @@ class _Form_ScreenState extends State<Form_Screen> {
                                             });
                                           });
                                         },
-                                        icon: Icon(Icons.watch_later_rounded),
+                                        icon: const Icon(Icons.watch_later_rounded, color: colors.secondary,),
                                     ),
                                         border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10))
@@ -195,19 +212,19 @@ class _Form_ScreenState extends State<Form_Screen> {
                                 height: 30,
                               ),
                               ElevatedButton(
-                                  style: ElevatedButton.styleFrom(backgroundColor: colors.primary),
+                                  style: ElevatedButton.styleFrom(backgroundColor: colors.secondary),
                                   onPressed:(){
                                     final name = namectr.text;
                                     final address = addressCtr.text;
-                                    if(_formKey.currentState!.validate())
+                                    if(_formKey.currentState!.validate()) {
                                       Navigator.push(context, MaterialPageRoute(builder: (context) => CardScreen(
-                                          name: name, address: address, image: widget.image, datee: dateinput.text.toString(), timee: timecon.text, id:widget.id.toString()
-                                      ),
+                                          name: name, address: address, image: widget.image, datee: dateinput.text.toString(), timee: timecon.text, temp_Id:widget.temp_Id.toString())
                                       ),
                                       );
+                                    }
                                       setState(() {});
                                   },
-                                  child: Text("Submit")
+                                  child: const Text("Submit")
                               ),
                             ],
                           ),

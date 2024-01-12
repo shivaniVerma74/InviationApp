@@ -21,8 +21,8 @@ import '../api/api_services.dart';
 
 class CardView extends StatefulWidget {
   final String? image;
-  final String? id;
-  const CardView({Key? key, this.image, this.id}) : super(key: key);
+  final String? temp_Id;
+  const CardView({Key? key, this.image, this.temp_Id}) : super(key: key);
 
   @override
   State<CardView> createState() => _CardViewState();
@@ -69,17 +69,17 @@ class _CardViewState extends State<CardView> {
   String? card_id;
 
    SaveMyCardModel? saveMyCardModel;
-   saveCard() async{
+   saveCard() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? userId = preferences.getString('userId');
     String? template_id = preferences.getString('template_id');
     var headers = {
       'Cookie': 'ci_session=79b222a1b7a3dc18c150b1366e8f9ceb03aaa932'
     };
-    var request = http.MultipartRequest('POST', Uri.parse('${ApiService.savemycard}'));
+    var request = http.MultipartRequest('POST', Uri.parse(ApiService.savemycard));
     request.fields.addAll({
       'user_id': '$userId',
-      'template_id': '${widget.id}'
+      'template_id': widget.temp_Id.toString()
     });
     print("parameterr ${request.fields}");
     request.files.add(await http.MultipartFile.fromPath('image', '${widget.image}'));
@@ -100,8 +100,6 @@ class _CardViewState extends State<CardView> {
       print(response.reasonPhrase);
     }
   }
-
-
 
   // save() async {
   //   var status =  await Permission.photos.request();
@@ -137,7 +135,7 @@ class _CardViewState extends State<CardView> {
     // Navigator.of(context).pop();
     var options = {
       'key': 'rzp_test_1DP5mmOlF5G5ag',
-      'amount': "${pricerazorpayy}",
+      'amount': "$pricerazorpayy",
       'name': 'Invitation',
       'image':'assets/images/homeimage.png',
       'description': 'Invitation',
@@ -202,16 +200,16 @@ class _CardViewState extends State<CardView> {
     }
   }
 
-  purchaseCard() async{
+  purchaseCard() async {
      SharedPreferences preferences = await SharedPreferences.getInstance();
      preferences.getString("card_id");
-     print("Purchase Paymnet Apiiii ${card_id}");
+     print("Purchase Paymnet Apiiii $card_id");
     var headers = {
       'Cookie': 'ci_session=094101f2118b81b6d7797c1b01164b0b63d14708'
     };
-    var request = http.MultipartRequest('POST', Uri.parse('${ApiService.purchasepayment}'));
+    var request = http.MultipartRequest('POST', Uri.parse(ApiService.purchasepayment));
     request.fields.addAll({
-      'id': '${card_id}',
+      'id': '$card_id',
       'transaction_id': 'rzp_test_1DP5mmOlF5G5ag'
     });
      print("Purchase parameter ${request.fields}");
@@ -235,23 +233,29 @@ class _CardViewState extends State<CardView> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: colors.primary,
-        centerTitle: true,
-          title: Text("Card View")
-      ),
+          elevation: 0,
+          centerTitle: true,
+          foregroundColor: colors.whiteTemp,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(25),
+              bottomRight: Radius.circular(25),
+            ),
+          ),
+          title: const Text('Card View'),
+          backgroundColor: colors.secondary),
         body: SingleChildScrollView(
           child: RefreshIndicator(
          onRefresh: refreshFunction,
          child: Column(
           children: [
-            SizedBox(height:2),
+            const SizedBox(height:2),
             RepaintBoundary(
               key: keyList,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  height: MediaQuery.of(context).size.height/1.8,
+                  height: MediaQuery.of(context).size.height/1.7,
                   width: MediaQuery.of(context).size.width/1.1,
                   child: Card(
                     elevation: 5,
@@ -265,27 +269,27 @@ class _CardViewState extends State<CardView> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Card Price:", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15, color: Colors.black, decoration: TextDecoration.underline,)),
+                  const Text("Card Price:", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15, color: Colors.black, decoration: TextDecoration.underline,)),
                   Text("₹ ${saveMyCardModel?.data?[0].price}", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15, color: Colors.black, decoration: TextDecoration.underline,))
                 ],
               ),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height/11.9),
+            SizedBox(height: MediaQuery.of(context).size.height/13),
             Align(
               alignment: Alignment.bottomCenter,
               child:
               Container(
-                height: 40,
-                width: MediaQuery.of(context).size.width/1.1,
+                height:45,
+                width: MediaQuery.of(context).size.width/2,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: colors.primary),
+                  style: ElevatedButton.styleFrom(backgroundColor: colors.secondary),
                   onPressed:() {
                     openCheckout(saveMyCardModel?.data?[0].price);
                     setState(() {
                      // areTextFieldsVisible = !areTextFieldsVisible;
                     });
                   },
-                  child: const Text("Pay Now",style: TextStyle(fontSize: 15)
+                  child: const Text("Save",style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)
                   ),
                 ),
               ),
@@ -331,7 +335,7 @@ class _CardViewState extends State<CardView> {
               ),
             ),
           ],
-      ),
+          ),
           ),
         ),
     );

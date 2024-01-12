@@ -1,3 +1,18 @@
+// import 'dart:convert';
+// import 'dart:io';
+// import 'package:doctorapp/AuthenticationView/LoginScreen.dart';
+// import 'package:doctorapp/Helper/Color.dart';
+// import 'package:doctorapp/New_model/GetCityModel.dart';
+// import 'package:doctorapp/New_model/registration_model2.dart';
+// import 'package:doctorapp/Screen/Bottom.dart';
+// import 'package:doctorapp/api/api_services.dart';
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
+// // import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
+// import 'package:permission_handler/permission_handler.dart';
+// import 'package:flutter/cupertino.dart';
+// import 'package:flutter/material.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:geoloca…
 import 'dart:convert';
 import 'dart:io';
 
@@ -22,8 +37,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
-  bool isLoder =true;
+  bool isLoder = true;
   File? imageFile;
   final ImagePicker _picker = ImagePicker();
   Future<bool> showExitPopup() async {
@@ -62,7 +76,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   GetUserProfileModel? getprofile;
   getuserProfile() async {
     setState(() {
-      isLoder == true ? const Center(child: CircularProgressIndicator()):SizedBox();
+      isLoder == true
+          ? const Center(child: CircularProgressIndicator())
+          : SizedBox();
     });
     print("This Is User profilel============>");
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -79,7 +95,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (response.statusCode == 200) {
       var finalResult = await response.stream.bytesToString();
       print('__________${finalResult}_____________');
-      final jsonResponse = GetUserProfileModel.fromJson(json.decode(finalResult));
+      final jsonResponse =
+      GetUserProfileModel.fromJson(json.decode(finalResult));
       setState(() {
         getprofile = jsonResponse;
       });
@@ -95,60 +112,69 @@ class _ProfileScreenState extends State<ProfileScreen> {
     var headers = {
       'Cookie': 'ci_session=64caa747045713fca2e42eb930c7387e303fd583'
     };
-    var request = http.MultipartRequest('POST', Uri.parse('${ApiService.getCheckSubscriptionApi}'));
-    request.fields.addAll({
-      'user_id': "$userId"
-    });
+    var request = http.MultipartRequest(
+        'POST', Uri.parse('${ApiService.getCheckSubscriptionApi}'));
+    request.fields.addAll({'user_id': "$userId"});
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
-      var  result = await response.stream.bytesToString();
+      var result = await response.stream.bytesToString();
       var finalResult = CheckPlanModel.fromJson(jsonDecode(result));
       print('____Bew Api______${finalResult}_________');
       setState(() {
-        checkPlanModel =  finalResult ;
+        checkPlanModel = finalResult;
       });
-    }
-    else {
+    } else {
       print(response.reasonPhrase);
     }
-
   }
+
   void initState() {
     super.initState();
     // checkSubscriptionApi();
-    Future.delayed(Duration(milliseconds:300), () {
+    Future.delayed(Duration(milliseconds: 300), () {
       return getuserProfile();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    print("My Profile pic is here U can ------${getprofile?.data?.first.profilePic}");
+    print(
+        "My Profile pic is here U can ------${getprofile?.data?.first.profilePic}");
     return Scaffold(
-      bottomSheet:  Padding(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: colors.secondary,
+        // title: const Text('Profile'),
+        // centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
+      ),
+      bottomSheet: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
           decoration: BoxDecoration(
-             color:colors.secondary,
-            borderRadius: BorderRadius.circular(10)
-          ),
+              color: colors.secondary, borderRadius: BorderRadius.circular(10)),
           height: 50,
           child: InkWell(
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EditeProfile(getUserProfileModel: getprofile ?? GetUserProfileModel(),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditeProfile(
+                      getUserProfileModel: getprofile ?? GetUserProfileModel(),
+                    ),
                   ),
-                ),
-              ).then((value) => getuserProfile());
-            },
-            child: Center(
-                child: Text("Edit Profile",style:
-                TextStyle(color: colors.whiteTemp)))
-          ),
+                ).then((value) => getuserProfile());
+              },
+              child: Center(
+                  child: Text("Edit Profile",
+                      style: TextStyle(color: colors.whiteTemp)))),
         ),
       ),
       body: SingleChildScrollView(
@@ -158,181 +184,320 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: Colors.white,
           ),
         )
-            : Padding(
-          padding: const EdgeInsets.only(left: 10,right: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              const SizedBox(
-                height: 20,
+            : Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Stack(children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * 0.24,
+                decoration: BoxDecoration(
+                    color: colors.secondary,
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20))),
               ),
-              Stack(children: [
-                /*Container(
+              /*Container(
+                    width: 100,
+                    height: 100,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      // color: whiteColor
+                    ),
+                    child: imageFile != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(30),
+                            child: Image.file(
+                              imageFile!,
+                              fit: BoxFit.cover,
+                            ))
+                        : Image.asset('assets/images/tablets.png'),
+                  ),*/
+              Column(
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Center(
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50)),
+                      elevation: 3,
+                      child: Container(
                         width: 100,
                         height: 100,
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
-                          // color: whiteColor
                         ),
-                        child: imageFile != null
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(30),
-                                child: Image.file(
-                                  imageFile!,
-                                  fit: BoxFit.cover,
-                                ))
-                            : Image.asset('assets/images/tablets.png'),
-                      ),*/
-                Card(
-                  shape:  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50)
-                  ),
-                  elevation: 3,
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
-                    child: getprofile?.data?.first.profilePic == null ||
-                        getprofile?.data?.first.profilePic == ""
-                        ? Image.asset('assets/images/tablets.png')
-                        : ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: Image.network(
-                        "${getprofile?.data?.first.profilePic}",
-                        fit: BoxFit.fill,
+                        child: getprofile?.data?.first.profilePic ==
+                            null ||
+                            getprofile?.data?.first.profilePic == ""
+                            ? Image.asset('assets/images/tablets.png')
+                            : ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: Image.network(
+                            "${getprofile?.data?.first.profilePic}",
+                            fit: BoxFit.fill,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ]),
-              const SizedBox(
-                height: 10,
-              ),
-              // Text('${getprofile?.user?.username}',style: TextStyle(fontWeight: FontWeight.w700,fontSize: 20),),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("${getprofile?.data?.first.username}",style: TextStyle(color: colors.blackTemp,fontWeight: FontWeight.bold),),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "${getprofile?.data?.first.username}",
+                    style: TextStyle(
+                        color: colors.whiteTemp,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                  ),
                 ],
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-            Card(
-              child:Column(
+              )
+            ]),
+            const SizedBox(
+              height: 10,
+            ),
+            // Text('${getprofile?.user?.username}',style: TextStyle(fontWeight: FontWeight.w700,fontSize: 20),),
+            // Row(
+            //   crossAxisAlignment: CrossAxisAlignment.center,
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+
+            //   ],
+            // ),
+            const SizedBox(
+              height: 40,
+            ),
+
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Email id',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w700),
-                        ),
-                        SizedBox(
-                          // padding: EdgeInsets.only(left: 30),
-                            child: Text(
-                              "${getprofile?.data?.first.email}",
-                            ))
-                      ],
-                    ),
+                  Icon(
+                    Icons.email,
+                    size: 20,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text('Mobile Number',
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w700)),
-                        const SizedBox(
-                          width: 50,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 0.0),
-                          child: Text("${getprofile?.data?.first.mobile}"),
-                        )
-                      ],
-                    ),
+                  SizedBox(
+                    width: 10,
                   ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Email id',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w100),
+                      ),
+                      Text(
+                        "${getprofile?.data?.first.email}",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.normal),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
 
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.call,
+                    size: 20,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Mobile Number',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w100),
+                      ),
+                      Text(
+                        "${getprofile?.data?.first.mobile}",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.normal),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.pin_drop_outlined,
+                    size: 20,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Address',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w100),
+                      ),
+                      Text(
+                        "${getprofile?.data?.first.address}",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.normal),
+                      )
+                    ],
+                  )
                 ],
               ),
             ),
 
-              checkPlanModel == null || checkPlanModel == "" ? SizedBox.shrink():  Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Align(
+            // Card(
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       Padding(
+            //         padding: const EdgeInsets.all(8.0),
+            //         child: Row(
+            //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //           children: [
+            //             const Text(
+            //               'Mobile Number',
+            //               style: TextStyle(
+            //                   fontSize: 15, fontWeight: FontWeight.w700),
+            //             ),
+            //             SizedBox(
+            //                 // padding: EdgeInsets.only(left: 30),
+            //                 child: Text(
+            //               "${getprofile?.data?.first.mobile}",
+            //             ))
+            //           ],
+            //         ),
+            //       ),
+            //       Padding(
+            //         padding: const EdgeInsets.all(8.0),
+            //         child: Row(
+            //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //           children: [
+            //             const Text('Mobile Number',
+            //                 style: TextStyle(
+            //                     fontSize: 15,
+            //                     fontWeight: FontWeight.w700)),
+            //             const SizedBox(
+            //               width: 50,
+            //             ),
+            //             Padding(
+            //               padding: const EdgeInsets.only(left: 0.0),
+            //               child:
+            //                   Text("${getprofile?.data?.first.mobile}"),
+            //             )
+            //           ],
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+
+            checkPlanModel == null || checkPlanModel == ""
+                ? SizedBox.shrink()
+                : const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Align(
                   alignment: Alignment.topLeft,
-                    child: Text("My Subscription Plan",style: TextStyle(color: colors.secondary,fontWeight: FontWeight.bold,fontSize: 20),)),
+                  child: Text(
+                    "My Subscription Plan",
+                    style: TextStyle(
+                        color: colors.secondary,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                  ),
               ),
-              checkPlanModel == null || checkPlanModel == "" ? SizedBox.shrink():  Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: .0, vertical: 2.0),
-                  child: Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: Container(
-                      height: 200,
-                      child: ListView.builder(
-                          itemCount: checkPlanModel!.data!.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return  Card(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                              elevation: 5,
-                              child: ListTile(
-                                title: Text(
-                                  "${checkPlanModel!.data![index].name}",
-                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                                ),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(height: 8),
-                                    Text( "${checkPlanModel!.data![index].description}"),
-                                    SizedBox(height: 8),
-                                    Text( "${checkPlanModel!.data![index].time}"),
-                                    SizedBox(height: 8),
-
-                                    Text("₹ ${checkPlanModel!.data![index].amount}"),
-                                    SizedBox(height: 8),
-
-                                  ],
-                                ),
-                                trailing: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("${checkPlanModel!.data![index].purchaseDate}"),
-                                    SizedBox(height: 8),
-                                    Text("${checkPlanModel!.data![index].expiryDate}"),
-                                    SizedBox(height: 8),
-                                  ],
-                                ),
-                                // trailing: getPlan!.data![index].isPurchased == true ? Container(
-                                //   height: 30,
-                                //   width: 90,
-                                //   decoration: BoxDecoration(
-                                //       color: colors.secondary,
-                                //       borderRadius: BorderRadius.circular(10)
-                                //   ),
-                                //   child: Center(child: Text("Purchased",style: TextStyle(color: colors.whiteTemp,fontWeight: FontWeight.bold),)),
-                                // ):SizedBox.shrink()
+            ),
+            checkPlanModel == null || checkPlanModel == ""
+                ? SizedBox.shrink()
+                : Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: .0, vertical: 2.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Container(
+                    height: 200,
+                    child: ListView.builder(
+                        itemCount: checkPlanModel!.data!.length,
+                        itemBuilder:
+                            (BuildContext context, int index) {
+                          return Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(10)),
+                            elevation: 5,
+                            child: ListTile(
+                              title: Text(
+                                "${checkPlanModel!.data![index].name}",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18),
                               ),
-                            );
-                          }),
-                    ),
-
-
-                  )
-              )
-
-
-            ],
-          ),
+                              subtitle: Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(height: 8),
+                                  Text(
+                                      "${checkPlanModel!.data![index].description}"),
+                                  SizedBox(height: 8),
+                                  Text(
+                                      "${checkPlanModel!.data![index].time}"),
+                                  SizedBox(height: 8),
+                                  Text(
+                                      "₹ ${checkPlanModel!.data![index].amount}"),
+                                  SizedBox(height: 8),
+                                ],
+                              ),
+                              trailing: Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                      "${checkPlanModel!.data![index].purchaseDate}"),
+                                  SizedBox(height: 8),
+                                  Text(
+                                      "${checkPlanModel!.data![index].expiryDate}"),
+                                  SizedBox(height: 8),
+                                ],
+                              ),
+                              // trailing: getPlan!.data![index].isPurchased == true ? Container(
+                              //   height: 30,
+                              //   width: 90,
+                              //   decoration: BoxDecoration(
+                              //       color: colors.secondary,
+                              //       borderRadius: BorderRadius.circular(10)
+                              //   ),
+                              //   child: Center(child: Text("Purchased",style: TextStyle(color: colors.whiteTemp,fontWeight: FontWeight.bold),)),
+                              // ):SizedBox.shrink()
+                            ),
+                          );
+                        }),
+                  ),
+                ))
+          ],
         ),
       ),
     );

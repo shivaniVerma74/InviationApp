@@ -63,19 +63,19 @@ class _MyEnquiryState extends State<MyEnquiry> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("My Enquiry"),
+        title: const Text("My Booking"),
         elevation: 0,
         centerTitle: true,
-        backgroundColor: colors.primary,
+        backgroundColor: colors.secondary,
       ),
       body: SingleChildScrollView(
         child: RefreshIndicator(
           onRefresh: refreshFunction,
-          child: getEnquiryModel?.status == false ? Center(child: Text("No Enquiry Found", style: TextStyle(fontSize: 15, color: Colors.black),),):
+          child: getEnquiryModel?.status == false ? Center(child: Text("No Booking Found", style: TextStyle(fontSize: 15, color: Colors.black),),):
           Column(
             children: [
-              SizedBox(height: 10),
-              getEnquiryModel == null ? Center(
+              const SizedBox(height: 10),
+              getEnquiryModel == null ? const Center(
                   child: CircularProgressIndicator(color: colors.primary)
               ):
               Container(
@@ -85,7 +85,8 @@ class _MyEnquiryState extends State<MyEnquiry> {
                     itemCount: getEnquiryModel?.data?.length,
                     scrollDirection: Axis.vertical,
                     itemBuilder: (BuildContext context, int index) {
-                      return  Card(
+                      return
+                        Card(
                         margin: EdgeInsets.all(10),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                         elevation: 5.0,
@@ -103,11 +104,11 @@ class _MyEnquiryState extends State<MyEnquiry> {
                                       borderRadius: BorderRadius.circular(10),
                                       // image: DecorationImage(image: AssetImage('assets/images/img.png'),fit: BoxFit.fill)
                                     ),
-                                    height: 140,
+                                    height: 150,
                                     width: MediaQuery.of(context).size.width,
                                     child:
                                     // Image.asset('assets/images/img.png'),
-                                    Image.network("${ApiService.imageUrl}${getEnquiryModel?.data?[index].profileImage}"),
+                                    Image.network("${ApiService.imageUrl}${getEnquiryModel?.data?[index].profileImage}", fit: BoxFit.fill,),
                                   ),
                                 ),
                                 Container(

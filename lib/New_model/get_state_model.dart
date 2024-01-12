@@ -1,57 +1,110 @@
-// To parse this JSON data, do
-//
-//     final getStateResponseModel = getStateResponseModelFromJson(jsonString);
+/// response_code : "1"
+/// msg : "State List"
+/// data : [{"id":"2","name":"Madhya Pardesh","country_id":"5","created_at":"2022-09-28 12:23:49","updated_at":"2022-09-28 12:45:40"},{"id":"3","name":"Maharastra","country_id":"5","created_at":"2022-09-28 13:19:51","updated_at":"2022-09-28 13:19:51"}]
 
-import 'dart:convert';
-
-GetStateResponseModel getStateResponseModelFromJson(String str) => GetStateResponseModel.fromJson(json.decode(str));
-
-String getStateResponseModelToJson(GetStateResponseModel data) => json.encode(data.toJson());
-
-class GetStateResponseModel {
-  bool? status;
-  String? message;
-  List<GetStateData>? data;
-
-  GetStateResponseModel({
-    this.status,
-    this.message,
-    this.data,
-  });
-
-  factory GetStateResponseModel.fromJson(Map<String, dynamic> json) => GetStateResponseModel(
-    status: json["status"],
-    message: json["message"],
-    data: List<GetStateData>.from(json["data"].map((x) => GetStateData.fromJson(x))),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "status": status,
-    "message": message,
-    "data": List<dynamic>.from(data!.map((x) => x.toJson())),
-  };
+class GetStateModel {
+  GetStateModel({
+      String? responseCode, 
+      String? msg, 
+      List<Data>? data,}){
+    _responseCode = responseCode;
+    _msg = msg;
+    _data = data;
 }
 
-class GetStateData {
-  String? id;
-  String? name;
-  String? countryId;
+  GetStateModel.fromJson(dynamic json) {
+    _responseCode = json['response_code'];
+    _msg = json['msg'];
+    if (json['data'] != null) {
+      _data = [];
+      json['data'].forEach((v) {
+        _data?.add(Data.fromJson(v));
+      });
+    }
+  }
+  String? _responseCode;
+  String? _msg;
+  List<Data>? _data;
+GetStateModel copyWith({  String? responseCode,
+  String? msg,
+  List<Data>? data,
+}) => GetStateModel(  responseCode: responseCode ?? _responseCode,
+  msg: msg ?? _msg,
+  data: data ?? _data,
+);
+  String? get responseCode => _responseCode;
+  String? get msg => _msg;
+  List<Data>? get data => _data;
 
-  GetStateData({
-    this.id,
-    this.name,
-    this.countryId,
-  });
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['response_code'] = _responseCode;
+    map['msg'] = _msg;
+    if (_data != null) {
+      map['data'] = _data?.map((v) => v.toJson()).toList();
+    }
+    return map;
+  }
 
-  factory GetStateData.fromJson(Map<String, dynamic> json) => GetStateData(
-    id: json["id"],
-    name: json["name"],
-    countryId: json["country_id"],
-  );
+}
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "country_id": countryId,
-  };
+/// id : "2"
+/// name : "Madhya Pardesh"
+/// country_id : "5"
+/// created_at : "2022-09-28 12:23:49"
+/// updated_at : "2022-09-28 12:45:40"
+
+class Data {
+  Data({
+      String? id, 
+      String? name, 
+      String? countryId, 
+      String? createdAt, 
+      String? updatedAt,}){
+    _id = id;
+    _name = name;
+    _countryId = countryId;
+    _createdAt = createdAt;
+    _updatedAt = updatedAt;
+}
+
+  Data.fromJson(dynamic json) {
+    _id = json['id'];
+    _name = json['name'];
+    _countryId = json['country_id'];
+    _createdAt = json['created_at'];
+    _updatedAt = json['updated_at'];
+  }
+  String? _id;
+  String? _name;
+  String? _countryId;
+  String? _createdAt;
+  String? _updatedAt;
+Data copyWith({  String? id,
+  String? name,
+  String? countryId,
+  String? createdAt,
+  String? updatedAt,
+}) => Data(  id: id ?? _id,
+  name: name ?? _name,
+  countryId: countryId ?? _countryId,
+  createdAt: createdAt ?? _createdAt,
+  updatedAt: updatedAt ?? _updatedAt,
+);
+  String? get id => _id;
+  String? get name => _name;
+  String? get countryId => _countryId;
+  String? get createdAt => _createdAt;
+  String? get updatedAt => _updatedAt;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['id'] = _id;
+    map['name'] = _name;
+    map['country_id'] = _countryId;
+    map['created_at'] = _createdAt;
+    map['updated_at'] = _updatedAt;
+    return map;
+  }
+
 }

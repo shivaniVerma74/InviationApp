@@ -32,6 +32,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
     super.initState();
     getPrivacyPolicyApiApi();
   }
+
   var privacyPolicy;
   var privacyPolicyTitle;
 
@@ -56,6 +57,8 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
       print(response.reasonPhrase);
     }
   }
+
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(

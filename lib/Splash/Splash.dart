@@ -21,29 +21,32 @@ class _SplashScreenState extends State<SplashScreen> {
   bool? isSeen;
   @override
   void initState() {
+    print("u id in splash screeen-----------$uid");
     // TODO: implement initState
-    Future.delayed(Duration(seconds:2),() async{
+    Future.delayed(const Duration(seconds: 3),() async {
       SharedPreferences prefs  = await SharedPreferences.getInstance();
       bool? isLogin  =  prefs.getBool('isLogin');
+      print("is login trueee--------${isLogin}");
       if(isLogin ?? false) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> BottomScreen()));
-      }else{
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const BottomScreen()));
+      } else {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> LoginScreen()));
       }
     });
     // Timer(Duration(seconds: 3), () {Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> IntroSlider()));});
     super.initState();
-
   }
+
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: colors.primary,
+        backgroundColor: Colors.black,
         body: Container(
           height: MediaQuery.of(context).size.height,
           child: Center(
-            child: Image.asset("assets/splash/splashimages.png", fit: BoxFit.fill)
+            child: Image.asset("assets/splash/splashimages.png", fit: BoxFit.cover)
           ),
         ),
       ),

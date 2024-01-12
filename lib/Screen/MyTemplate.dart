@@ -73,7 +73,7 @@ class _MyTemplateState extends State<MyTemplate> {
         title: Text("My Card"),
         elevation: 0,
         centerTitle: true,
-        backgroundColor: colors.primary,
+        backgroundColor: colors.secondary,
       ),
       body: SingleChildScrollView(
         child: RefreshIndicator(

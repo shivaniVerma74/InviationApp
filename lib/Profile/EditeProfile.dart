@@ -43,14 +43,14 @@ class _EditeProfileState extends State<EditeProfile> {
   String? image;
   bool  isLodding = false;
 
-  void requestPermission(BuildContext context,int i) async{
+  void requestPermission(BuildContext context,int i) async {
     return await showDialog<void>(
       context: context,
       // barrierDismissible: barrierDismissible, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(6))),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -80,11 +80,12 @@ class _EditeProfileState extends State<EditeProfile> {
                 },
                 child: Container(
                   child: const ListTile(
-                      title:  Text("Camera"),
-                      leading: Icon(
+                      title: Text("Camera"),
+                      leading:Icon(
                         Icons.camera,
                         color: colors.primary,
-                      )),
+                      ),
+                  ),
                 ),
               ),
             ],
@@ -93,6 +94,7 @@ class _EditeProfileState extends State<EditeProfile> {
       },
     );
   }
+
   Future<void> getFromGallery(int i) async {
     var result = await FilePicker.platform.pickFiles(
       type: FileType.image,
@@ -107,11 +109,12 @@ class _EditeProfileState extends State<EditeProfile> {
         }
       });
       Navigator.pop(context);
-
     } else {
       // User canceled the picker
     }
   }
+
+
   Future getImage(ImgSource source, BuildContext context, int i) async {
     var image = await ImagePickerGC.pickImage(
       context: context,
@@ -124,6 +127,8 @@ class _EditeProfileState extends State<EditeProfile> {
     getCropImage(context, i, image);
     Navigator.pop(context);
   }
+
+
   Future getImageGallery(ImgSource source, BuildContext context, int i) async {
     var image = await ImagePickerGC.pickImage(
       context: context,
@@ -146,7 +151,6 @@ class _EditeProfileState extends State<EditeProfile> {
         CropAspectRatioPreset.ratio4x3,
         CropAspectRatioPreset.ratio16x9
       ],
-
     );
     setState(() {
       if (i == 1) {
@@ -164,8 +168,8 @@ class _EditeProfileState extends State<EditeProfile> {
     // TODO: implement initState
     emailController.text = widget.getUserProfileModel.data?.first.email ?? '' ;
     nameController.text = widget.getUserProfileModel.data?.first.username ?? '' ;
-    mobileController.text = widget.getUserProfileModel.data?.first.mobile?? '' ;
-    addressController.text = widget.getUserProfileModel.data?.first.address?? '' ;
+    mobileController.text = widget.getUserProfileModel.data?.first.mobile ?? '' ;
+    addressController.text = widget.getUserProfileModel.data?.first.address ?? '' ;
     image = widget.getUserProfileModel.data?.first.profilePic ?? '';
 
     getUserID();
@@ -219,7 +223,7 @@ class _EditeProfileState extends State<EditeProfile> {
           ),
           height: 50,
           child: InkWell(
-              onTap: (){
+              onTap: () {
                 updateProfileApi();
               },
               child:isLodding ? Center(child: CircularProgressIndicator()) :
@@ -404,11 +408,12 @@ class _EditeProfileState extends State<EditeProfile> {
      "lat":"",
      "lng":""
     });
-    print("this os p spos pms oskm ms=========>${request.files}");
+    print("this os p spos pms oskm ms=========>${request.fields}");
    // request.files.add(await http.MultipartFile.fromPath('registration_card', registrationImage?.path ?? ''  ));
    if(imageFile != null){
      request.files.add(await http.MultipartFile.fromPath('image', imageFile?.path ?? ''));
    }
+   print("imageee---------------- ${imageFile}");
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       final result =  await response.stream.bytesToString();

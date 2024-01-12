@@ -5,8 +5,11 @@ import 'package:doctorapp/Screen/Faq.dart';
 import 'package:doctorapp/Screen/Histroy.dart';
 import 'package:doctorapp/Screen/HomeScreen.dart';
 import 'package:doctorapp/Screen/WishlistScreen.dart';
+import 'package:doctorapp/Screen/vender_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_share/flutter_share.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../AuthenticationView/LoginScreen.dart';
@@ -19,8 +22,9 @@ import '../Static/privacy_Policy.dart';
 import '../Static/terms_condition.dart';
 import '../SubscriptionPlan/subscription_plan.dart';
 import '../api/api_services.dart';
-import 'package:http/http.dart'as http;
+import 'package:http/http.dart' as http;
 
+import 'EventsForm.dart';
 import 'ExampleScreen.dart';
 import 'MyCardTemplate.dart';
 import 'MyEnquiry.dart';
@@ -28,7 +32,7 @@ import 'MyTemplate.dart';
 import 'NewScreen.dart';
 
 class BottomScreen extends StatefulWidget {
-  const BottomScreen({super.key,this.cityId});
+  const BottomScreen({super.key, this.cityId});
   final cityId;
 
   @override
@@ -38,11 +42,10 @@ class BottomScreen extends StatefulWidget {
 class _BottomScreenState extends State<BottomScreen> {
   int currentindex = 0;
   List<Widget> pages1 = <Widget>[
-    HomeScreen(),
-    MyCardTemplate(),
+    const HomeScreen(),
+    const MyCardTemplate(),
     // ProfileScreen(),
-    ProfileScreen(),
-
+    const EventForm(),
   ];
 
   void _onItemTapped(int index) {
@@ -50,6 +53,7 @@ class _BottomScreenState extends State<BottomScreen> {
       currentindex = index;
     });
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -57,6 +61,7 @@ class _BottomScreenState extends State<BottomScreen> {
     getuserProfile();
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   GetUserProfileModel? getprofile;
   getuserProfile() async {
@@ -75,7 +80,7 @@ class _BottomScreenState extends State<BottomScreen> {
     if (response.statusCode == 200) {
       var finalResult = await response.stream.bytesToString();
       final jsonResponse =
-      GetUserProfileModel.fromJson(json.decode(finalResult));
+          GetUserProfileModel.fromJson(json.decode(finalResult));
       print("this is a ========>profile${jsonResponse}");
       print("emailllllll${getprofile?.data?.first.mobile}");
       setState(() {
@@ -88,7 +93,6 @@ class _BottomScreenState extends State<BottomScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("aaaaaaaaaaaaaaaaaaaa${widget.cityId}");
     return WillPopScope(
       onWillPop: () async {
         showDialog(
@@ -96,19 +100,19 @@ class _BottomScreenState extends State<BottomScreen> {
             barrierDismissible: false,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: Text("Confirm Exit"),
-                content: Text("Are you sure you want to exit?"),
+                title: const Text("Confirm Exit"),
+                content: const Text("Are you sure you want to exit?"),
                 actions: <Widget>[
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(primary: colors.secondary),
-                    child: Text("YES"),
+                    child: const Text("YES"),
                     onPressed: () {
                       SystemNavigator.pop();
                     },
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(primary: colors.secondary),
-                    child: Text("NO"),
+                    child: const Text("NO"),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
@@ -118,38 +122,52 @@ class _BottomScreenState extends State<BottomScreen> {
             });
         return true;
       },
-
       child: SafeArea(
         child: Scaffold(
+          key: _scaffoldKey,
           drawer: getDrawer(),
           appBar: AppBar(
             centerTitle: true,
-            backgroundColor:colors.primary,
+            leading: IconButton(
+              icon: const Icon(
+                Icons.menu,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                _scaffoldKey.currentState!.openDrawer();
+              },
+            ),
+            actions: const [
+              Padding(
+                padding: EdgeInsets.only(right: 5, top: 5),
+                child: Icon(Icons.notifications, color: Colors.white),
+              )
+            ],
+            backgroundColor: colors.secondary,
             elevation: 0,
-            title: Image.asset("assets/images/homeimage.png",height: 50,
-                width: 50),
+            title: Image.asset("assets/images/homeimage.png", height: 60, width: 60),
           ),
           body: Center(
             child: pages1.elementAt(currentindex),
           ),
           bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: Colors.white,
+            backgroundColor: colors.whiteTemp,
+            selectedIconTheme: const IconThemeData(color: colors.black54),
+            unselectedIconTheme: const IconThemeData(color: Colors.black),
+            selectedLabelStyle: const TextStyle(color: Colors.black),
+            unselectedLabelStyle: const TextStyle(color: Colors.black),
             //  elevation: 1,
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                  label: 'Home', icon: Icon(Icons.home)
-              ),
+                label: 'Design',
+                icon: Icon(Icons.card_giftcard_outlined)),
               // BottomNavigationBarItem(label: 'Accessories', icon: Icon(Icons.calendar_today_rounded)),
-              BottomNavigationBarItem(
-                  label: 'My Card', icon: Icon(Icons.card_giftcard_outlined)
-              ),
-              BottomNavigationBarItem(
-                  label: 'Profile', icon: Icon(Icons.people_alt_sharp)
-              ),
+              BottomNavigationBarItem(label: 'Home', icon: Icon(Icons.home,)),
+              BottomNavigationBarItem(label: 'Coming Event', icon: Icon(Icons.event)),
             ],
             currentIndex: currentindex,
-            selectedItemColor: colors.primary,
-            unselectedItemColor: colors.secondary,
+            selectedItemColor: colors.secondary,
+            // unselectedItemColor: colors.secondary,
             onTap: _onItemTapped,
             showUnselectedLabels: true,
             showSelectedLabels: true,
@@ -160,6 +178,14 @@ class _BottomScreenState extends State<BottomScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> share() async {
+    await FlutterShare.share(
+        title: 'Atithi',
+        // text: 'Example share text',
+        linkUrl: 'https://developmentalphawizz.com/dr_booking/',
+        chooserTitle: 'Atithi');
   }
 
   getDrawer() {
@@ -175,20 +201,22 @@ class _BottomScreenState extends State<BottomScreen> {
               gradient: LinearGradient(
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,
-                colors: [colors.primary, colors.secondary],
+                colors: [colors.secondary, colors.secondary],
               ),
             ),
-            child:
-            Row(
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                getprofile?.data?.first.profilePic == null || getprofile?.data?.first.profilePic == "" ? Center(child: CircularProgressIndicator(color: colors.primary,),):
-                CircleAvatar(
-                  radius: 40,
-                  backgroundImage: NetworkImage(
-                    "${getprofile?.data?.first.profilePic}",
-                  ),
-                ),
+                getprofile?.data?.first.profilePic == null || getprofile?.data?.first.profilePic == ""
+                    ? const Center(
+                        child: CircularProgressIndicator(color: colors.secondary),
+                      )
+                    : CircleAvatar(
+                        radius: 40,
+                        backgroundImage: NetworkImage(
+                          "${getprofile?.data?.first.profilePic}",
+                        ),
+                      ),
                 const SizedBox(
                   width: 10,
                 ),
@@ -206,9 +234,7 @@ class _BottomScreenState extends State<BottomScreen> {
                                 fontSize: 15,
                                 fontWeight: FontWeight.w500),
                           ),
-                          const SizedBox(
-                            height: 3,
-                          ),
+                          const SizedBox(height: 3),
                         ],
                       ),
                       SizedBox(
@@ -271,6 +297,23 @@ class _BottomScreenState extends State<BottomScreen> {
           // ),
           ListTile(
             leading: Image.asset(
+              "assets/images/person.png",
+              color: colors.black54,
+              height: 40,
+              width: 40,
+            ),
+            title: const Text(
+              'Profile',
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfileScreen()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Image.asset(
               "assets/images/home.png",
               color: colors.black54,
               height: 40,
@@ -294,24 +337,7 @@ class _BottomScreenState extends State<BottomScreen> {
               width: 40,
             ),
             title: const Text(
-              'My Enquiry',
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => BirthdayCardScreen()),
-              );
-            },
-          ),
-          ListTile(
-            leading: Image.asset(
-              "assets/images/enquiry.png",
-              color: colors.black54,
-              height: 40,
-              width: 40,
-            ),
-            title: Text(
-              'My Enquiry',
+              'My Booking',
             ),
             onTap: () {
               Navigator.push(
@@ -322,19 +348,126 @@ class _BottomScreenState extends State<BottomScreen> {
           ),
           ListTile(
             leading: Image.asset(
-              "assets/images/card.png",
+              "assets/images/enquiry.png",
               color: colors.black54,
               height: 40,
               width: 40,
             ),
             title: const Text(
-              'My Template',
+              'Marriage Certificate',
             ),
-            onTap:() {
+            onTap: () {
+              Fluttertoast.showToast(msg: "Coming Soon");
+            },
+          ),
+          ListTile(
+            leading: Image.asset(
+              "assets/images/enquiry.png",
+              color: colors.black54,
+              height: 40,
+              width: 40,
+            ),
+            title: const Text(
+              'Marriage Scheme Fund',
+            ),
+            onTap: () {
+              Fluttertoast.showToast(msg: "Coming Soon");
+            },
+          ),
+           ListTile(
+            leading: Image.asset(
+              "assets/images/Term & Conditions.png",
+              height: 40,
+              width: 40,
+              color: colors.black54,
+            ),
+            title: const Text(
+              'Vendor Registartion',
+            ),
+            onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MyTemplate()),
+                MaterialPageRoute(builder: (context) => Vendor_Form()),
               );
+            },
+          ),
+          ListTile(
+            leading: Image.asset(
+              "assets/images/share.png",
+              color: colors.black54,
+              height: 40,
+              width: 40,
+            ),
+            title: const Text(
+              'Share App',
+            ),
+            onTap: () {
+              share();
+            },
+          ),
+          // ListTile(
+          //   leading: Image.asset(
+          //     "assets/images/enquiry.png",
+          //     color: colors.black54,
+          //     height: 40,
+          //     width: 40,
+          //   ),
+          //   title: const Text(
+          //     'My Enquiry',
+          //   ),
+          //   onTap: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => WeddingCardApp()),
+          //     );
+          //   },
+          // ),
+          // ListTile(
+          //   leading: Image.asset(
+          //     "assets/images/card.png",
+          //     color: colors.black54,
+          //     height: 40,
+          //     width: 40,
+          //   ),
+          //   title: const Text(
+          //     'My Template',
+          //   ),
+          //   onTap: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => MyTemplate()),
+          //     );
+          //   },
+          // ),
+         // ListTile(
+           // leading: Image.asset(
+           //   "assets/images/Term & Conditions.png",
+            //  height: 40,
+             // width: 40,
+             // color: colors.black54,
+            //),
+           // title: const Text(
+           //   'Faq',
+          //  ),
+          //  onTap: () {
+            //  Navigator.push(
+             //   context,
+             //   MaterialPageRoute(builder: (context) => FaqScreen()),
+             // );
+          //  },
+         // ),
+          ListTile(
+            leading: Image.asset(
+              "assets/images/Term & Conditions.png",
+              height: 40,
+              width: 40,
+              color: colors.black54,
+            ),
+            title: const Text(
+              'My Bills',
+            ),
+            onTap: () {
+              Fluttertoast.showToast(msg: "Coming Soon");
             },
           ),
           ListTile(
@@ -345,14 +478,10 @@ class _BottomScreenState extends State<BottomScreen> {
               color: colors.black54,
             ),
             title: const Text(
-              'Faq',
+              'Business Card',
             ),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => FaqScreen()
-                ),
-              );
+              Fluttertoast.showToast(msg: "Coming Soon");
             },
           ),
           ListTile(
@@ -385,11 +514,24 @@ class _BottomScreenState extends State<BottomScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PrivacyPolicy()
-                ),
+                MaterialPageRoute(builder: (context) => PrivacyPolicy()),
               );
             },
           ),
+          // ListTile(
+          //   leading: Image.asset(
+          //     "assets/images/share.png",
+          //     color: colors.black54,
+          //     height: 40,
+          //     width: 40,
+          //   ),
+          //   title: const Text(
+          //     'Share App',
+          //   ),
+          //   onTap: () {
+          //     share();
+          //   },
+          // ),
           // ListTile(
           //   leading: Image.asset(
           //     "assets/images/Change Password.png",
@@ -415,7 +557,7 @@ class _BottomScreenState extends State<BottomScreen> {
               width: 40,
               //color: Colors.grey.withOpacity(0.8),
             ),
-            title: Text(
+            title: const Text(
               'Sign Out',
             ),
             onTap: () async {
@@ -425,15 +567,16 @@ class _BottomScreenState extends State<BottomScreen> {
                   builder: (BuildContext context) {
                     return AlertDialog(
                       title: const Text("Confirm Sign out"),
-                      content: const Text("Are  sure to sign out from app now?"),
+                      content:
+                          const Text("Are  sure to sign out from app now?"),
                       actions: <Widget>[
                         ElevatedButton(
                           style:
-                          ElevatedButton.styleFrom(primary: colors.primary),
+                              ElevatedButton.styleFrom(primary: colors.secondary),
                           child: Text("YES"),
                           onPressed: () async {
                             SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
+                                await SharedPreferences.getInstance();
                             setState(() {
                               prefs.clear();
                             });
@@ -446,7 +589,7 @@ class _BottomScreenState extends State<BottomScreen> {
                         ),
                         ElevatedButton(
                           style:
-                          ElevatedButton.styleFrom(primary: colors.primary),
+                              ElevatedButton.styleFrom(primary: colors.secondary),
                           child: Text("NO"),
                           onPressed: () {
                             Navigator.of(context).pop();

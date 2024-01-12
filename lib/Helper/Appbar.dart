@@ -133,13 +133,14 @@ AppBar customAppBar(
       required String text,
       required bool isTrue,
 
-    }){
+    })
+{
   return AppBar(
     elevation: 0,
     backgroundColor: colors.whiteTemp,
     centerTitle: true,
     flexibleSpace: Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(bottomRight: Radius.circular(1),bottomLeft: Radius.circular(1)),
         gradient: LinearGradient(
             begin: Alignment.bottomLeft,
@@ -164,7 +165,7 @@ AppBar customAppBar(
         ):SizedBox()
     ),
     title: Text('${text}',style: TextStyle(color: Colors.white,fontSize: 20),),
-    actions: [
+    actions: const [
       // InkWell(
       //   onTap: (){
       //     Navigator.pop(context);

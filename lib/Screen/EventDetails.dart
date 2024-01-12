@@ -176,12 +176,12 @@ class _EventDetailsState extends State<EventDetails> {
                               children: [
                                 Container(
                                     width: MediaQuery.of(context).size.width/2.2,
-
                                     child: Row(
-                                      children: [
+                                      children: const [
                                         Text("Event Name:",textAlign: TextAlign.right),
                                       ],
-                                    )),
+                                    ),
+                                ),
                                 Container(child: Row(
                                   children: [
                                     Text("${widget.data!.eventName}"),
@@ -195,9 +195,8 @@ class _EventDetailsState extends State<EventDetails> {
                               children: [
                                 Container(
                                     width: MediaQuery.of(context).size.width/2.2,
-
                                     child: Row(
-                                      children: [
+                                      children: const [
                                         Text("Description:",textAlign: TextAlign.right),
                                       ],
                                     ),
@@ -502,7 +501,7 @@ class _EventDetailsState extends State<EventDetails> {
               //   //   ),
               //   // ),
               // ),
-              SizedBox(
+              const SizedBox(
                 height: 200,
               ),
               Align(
@@ -516,7 +515,7 @@ class _EventDetailsState extends State<EventDetails> {
                       // Fluttertoast.showToast(msg: "Enquiry submit successfully");
                       Navigator.push(context, MaterialPageRoute(builder: (context) => EnquiryForm()));
                     },
-                    child: Text("Enquiry",style: TextStyle(fontSize: 15)
+                    child: const Text("Enquiry",style: TextStyle(fontSize: 15)
                     ),
                   ),
                 ),

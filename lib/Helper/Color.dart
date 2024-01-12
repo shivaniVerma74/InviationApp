@@ -15,7 +15,7 @@ List milestoneList = [1,2,3,4];
 
 Color getColor(double item) {if (item < milestoneCount) {
   return colors.primary;}
-else if (item > milestoneCount && item == item++) { return Colors.teal;}
+else if (item > milestoneCount && item == item++) {return Colors.teal;}
 return Colors.red; }
 
 
@@ -37,8 +37,9 @@ extension colors on ColorScheme {
     },
   );
 
-  static const Color primary =Color(0xffC5206B);
-  static const Color secondary = Color(0xff523176);
+  static const Color primary = Color(0xffEDC853);
+  static const Color secondary = Color(0xffec407a);
+  // static const Color secondaryy = Color(0xffec407a);
 
 
   // bool get apcolor  =>
@@ -113,6 +114,7 @@ extension colors on ColorScheme {
   static const Color disableColor = Color(0xffEEF2F9);
 
   static const Color blackTemp = Color(0xff000000);
+  static const Color golden = Color(0xffD9B352);
 
   Color get black26 =>
       this.brightness == Brightness.dark ? white30 : Colors.black26;

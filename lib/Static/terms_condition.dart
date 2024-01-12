@@ -19,10 +19,8 @@ class TermsCondition extends StatefulWidget {
 class _TermsConditionState extends State<TermsCondition> {
   @override
 
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-
-  new GlobalKey<RefreshIndicatorState>();
   Future<Null> _refresh() {
     return callApi();
   }

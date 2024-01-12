@@ -24,11 +24,8 @@ class VerifyOtp extends StatefulWidget {
 class _VerifyOtpState extends State<VerifyOtp> {
   TextEditingController pinController = TextEditingController();
 
-  @override
-
   verifyOtpApi() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    print("successsssssssssssss");
     var headers = {
       'Cookie': 'ci_session=1fae43cb24be06ee09e394b6be82b42f6d887269'
     };
@@ -66,34 +63,14 @@ class _VerifyOtpState extends State<VerifyOtp> {
     height: 60,
     textStyle: TextStyle(fontSize: 20, color: Color.fromRGBO(30, 60, 87, 1), fontWeight: FontWeight.w600),
     decoration: BoxDecoration(
-      border: Border.all(color: colors.primary),
-      borderRadius: BorderRadius.circular(50),
+      border: Border.all(color: colors.secondary),
+      borderRadius: BorderRadius.circular(5),
     ),
   );
-
-  // final focusedPinTheme = defaultPinTheme.copyDecorationWith(
-  //   border: Border.all(color: Color.fromRGBO(114, 178, 238, 1)),
-  //   borderRadius: BorderRadius.circular(8),
-  // );
-  //
-  // final submittedPinTheme = defaultPinTheme.copyWith(
-  //   decoration: defaultPinTheme.decoration.copyWith(
-  //     color: Color.fromRGBO(234, 239, 243, 1),
-  //   ),
-  // );
-
-  // @override
-
 
     @override
   void initState() {
     super.initState();
-    //verifyOtp();
-    // Future.delayed(Duration(seconds: 60)).then((_) {
-    //   verifyOtp();
-    //
-    // });
-
   }
   Widget build(BuildContext context) {
     return SafeArea(
@@ -123,7 +100,7 @@ class _VerifyOtpState extends State<VerifyOtp> {
                   "+91${widget.MOBILE}",
                   style: TextStyle(color:  colors.blackTemp,fontWeight:FontWeight.w500,fontSize: 18),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Text(
@@ -131,7 +108,7 @@ class _VerifyOtpState extends State<VerifyOtp> {
                   style: TextStyle(color:  colors.blackTemp,fontWeight:FontWeight.bold,fontSize: 16),
                 ),
 
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
                 Center(
                   child: Form(
                     child: Column(
@@ -154,61 +131,27 @@ class _VerifyOtpState extends State<VerifyOtp> {
                               showCursor: true,
                               onCompleted: (pin) => print(pin),
                             ),
-                            // Pinput(
-                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //   controller: pinController,
-                            //   // focusNode: focusNode,
-                            //   androidSmsAutofillMethod:
-                            //   AndroidSmsAutofillMethod.smsUserConsentApi,
-                            //   listenForMultipleSmsOnAndroid: true,
-                            //   // defaultPinTheme: defaultPinTheme,
-                            //   // validator: (value) {
-                            //   //   return value == '2222' ? null : 'Pin is incorrect';
-                            //   // },
-                            //   onClipboardFound: (value) {
-                            //     debugPrint('onClipboardFound: $value');
-                            //     pinController.setText(value);
-                            //   },
-                            //   hapticFeedbackType: HapticFeedbackType.lightImpact,
-                            //   onCompleted: (pin) {
-                            //     debugPrint('onCompleted: $pin');
-                            //   },
-                            //   onChanged: (value) {
-                            //     debugPrint('onChanged: $value');
-                            //   },
-                            //   cursor: Column(
-                            //     mainAxisAlignment: MainAxisAlignment.end,
-                            //     children: [
-                            //       Container(
-                            //         color: colors.whiteTemp,
-                            //         margin:  EdgeInsets.only(bottom: 9),
-                            //         width: 22,
-                            //         height: 1,
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
                           ),
                         )
                       ],
                     ),
                   ),
                 ),
-                SizedBox(height: 40,),
-                Text("Haven't received the verification code?",style: TextStyle(
+                const SizedBox(height: 40,),
+                const Text("Haven't received the verification code?",style: TextStyle(
                     color: colors.blackTemp,fontSize: 15,fontWeight: FontWeight.bold
                 ),),
-                Text("Resend",style: TextStyle(
-                    color: colors.secondary,fontWeight: FontWeight.bold,fontSize: 17
+                const Text("Resend",style: TextStyle(
+                    color: Colors.black,fontWeight: FontWeight.bold,fontSize: 17
                 ),),
-                SizedBox(
+                const SizedBox(
                   height: 60,
                 ),
                 Btn(
                   color: colors.secondary,
                   height: 45,
                   width: 300,
-                  title: 'Done',
+                  title: 'Submit',
                   onPress: () {
                     // verifyOtp();
                     if(pinController.text== widget.OTP){
@@ -220,7 +163,6 @@ class _VerifyOtpState extends State<VerifyOtp> {
                     //     MaterialPageRoute(builder: (context) => HomeScreen()));
                   },
                 ),
-
               ],
             ),
           ),

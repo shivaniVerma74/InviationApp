@@ -726,15 +726,14 @@ class CardScreen extends StatefulWidget {
   final String? image;
   final String datee;
   final String timee;
-  final String id;
-  CardScreen({Key? key, required this.name, required this.address, required this.datee, required this.timee, this.image, required this.id}) : super(key: key);
+  final String temp_Id;
+  CardScreen({Key? key, required this.name, required this.address, required this.datee, required this.timee, this.image, required this.temp_Id}) : super(key: key);
   @override
   State<CardScreen> createState() => _CardScreenState();
 }
 
 class _CardScreenState extends State<CardScreen> {
   ScreenshotController screenshotController = ScreenshotController();
-
   var newInvitationText;
   var locationn;
   var datte;
@@ -776,13 +775,13 @@ class _CardScreenState extends State<CardScreen> {
     ColorTools.createPrimarySwatch(blueBlues): 'Blue blues',
   };
 
-  List<DraggableText> draggableTexts = [
+  List<DraggableText> draggableTexts = [];
 
-  ];
   @override
   void initState() {
+    print("===============${widget.image}===========");
     screenPickerColor = Colors.blue;
-    dialogPickerColor = Colors.yellow;
+    dialogPickerColor = Colors.red;
     dialogSelectColor = const Color(0xFFA239CA);
     super.initState();
     setState(() {
@@ -790,10 +789,10 @@ class _CardScreenState extends State<CardScreen> {
       locationn = widget.address.toString();
       datte = widget.datee.toString();
       timmm = widget.timee.toString();
-      draggableTexts.add(DraggableText(text: '${newInvitationText}', color: dialogPickerColor,x: 120, y: 150));
-      draggableTexts.add(DraggableText(text: '${locationn}', color: dialogPickerColor,x: 120, y: 200));
-      draggableTexts.add(DraggableText(text: '${datte}', color: dialogPickerColor,x: 120, y: 250));
-      draggableTexts.add(DraggableText(text: '${timmm}', color: dialogPickerColor,x: 120, y: 300));
+      draggableTexts.add(DraggableText(text: '$newInvitationText', color: dialogPickerColor,x: 120, y: 150));
+      draggableTexts.add(DraggableText(text: '$locationn', color: dialogPickerColor,x: 120, y: 200));
+      draggableTexts.add(DraggableText(text: '$datte', color: dialogPickerColor, x: 120, y: 250));
+      draggableTexts.add(DraggableText(text: '$timmm', color: dialogPickerColor, x: 120, y: 300));
     });
   }
   Future _refresh() {
@@ -813,15 +812,15 @@ class _CardScreenState extends State<CardScreen> {
     var request = http.MultipartRequest('POST', Uri.parse('${ApiService.savemycard}'));
     request.fields.addAll({
       'user_id': '$userId',
-      'template_id': '${widget.id}'
+      'template_id': widget.temp_Id.toString()
     });
-    request.files.add(await http.MultipartFile.fromPath('image', '${image}'));
+    request.files.add(await http.MultipartFile.fromPath('image', '$image'));
     print("save Cardddd paraa${request.fields}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       Fluttertoast.showToast(msg: "card save successfully");
-      Navigator.push(context, MaterialPageRoute(builder: (context) => CardView(image: image, id:widget.id.toString())));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => CardView(image: image, temp_Id:widget.temp_Id.toString())));
       print(await response.stream.bytesToString());
     }
     else {
@@ -863,10 +862,18 @@ class _CardScreenState extends State<CardScreen> {
     return RefreshIndicator(
       onRefresh: _refresh,
       child: Scaffold(
-        appBar: AppBar(title: Text("Card Design"),
+        appBar: AppBar(
+            elevation: 0,
             centerTitle: true,
-            backgroundColor: colors.primary
-        ),
+            foregroundColor: colors.whiteTemp,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(25),
+                bottomRight: Radius.circular(25),
+              ),
+            ),
+            title: const Text('Card Design'),
+            backgroundColor: colors.secondary),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -874,88 +881,80 @@ class _CardScreenState extends State<CardScreen> {
               RepaintBoundary(
                 key: keyList,
                 child: Container(
-                  height: MediaQuery.of(context).size.height/1.5,
-                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height/1.3,
+                  width: MediaQuery.of(context).size.width/1,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: NetworkImage("${widget.image}"),
                       fit: BoxFit.fill,
                     ),
                   ),
-                 child: Stack(
-                   key: stackKey,
-                   fit: StackFit.expand,
-                   children: [
-                     for (var draggableText in draggableTexts)
-                      Positioned(
-                        left: draggableText.x,
-                        top: draggableText.y,
-                        child: Draggable(
+                 child: Padding(
+                     padding: const EdgeInsets.only(left: 30, top: 30),
+                   child: Stack(
+                     key: stackKey,
+                     fit: StackFit.expand,
+                     children: [
+                       for (var draggableText in draggableTexts)
+                        Positioned(
+                          left: draggableText.x,
+                          top: draggableText.y,
                           child: GestureDetector(
                             onTap: (){
                               setState(() {
-                                _editInvitationText1(context);
+                                // _editInvitationText1(context);
                               });
                             },
                             child: Text(
                               draggableText.text,
-                              style: TextStyle(color: dialogPickerColor, fontSize: 18),
+                              style: TextStyle(color: dialogPickerColor, fontSize: 20, fontFamily: 'Granaina', fontWeight: FontWeight.w600),
                               textAlign: TextAlign.center,
                             ),
                           ),
-                          // onDragStarted: () {
-                          //   setState(() {
-                          //     draggableText.scale = 1.2;
-                          //   });
-                          // },
-                          // onDraggableCanceled: (_, __) {
-                          //   setState(() {
-                          //     draggableText.scale = 1.0;
-                          //   });
-                          // },
-                          feedback: Text(
-                            draggableText.text,
-                            style: TextStyle(color: dialogPickerColor, fontSize: 18),
-                          ),
-                          childWhenDragging: Container(),
-                          onDragEnd: (dragDetails) {
-                            setState(() {
-                              final parentPos = context.findRenderObject()?.paintBounds;
-                              if (parentPos == null) return;
-                              draggableText.x = dragDetails.offset.dx - parentPos.left;
-                              draggableText.y = dragDetails.offset.dy - parentPos.top;
-                            });
-                          },
                         ),
-                      ),
-                   ],
+                       // Positioned(
+                       //   left: draggableText.x,
+                       //   top: draggableText.y,
+                       //   child: Draggable(
+                       //     child: GestureDetector(
+                       //       onTap: (){
+                       //         setState(() {
+                       //           _editInvitationText1(context);
+                       //         });
+                       //       },
+                       //       child: Text(
+                       //         draggableText.text,
+                       //         style: TextStyle(color: dialogPickerColor, fontSize: 18, fontFamily: 'Granaina'),
+                       //         textAlign: TextAlign.center,
+                       //       ),
+                       //     ),
+                       //     feedback: Text(
+                       //       draggableText.text,
+                       //       style: TextStyle(color: dialogPickerColor, fontSize: 18),
+                       //     ),
+                       //     childWhenDragging: Container(),
+                       //     onDragEnd: (dragDetails) {
+                       //       setState(() {
+                       //         final parentPos = context.findRenderObject()?.paintBounds;
+                       //         if (parentPos == null) return;
+                       //         draggableText.x = dragDetails.offset.dx - parentPos.left;
+                       //         draggableText.y = dragDetails.offset.dy - parentPos.top;
+                       //       });
+                       //     },
+                       //   ),
+                       // ),
+                     ],
+                   ),
                  ),
                 ),
               ),
               ListTile(
                 title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Change Text Color", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
-                    const SizedBox(width: 4),
-                    ColorIndicator(
-                      width: 30,
-                      height: 30,
-                      borderRadius: 4,
-                      color: dialogPickerColor,
-                      onSelectFocus: false,
-                      onSelect: () async {
-                        final Color colorBeforeDialog = dialogPickerColor;
-                        if (!(await colorPickerDialog())) {
-                          setState(() {
-                            dialogPickerColor = colorBeforeDialog;
-                          });
-                        }
-                      },
-                    ),
-                    SizedBox(width: 70),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: colors.primary, // background
+                        primary: colors.secondary, // background
                       ),
                       onPressed: () {
                         showDialog(
@@ -1001,52 +1000,37 @@ class _CardScreenState extends State<CardScreen> {
                           },
                         );
                       },
-                      child: Text('Edit Texts'),
+                      child: Text('Edit Text', style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700)),
                     ),
+                    Container(
+                      width: 90,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: colors.secondary, // background
+                          ),
+                          onPressed: (){
+                        save();
+                      }, child: Text("Next", style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700))),
+                    ),
+                    // InkWell(
+                    //   onTap: () {
+                    //     save();
+                    //   },
+                    //   child: Container(
+                    //     height: 39,
+                    //     width: MediaQuery.of(context).size.width/3,
+                    //     decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: colors.primary),
+                    //     child: const Center(
+                    //       child: Text("Save Card",
+                    //           style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700)
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
-                // title: const Text('Click this color to modify it in a dialog.'),
-                // subtitle: Text(
-                //   // ignore: lines_longer_than_80_chars
-                //   '${ColorTools.materialNameAndCode(dialogPickerColor, colorSwatchNameMap: colorsNameMap)} '
-                //       'aka ${ColorTools.nameThatColor(dialogPickerColor)}',
-                // ),
-                // trailing:
-                // ColorIndicator(
-                //   width: 34,
-                //   height: 34,
-                //   borderRadius: 4,
-                //   color: dialogPickerColor,
-                //   onSelectFocus: false,
-                //   onSelect: () async {
-                //     // Store current color before we open the dialog.
-                //     final Color colorBeforeDialog = dialogPickerColor;
-                //     // Wait for the picker to close, if dialog was dismissed,
-                //     // then restore the color we had before it was opened.
-                //     if (!(await colorPickerDialog())) {
-                //       setState(() {
-                //         dialogPickerColor = colorBeforeDialog;
-                //       });
-                //     }
-                //   },
-                // ),
               ),
-              const SizedBox(height: 40),
-              InkWell(
-                onTap: () {
-                 save();
-                },
-                child: Container(
-                  height: 40,
-                    width: MediaQuery.of(context).size.width/1.1,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: colors.primary),
-                    child: const Center(
-                        child: Text("Save Card",
-                            style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700)
-                        ),
-                    ),
-                ),
-              ),
+              // const SizedBox(height: 40),
             ],
           ),
         ),
@@ -1361,6 +1345,7 @@ class _CardScreenState extends State<CardScreen> {
       const BoxConstraints(minHeight: 480, minWidth: 300, maxWidth: 320),
     );
   }
+
 }
 
 //
