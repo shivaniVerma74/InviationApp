@@ -601,338 +601,388 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(text: "Sign Up", isTrue: true, context: context),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+      // appBar: customAppBar(text: "Sign Up", isTrue: true, context: context),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/splash/loginback.png"),
+            fit: BoxFit.fill,
+          ),
+        ),
         child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Row(
-                      children: const [
-                        Text(
-                          "Name",
-                          style: TextStyle(
-                              color: colors.black54,
-                              fontWeight: FontWeight.bold),
+          child: Column(
+            children: [
+              SizedBox(height: 80,),
+              const Text("SignUp", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: Color(0xffDEBA54)),),
+              // SizedBox(height: 40,),
+              // Image.asset("assets/splash/splash logo.png", scale: 1.9),
+              SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Row(
+                            children: const [
+                              Text(
+                                "Name",
+                                style: TextStyle(
+                                    color: colors.whiteTemp,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                "*",
+                                style: TextStyle(
+                                    color: colors.red,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 10),
+                              ),
+                            ],
+                          )),
+                      Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
-                        Text(
-                          "*",
-                          style: TextStyle(
-                              color: colors.red,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10),
+                        elevation: 5,
+                        child: TextFormField(
+                          style: TextStyle(color: colors.black54),
+                          controller: nameController,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                              hintText: 'Enter name',
+                              hintStyle: const TextStyle(
+                                  fontSize: 15.0, color: Colors.black),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              contentPadding: const EdgeInsets.only(
+                                left: 10,
+                              )),
+                          validator: (v) {
+                            if (v!.isEmpty) {
+                              return "name is required";
+                            }
+                          },
                         ),
-                      ],
-                    )),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  elevation: 5,
-                  child: TextFormField(
-                    style: TextStyle(color: colors.black54),
-                    controller: nameController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                        hintText: 'Enter name',
-                        hintStyle: const TextStyle(
-                            fontSize: 15.0, color: Colors.black),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        contentPadding: const EdgeInsets.only(
-                          left: 10,
-                        )),
-                    validator: (v) {
-                      if (v!.isEmpty) {
-                        return "name is required";
-                      }
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Row(
-                      children: const [
-                        Text(
-                          "Mobile No",
-                          style: TextStyle(
-                              color: colors.black54,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          "*",
-                          style: TextStyle(
-                              color: colors.red,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10),
-                        ),
-                      ],
-                    )),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  elevation: 5,
-                  child: TextFormField(
-                    style: TextStyle(color: colors.black54),
-                    controller: mobileController,
-                    keyboardType: TextInputType.number,
-                    maxLength: 10,
-                    decoration: InputDecoration(
-                        counterText: "",
-                        hintText: 'Enter mobile',
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        hintStyle:
-                        TextStyle(fontSize: 15.0, color: Colors.black),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        contentPadding: const EdgeInsets.only(
-                          left: 10,
-                        )),
-                    validator: (v) {
-                      if (v!.length < 10) {
-                        return "mobile number is required";
-                      }
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: Row(
-                      children: const [
-                        Text(
-                          "Email Id",
-                          style: TextStyle(
-                              color: colors.black54,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          "*",
-                          style: TextStyle(
-                              color: colors.red,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10),
-                        ),
-                      ],
-                    )),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  elevation: 5,
-                  child: TextFormField(
-                    style: TextStyle(color: colors.black54),
-                    controller: emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        hintText: 'Enter email',
-                        hintStyle: const TextStyle(
-                            fontSize: 15.0, color: Colors.black),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        contentPadding: const EdgeInsets.only(
-                          left: 10,
-                        ),
-                    ),
-                    validator: (v) {
-                      if (v!.isEmpty) {
-                        return "Email is required";
-                      }
-                      if (!v.contains("@")) {
-                        return "Enter Valid Email Id";
-                      }
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: Row(
-                    children: const [
-                      Text(
-                        "States",
-                        style: TextStyle(
-                            color: colors.black54, fontWeight: FontWeight.bold),
                       ),
-                      Text(
-                        "*",
-                        style: TextStyle(
-                            color: colors.red,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 10),
+                      const SizedBox(
+                        height: 10,
                       ),
+                      Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Row(
+                            children: const [
+                              Text(
+                                "Mobile No",
+                                style: TextStyle(
+                                    color: colors.whiteTemp,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                "*",
+                                style: TextStyle(
+                                    color: colors.red,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 10),
+                              ),
+                            ],
+                          )),
+                      Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        elevation: 5,
+                        child: TextFormField(
+                          style: const TextStyle(color: colors.black54),
+                          controller: mobileController,
+                          keyboardType: TextInputType.number,
+                          maxLength: 10,
+                          decoration: InputDecoration(
+                              counterText: "",
+                              hintText: 'Enter mobile',
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              hintStyle:
+                              const TextStyle(fontSize: 15.0, color: Colors.black),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              contentPadding: const EdgeInsets.only(
+                                left: 10,
+                              )),
+                          validator: (v) {
+                            if (v!.length < 10) {
+                              return "mobile number is required";
+                            }
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Row(
+                            children: const [
+                              Text(
+                                "Email Id",
+                                style: TextStyle(
+                                    color: colors.whiteTemp,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                "*",
+                                style: TextStyle(
+                                    color: colors.red,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 10),
+                              ),
+                            ],
+                          )),
+                      Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        elevation: 5,
+                        child: TextFormField(
+                          style: TextStyle(color: colors.black54),
+                          controller: emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              hintText: 'Enter email',
+                              hintStyle: const TextStyle(
+                                  fontSize: 15.0, color: Colors.black),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              contentPadding: const EdgeInsets.only(
+                                left: 10,
+                              ),
+                          ),
+                          validator: (v) {
+                            if (v!.isEmpty) {
+                              return "Email is required";
+                            }
+                            if (!v.contains("@")) {
+                              return "Enter Valid Email Id";
+                            }
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Row(
+                          children: const [
+                            Text(
+                              "States",
+                              style: TextStyle(
+                                  color: colors.whiteTemp, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              "*",
+                              style: TextStyle(
+                                  color: colors.whiteTemp,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 10),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Card(
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              hint: const Padding(
+                                padding: EdgeInsets.only(left: 7),
+                                child: Text("Select State", style: TextStyle(color: Colors.black, fontSize: 15),),
+                              ),
+                              isExpanded: true,
+                              elevation: 0,
+                              value: states,
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 40,
+                                color: Colors.black,
+                              ),
+                              items: getStateModel?.data?.map((items) {
+                                return DropdownMenuItem(
+                                    value: items.id.toString(),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(items.name.toString()),
+                                    ));
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  states = newValue!;
+                                  addCities();
+                                  print("City iddddd issss $states");
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(5.0),
+                        child: Row(
+                          children: const [
+                            Text(
+                              "Cities",
+                              style: TextStyle(
+                                  color: colors.whiteTemp, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              "*",
+                              style: TextStyle(
+                                  color: colors.red,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 10),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Card(
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              hint: const Padding(
+                                padding: EdgeInsets.only(left: 7),
+                                child: Text("Select cities", style: TextStyle(color: Colors.black, fontSize: 15),),
+                              ),
+                              isExpanded: true,
+                              elevation: 0,
+                              value: cities,
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 40,
+                                color: Colors.black,
+                              ),
+                              items: getCityModel?.data?.map((items) {
+                                return DropdownMenuItem(
+                                    value: items.id.toString(),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(items.name.toString()),
+                                    ));
+                              }).toList(),
+                              onChanged: (String? newValue) async {
+                                setState(() {
+                                  cities = newValue!;
+                                  print("City iddddd issss ${cities}");
+                                });
+                                SharedPreferences pref =
+                                await SharedPreferences.getInstance();
+                                pref.setString('Selected_city', cities!);
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                      // TextFormField(
+                      //   controller: addressCtr,
+                      //   decoration: InputDecoration(
+                      //     hintText: 'Enter Address',
+                      //       hintStyle: const TextStyle(
+                      //           fontSize: 15.0, color: colors.secondary),
+                      //     border: OutlineInputBorder(
+                      //       borderRadius: BorderRadius.circular(10)
+                      //     ),
+                      //   ),
+                      //   onTap:(){
+                      //     // PlacePicker(
+                      //     //   apiKey: Platform.isAndroid
+                      //     //       ? "AIzaSyBRnd5Bpqec-SYN-wAYFECRw3OHd4vkfSA"
+                      //     //       : "AIzaSyBRnd5Bpqec-SYN-wAYFECRw3OHd4vkfSA",
+                      //     //   onPlacePicked: (result) {
+                      //     //     print(result.formattedAddress);
+                      //     //     setState(() {
+                      //     //       addressCtr.text = result.formattedAddress.toString();
+                      //     //       pickLat = result.geometry!.location.lat;
+                      //     //       pickLong = result.geometry!.location.lng;
+                      //     //     });
+                      //     //     Navigator.of(context).pop();
+                      //     //     // distnce();
+                      //     //   },
+                      //     //   initialPosition: LatLng(currentLocation!.latitude, currentLocation!.longitude),
+                      //     //   useCurrentLocation: true,
+                      //     // );
+                      //     _getLocation();
+                      //   },
+                      // ),
+                      const SizedBox(height: 30),
+                      Center(
+                        child: Btn(
+                            height: 50,
+                            width: MediaQuery.of(context).size.width/2,
+                            title: isLoading ? "Please wait......" : 'Submit',
+                            // color: colors.secondary,
+                            onPress: () {
+                              if (_formKey.currentState!.validate()) {
+                                registrationApi();
+                              } else {
+                                const snackBar = SnackBar(
+                                  content: Text('All Fields are required!'),
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                //Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+                              }
+                            }),
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "All ready have an account",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => SignupScreen()));
+                            },
+                            child: const Text(
+                              "Login", style: TextStyle(
+                                color: colors.secondary,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10,),
                     ],
                   ),
                 ),
-                Card(
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        hint: Text("Select State", style: TextStyle(color: Colors.black),),
-                        isExpanded: true,
-                        elevation: 0,
-                        value: states,
-                        icon: Icon(
-                          Icons.keyboard_arrow_down,
-                          size: 40,
-                          color: Colors.black,
-                        ),
-                        items: getStateModel?.data?.map((items) {
-                          return DropdownMenuItem(
-                              value: items.id.toString(),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(items.name.toString()),
-                              ));
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            states = newValue!;
-                            addCities();
-                            print("City iddddd issss $states");
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: Row(
-                    children: const [
-                      Text(
-                        "Cities",
-                        style: TextStyle(
-                            color: colors.black54, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        "*",
-                        style: TextStyle(
-                            color: colors.red,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 10),
-                      ),
-                    ],
-                  ),
-                ),
-                Card(
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        hint: Text("Select cities", style: TextStyle(color: Colors.black),),
-                        isExpanded: true,
-                        elevation: 0,
-                        value: cities,
-                        icon: Icon(
-                          Icons.keyboard_arrow_down,
-                          size: 40,
-                          color: Colors.black,
-                        ),
-                        items: getCityModel?.data?.map((items) {
-                          return DropdownMenuItem(
-                              value: items.id.toString(),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(items.name.toString()),
-                              ));
-                        }).toList(),
-                        onChanged: (String? newValue) async {
-                          setState(() {
-                            cities = newValue!;
-                            print("City iddddd issss ${cities}");
-                          });
-                          SharedPreferences pref =
-                          await SharedPreferences.getInstance();
-                          pref.setString('Selected_city', cities!);
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-                // TextFormField(
-                //   controller: addressCtr,
-                //   decoration: InputDecoration(
-                //     hintText: 'Enter Address',
-                //       hintStyle: const TextStyle(
-                //           fontSize: 15.0, color: colors.secondary),
-                //     border: OutlineInputBorder(
-                //       borderRadius: BorderRadius.circular(10)
-                //     ),
-                //   ),
-                //   onTap:(){
-                //     // PlacePicker(
-                //     //   apiKey: Platform.isAndroid
-                //     //       ? "AIzaSyBRnd5Bpqec-SYN-wAYFECRw3OHd4vkfSA"
-                //     //       : "AIzaSyBRnd5Bpqec-SYN-wAYFECRw3OHd4vkfSA",
-                //     //   onPlacePicked: (result) {
-                //     //     print(result.formattedAddress);
-                //     //     setState(() {
-                //     //       addressCtr.text = result.formattedAddress.toString();
-                //     //       pickLat = result.geometry!.location.lat;
-                //     //       pickLong = result.geometry!.location.lng;
-                //     //     });
-                //     //     Navigator.of(context).pop();
-                //     //     // distnce();
-                //     //   },
-                //     //   initialPosition: LatLng(currentLocation!.latitude, currentLocation!.longitude),
-                //     //   useCurrentLocation: true,
-                //     // );
-                //     _getLocation();
-                //   },
-                // ),
-                SizedBox(height: 50),
-                Center(
-                  child: Btn(
-                      height: 50,
-                      width: 320,
-                      title: isLoading ? "Please wait......" : 'Submit',
-                      // color: colors.secondary,
-                      onPress: () {
-                        if (_formKey.currentState!.validate()) {
-                          registrationApi();
-                        } else {
-                          const snackBar = SnackBar(
-                            content: Text('All Fields are required!'),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          //Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
-                        }
-                      }),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -958,7 +1008,7 @@ class _SignupScreenState extends State<SignupScreen> {
       currentLocationController.text = result.formattedAddress.toString();
       var lat = result.latLng!.latitude;
       var long = result.latLng!.longitude;
-      print("lat long here ${lat} ${long}");
+      print("lat long here $lat $long");
     });
   }
 }

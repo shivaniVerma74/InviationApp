@@ -38,7 +38,7 @@ extension colors on ColorScheme {
   );
 
   static const Color primary = Color(0xffEDC853);
-  static const Color secondary = Color(0xffec407a);
+  static const Color secondary = Color(0xffEC407A);
   // static const Color secondaryy = Color(0xffec407a);
 
 

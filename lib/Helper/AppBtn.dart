@@ -32,7 +32,7 @@ class Btn extends StatelessWidget {
                 0,
                 1,
               ]),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(40),
           // border: Border.all(color:colors.primary)
         ),
         height: height,

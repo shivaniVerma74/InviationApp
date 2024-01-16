@@ -998,17 +998,17 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
+        const Text(
           'Select your religion:',
           style: TextStyle(fontSize: 18),
         ),
         SizedBox(height: 20),
         DropdownButton<String>(
           value: selectedReligion,
-          icon: Icon(Icons.arrow_downward),
+          icon: const Icon(Icons.arrow_downward),
           iconSize: 24,
           elevation: 16,
-          style: TextStyle(color: Colors.deepPurple),
+          style: const TextStyle(color: Colors.deepPurple),
           onChanged: (String? newValue) {
             setState(() {
               selectedReligion = newValue;
@@ -1030,16 +1030,14 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     );
   }
+
   myCard() {
     return savedCardModel?.status == false ? const Text("No Card Found")
-        : savedCardModel?.data?.length == null ||
-        savedCardModel?.data?.length == ""
+        : savedCardModel?.data?.length == null || savedCardModel?.data?.length == ""
         ? const Center(
         child: CircularProgressIndicator(
-        color: colors.secondary,
-         ),
-        )
-        : ListView.builder(
+        color: colors.secondary),
+    ): ListView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: savedCardModel?.data?.length,

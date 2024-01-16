@@ -24,6 +24,7 @@ import '../SubscriptionPlan/subscription_plan.dart';
 import '../api/api_services.dart';
 import 'package:http/http.dart' as http;
 
+import 'Demo.dart';
 import 'EventsForm.dart';
 import 'ExampleScreen.dart';
 import 'MyCardTemplate.dart';
@@ -67,12 +68,12 @@ class _BottomScreenState extends State<BottomScreen> {
   getuserProfile() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? userId = preferences.getString('userId');
-    print("getProfile--------------->${userId}");
+    print("getProfile--------------->$userId");
     var headers = {
       'Cookie': 'ci_session=d9075fff59f39b7a82c03ca267be8899c1a9fbf8'
     };
     var request = http.MultipartRequest(
-        'POST', Uri.parse('${ApiService.getUserProfile}'));
+        'POST', Uri.parse(ApiService.getUserProfile));
     request.fields.addAll({'id': '$userId'});
     print("getProfile--------------->${request.fields}");
     request.headers.addAll(headers);
@@ -357,7 +358,8 @@ class _BottomScreenState extends State<BottomScreen> {
               'Marriage Certificate',
             ),
             onTap: () {
-              Fluttertoast.showToast(msg: "Coming Soon");
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));
+              // Fluttertoast.showToast(msg: "Coming Soon");
             },
           ),
           ListTile(

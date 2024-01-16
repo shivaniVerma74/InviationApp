@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 3),() async {
       SharedPreferences prefs  = await SharedPreferences.getInstance();
       bool? isLogin  =  prefs.getBool('isLogin');
-      print("is login trueee--------${isLogin}");
+      print("is login trueee--------$isLogin");
       if(isLogin ?? false) {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const BottomScreen()));
       } else {
@@ -45,8 +45,14 @@ class _SplashScreenState extends State<SplashScreen> {
         backgroundColor: Colors.black,
         body: Container(
           height: MediaQuery.of(context).size.height,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/splash/splashimages.png"),
+              fit: BoxFit.fill,
+            ),
+          ),
           child: Center(
-            child: Image.asset("assets/splash/splashimages.png", fit: BoxFit.cover)
+            child: Image.asset("assets/splash/splash logo.png", height: 180, width: 180,)
           ),
         ),
       ),

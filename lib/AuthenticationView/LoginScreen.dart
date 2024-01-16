@@ -105,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Container(
           height: MediaQuery.of(context).size.height,
             width: double.infinity,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage("assets/splash/loginback.png"),
                 fit: BoxFit.fill,
@@ -113,17 +113,15 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             child:  Column(
               children: [
-                // Padding(
-                //               //   padding: const EdgeInsets.only(top: 0.75),
-                //               //   child: Container(
-                //               //       height: MediaQuery.of(context).size.height/3.0,
-                //               //       child: Image.asset("assets/images/login.png", scale: 3.9)),
-                //               // ),
-                SizedBox(height: 240),
+
+                SizedBox(height: 50,),
+                const Text("Login", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Color(0xffDEBA54)),),
+                SizedBox(height: 40,),
+                Image.asset("assets/splash/splash logo.png", scale: 1.9),
+                SizedBox(height: 80),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 20),
                     // const Padding(
                     //   padding: EdgeInsets.only(left: 20.0),
                     //   child: Text("Login",
@@ -133,112 +131,105 @@ class _LoginScreenState extends State<LoginScreen> {
                     //         fontSize: 25),
                     //   ),
                     // ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20.0, bottom: 10, left: 10, right: 10),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 10),
-                              child: Container(
-                                height: 60,
-                                width: MediaQuery.of(context).size.width/1.1,
-                                // decoration: BoxDecoration(
-                                //   borderRadius: BorderRadius.circular(15),
-                                //   color: colors.whiteTemp,
-                                //   //Theme.of(context).colorScheme.gray,
-                                // ),
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  elevation: 4,
-                                  child: Center(
-                                    child: TextFormField(
-                                      controller: mobileController,
-                                      keyboardType: TextInputType.number,
-                                      maxLength: 10,
-                                      validator: (v) {
-                                        if (v!.length != 10) {
-                                          return "mobile number is required";
-                                        }
-                                      },
-                                      decoration: const InputDecoration(
-                                        border: InputBorder.none,
-                                        counterText: "",
-                                        contentPadding: EdgeInsets.only(left: 15, top: 15),
-                                        hintText: "Login Here/Mobile Number",
-                                        hintStyle: TextStyle(color: Colors.black),
-                                        prefixIcon: Icon(Icons.call, color: Colors.black, size: 18),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          Container(
+                            // height: 60,
+                            width: MediaQuery.of(context).size.width/1.1,
+                            // decoration: BoxDecoration(
+                            //   borderRadius: BorderRadius.circular(15),
+                            //   color: colors.whiteTemp,
+                            //   //Theme.of(context).colorScheme.gray,
+                            // ),
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 40, left: 10, right: 10),
-                              child: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-                                  if (mobileController.text.isNotEmpty &&
-                                      mobileController.text.length == 10) {
-                                    loginWithMobileApi();
-                                  } else {
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-                                    Fluttertoast.showToast(msg: "Please enter valid mobile number!");
-                                  }
-                                },
-                                child: Container(
-                                  height: 50,
-                                  width: MediaQuery.of(context).size.width/1.7,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      color: colors.secondary),
-                                  child:
-                                  // isloader == true ? Center(child: CircularProgressIndicator(color: Colors.white,),) :
-                                  const Center(
-                                    child: Text("Send OTP", style: TextStyle(fontSize: 18, color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 80),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  "Don't have an account?",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => SignupScreen()));
+                              elevation: 4,
+                              child: Center(
+                                child: TextFormField(
+                                  controller: mobileController,
+                                  keyboardType: TextInputType.number,
+                                  maxLength: 10,
+                                  validator: (v) {
+                                    if (v!.length != 10) {
+                                      return "mobile number is required";
+                                    }
                                   },
-                                  child: const Text(
-                                    "SignUp", style: TextStyle(
-                                      color: Color(0xffec407a),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                    counterText: "",
+                                    contentPadding: EdgeInsets.only(left: 15, top: 15),
+                                    hintText: "Mobile Number",
+                                    hintStyle: TextStyle(color: Colors.black),
+                                    prefixIcon: Icon(Icons.call, color: Colors.black, size: 18),
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                            const SizedBox(
-                              height: 20,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 60, left: 10, right: 10),
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                if (mobileController.text.isNotEmpty &&
+                                    mobileController.text.length == 10) {
+                                  loginWithMobileApi();
+                                } else {
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                  Fluttertoast.showToast(msg: "Please enter valid mobile number!");
+                                }
+                              },
+                              child: Container(
+                                height: 45,
+                                width: MediaQuery.of(context).size.width/1.7,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: colors.secondary),
+                                child:
+                                // isloader == true ? Center(child: CircularProgressIndicator(color: Colors.white,),) :
+                                const Center(
+                                  child: Text("Send OTP", style: TextStyle(fontSize: 18, color: Colors.white),
+                                  ),
+                                ),
+                              ),
                             ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 120),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                "Don't have an account?",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => SignupScreen()));
+                                },
+                                child: const Text(
+                                  "SignUp", style: TextStyle(
+                                    color: colors.secondary,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                        ],
                       ),
                     ),
                   ],
