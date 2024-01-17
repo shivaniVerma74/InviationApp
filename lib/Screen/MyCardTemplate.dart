@@ -31,12 +31,15 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: colors.white70,
+      backgroundColor: colors.scaffoldBackground,
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            customTabbarr(),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+          child: Column(
+            children: [
+              customTabBar(),
+            ],
+          ),
         ),
         // Column(
         //   children: [
@@ -225,120 +228,158 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
   }
 
 
-  customTabbarr() {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        // mainAxisSize: MainAxisSize.min,
-        children: [
-          const Card(
-            elevation: 0,
-            child: ListTile(
-              title: Text(
-                "Wedding Card",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-              ),
-              trailing: Text(
-                'View All',
-                style: TextStyle(color: Colors.deepOrangeAccent),
-              ),
-            ),
+  // customTabbarr() {
+  //   return SingleChildScrollView(
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       // mainAxisSize: MainAxisSize.min,
+  //       children: [
+  //         const Card(
+  //           elevation: 0,
+  //           child: ListTile(
+  //             title: Text(
+  //               "Wedding Card",
+  //               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+  //             ),
+  //             trailing: Text(
+  //               'View All',
+  //               style: TextStyle(color: Colors.deepOrangeAccent),
+  //             ),
+  //           ),
+  //         ),
+  //         GridView.builder(
+  //             shrinkWrap: true,
+  //             physics: const NeverScrollableScrollPhysics(),
+  //             itemCount: 2,
+  //             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+  //               mainAxisExtent: MediaQuery.of(context).size.height * 0.35,
+  //               crossAxisCount: 2, // number of items in each row
+  //               mainAxisSpacing: 20.0, // spacing between rows
+  //               crossAxisSpacing: 15.0, // spacing between columns
+  //             ),
+  //             padding: const EdgeInsets.all(10.0),
+  //             // weddingCardList?.data?.length == null
+  //             //     ? 0
+  //             //     : weddingCardList?.data?[0].templates!.length,
+  //
+  //             // scrollDirection: Axis.vertical,
+  //             itemBuilder: (BuildContext context, int index) {
+  //               return InkWell(
+  //                 onTap: () {
+  //                   Navigator.push(context, MaterialPageRoute(builder: (context) => const WeddingForm()));
+  //                 },
+  //                 child: Container(
+  //                   decoration: BoxDecoration(
+  //                     borderRadius: BorderRadius.circular(12),
+  //                     image: const DecorationImage(
+  //                         image: AssetImage("assets/images/wddingimg.png"),
+  //                         fit: BoxFit.fill),
+  //                   ),
+  //                   //    padding: EdgeInsets.all(20),
+  //                   // child: Image.asset('assets/images/wddingimg.png'),
+  //                   //  Image.network(
+  //                   //     weddingCardList?.data?[0].templates![index].preview ??
+  //                   //         ''),
+  //                 ),
+  //               );
+  //             }),
+  //         const Card(
+  //           elevation: 0,
+  //           child: ListTile(
+  //             title: Text(
+  //               "BirthDay Card",
+  //               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+  //             ),
+  //             trailing: Text(
+  //               'View All',
+  //               style: TextStyle(color: Colors.deepOrangeAccent),
+  //             ),
+  //           ),
+  //         ),
+  //         GridView.builder(
+  //             shrinkWrap: true,
+  //             physics: const NeverScrollableScrollPhysics(),
+  //             itemCount: birthDayCardList?.data == null ? 0 : birthDayCardList?.data?[0].templates!.length,
+  //             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+  //               mainAxisExtent: MediaQuery.of(context).size.height * 0.28,
+  //               crossAxisCount: 2,
+  //               mainAxisSpacing: 20.0,
+  //               crossAxisSpacing: 15.0,
+  //             ),
+  //             padding: const EdgeInsets.all(10.0),
+  //             // scrollDirection: Axis.vertical,
+  //             itemBuilder: (BuildContext context, int index) {
+  //               return InkWell(
+  //                 onTap: () {
+  //                   print("image hererrere ${birthDayCardList?.data?[index].templates![index].image}");
+  //                   Navigator.push(
+  //                     context,
+  //                     MaterialPageRoute(
+  //                       builder: (context) =>  Form_Screen(
+  //                           image: birthDayCardList?.data?[index].templates![index].image,
+  //                           temp_Id: birthDayCardList?.data?[index].templates![index].id
+  //                       ),
+  //                     ),
+  //                   );
+  //                 },
+  //                 child: Container(
+  //                   decoration: BoxDecoration(
+  //                     borderRadius: BorderRadius.circular(15),
+  //                     image: DecorationImage(
+  //                         image: NetworkImage(
+  //                           birthDayCardList?.data?[0].templates![index].preview ?? '',
+  //                         ),
+  //                         fit: BoxFit.fill),
+  //                   ),
+  //                 ),
+  //               );
+  //             }),
+  //         // newIndex == 1?
+  //         // templateView2(e): templateView(),
+  //         SizedBox(height: 50)
+  //       ],
+  //     ),
+  //   );
+  // }
+  customTabBar(){
+    return SizedBox(
+      child: GridView.builder(
+        physics:const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            mainAxisSpacing: 12,
+            crossAxisSpacing:12,
+            childAspectRatio: 0.85
           ),
-          GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: 2,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                mainAxisExtent: MediaQuery.of(context).size.height * 0.35,
-                crossAxisCount: 2, // number of items in each row
-                mainAxisSpacing: 20.0, // spacing between rows
-                crossAxisSpacing: 15.0, // spacing between columns
+          itemCount: 6,
+          itemBuilder: (_,index){
+            return Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: const [
+                   BoxShadow(
+                    color: colors.black54,
+                    // spreadRadius: 0.5,
+                    blurRadius: 1,
+                    offset: Offset(0, 1)
+                  )
+                ]
               ),
-              padding: const EdgeInsets.all(10.0),
-              // weddingCardList?.data?.length == null
-              //     ? 0
-              //     : weddingCardList?.data?[0].templates!.length,
-
-              // scrollDirection: Axis.vertical,
-              itemBuilder: (BuildContext context, int index) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const WeddingForm()));
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      image: const DecorationImage(
-                          image: AssetImage("assets/images/wddingimg.png"),
-                          fit: BoxFit.fill),
-                    ),
-                    //    padding: EdgeInsets.all(20),
-                    // child: Image.asset('assets/images/wddingimg.png'),
-                    //  Image.network(
-                    //     weddingCardList?.data?[0].templates![index].preview ??
-                    //         ''),
-                  ),
-                );
-              }),
-          const Card(
-            elevation: 0,
-            child: ListTile(
-              title: Text(
-                "BirthDay Card",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                   Image.asset("assets/home icon/Editorial.png",color: Colors.black,scale: 1.2,),
+                  const SizedBox(height: 12,),
+                  Text("Design",style: TextStyle(fontSize: 20,),),
+                  const SizedBox(height: 4,),
+                ],
               ),
-              trailing: Text(
-                'View All',
-                style: TextStyle(color: Colors.deepOrangeAccent),
-              ),
-            ),
-          ),
-          GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: birthDayCardList?.data == null ? 0 : birthDayCardList?.data?[0].templates!.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                mainAxisExtent: MediaQuery.of(context).size.height * 0.28,
-                crossAxisCount: 2,
-                mainAxisSpacing: 20.0,
-                crossAxisSpacing: 15.0,
-              ),
-              padding: const EdgeInsets.all(10.0),
-              // scrollDirection: Axis.vertical,
-              itemBuilder: (BuildContext context, int index) {
-                return InkWell(
-                  onTap: () {
-                    print("image hererrere ${birthDayCardList?.data?[index].templates![index].image}");
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>  Form_Screen(
-                            image: birthDayCardList?.data?[index].templates![index].image,
-                            temp_Id: birthDayCardList?.data?[index].templates![index].id
-                        ),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      image: DecorationImage(
-                          image: NetworkImage(
-                            birthDayCardList?.data?[0].templates![index].preview ?? '',
-                          ),
-                          fit: BoxFit.fill),
-                    ),
-                  ),
-                );
-              }),
-          // newIndex == 1?
-          // templateView2(e): templateView(),
-          SizedBox(height: 50)
-        ],
-      ),
+            );
+          }),
     );
   }
-
 
   @override
   void initState() {

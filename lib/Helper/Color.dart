@@ -71,6 +71,7 @@ extension colors on ColorScheme {
 
 
   static const Color transparent = Color(0xFFFBFBFB);
+  static const Color scaffoldBackground =  Color(0Xff00B5EE);
   static const Color darkBlue = Color(0xffB7281D);
   static const Color lightBlue = Color(0xFFADD8E6);
   static const Color purpleColor = Color(0xFF3E4095);

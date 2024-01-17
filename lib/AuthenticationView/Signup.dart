@@ -792,7 +792,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             Text(
                               "*",
                               style: TextStyle(
-                                  color: colors.whiteTemp,
+                                  color: colors.red,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 10),
                             ),
@@ -966,7 +966,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                           TextButton(
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => SignupScreen()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
                             },
                             child: const Text(
                               "Login", style: TextStyle(

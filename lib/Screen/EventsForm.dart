@@ -46,7 +46,7 @@ class _EventFormState extends State<EventForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: colors.white70,
+      backgroundColor: colors.scaffoldBackground,
       body: SingleChildScrollView(
         child: Column(
           children: [

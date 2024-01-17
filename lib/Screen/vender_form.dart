@@ -43,7 +43,8 @@ class _Vendor_FormState extends State<Vendor_Form> {
     });
     print("vendor form para ${request.fields}");
     request.files.add(await http.MultipartFile.fromPath('image', _imageFile!.path));
-    request.files.add(await http.MultipartFile.fromPath('aadhar_image', _adharimageFile!.path));
+    request.files.add(await http.MultipartFile.fromPath('aadhar_image', _adharFrontImageFile!.path));
+    request.files.add(await http.MultipartFile.fromPath('aadhar_back_image', _adharBackImageFile!.path));
     print("vendor form para-------- ${request.files}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
@@ -75,20 +76,32 @@ class _Vendor_FormState extends State<Vendor_Form> {
     }
   }
 
-  final adharpicker = ImagePicker();
-  File? _adharimageFile;
+  File? _adharFrontImageFile;
+  File? _adharBackImageFile;
+  bool isProfilePic = false;
+  bool isAdharFrontPic = false;
+  bool isAdharBackPic = false;
 
-  Future<void> _pickImage1(ImageSource source) async {
-    final adharpicker = ImagePicker();
-    final pickedImage = await adharpicker.getImage(source: source);
+  Future<void> _picAdharFrontImage(ImageSource source) async {
+    final adharFrontPicker = ImagePicker();
+    final pickedImage = await adharFrontPicker.getImage(source: source);
 
     if (pickedImage != null) {
       setState(() {
-        _adharimageFile = File(pickedImage.path);
+        _adharFrontImageFile = File(pickedImage.path);
       });
     }
   }
+  Future<void> _picAdharBackImage(ImageSource source) async {
+    final adharBackPicker = ImagePicker();
+    final pickedImage = await adharBackPicker.getImage(source: source);
 
+    if (pickedImage != null) {
+      setState(() {
+        _adharBackImageFile = File(pickedImage.path);
+      });
+    }
+  }
   void _showImagePicker(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -100,7 +113,30 @@ class _Vendor_FormState extends State<Vendor_Form> {
                 leading: Icon(Icons.photo_library),
                 title: Text('Gallery'),
                 onTap: () {
-                  _pickImage(ImageSource.gallery);
+                  if(isProfilePic){
+                    _pickImage(ImageSource.gallery).then(
+                            (value){
+                          setState(() {
+                            isProfilePic = false;
+                          });
+                        });;
+                  }
+                  else if(isAdharFrontPic){
+                    _picAdharFrontImage(ImageSource.gallery).then(
+                            (value){
+                          setState(() {
+                            isAdharFrontPic = false;
+                          });
+                        });;
+                  }
+                  else{
+                    _picAdharBackImage(ImageSource.gallery).then(
+                            (value){
+                          setState(() {
+                            isAdharBackPic = false;
+                          });
+                        });;
+                  }
                   Navigator.of(context).pop();
                 },
               ),
@@ -108,7 +144,30 @@ class _Vendor_FormState extends State<Vendor_Form> {
                 leading: Icon(Icons.photo_camera),
                 title: Text('Camera'),
                 onTap: () {
-                  _pickImage(ImageSource.camera);
+                  if(isProfilePic){
+                    _pickImage(ImageSource.camera).then(
+                            (value){
+                              setState(() {
+                                isProfilePic = false;
+                              });
+                            });
+                  }
+                  else if(isAdharFrontPic){
+                    _picAdharFrontImage(ImageSource.camera).then(
+                            (value){
+                          setState(() {
+                            isAdharFrontPic = false;
+                          });
+                        });;
+                  }
+                  else{
+                    _picAdharBackImage(ImageSource.camera).then(
+                            (value){
+                          setState(() {
+                            isAdharBackPic = false;
+                          });
+                        });;
+                  }
                   Navigator.of(context).pop();
                 },
               ),
@@ -120,35 +179,35 @@ class _Vendor_FormState extends State<Vendor_Form> {
   }
 
 
-  void _showImagePicker1(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return SafeArea(
-          child: Wrap(
-            children: <Widget>[
-              ListTile(
-                leading: Icon(Icons.photo_library),
-                title: Text('Gallery'),
-                onTap: () {
-                  _pickImage1(ImageSource.gallery);
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.photo_camera),
-                title: Text('Camera'),
-                onTap: () {
-                  _pickImage1(ImageSource.camera);
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+  // void _showImagePicker1(BuildContext context) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return SafeArea(
+  //         child: Wrap(
+  //           children: <Widget>[
+  //             ListTile(
+  //               leading: Icon(Icons.photo_library),
+  //               title: Text('Gallery'),
+  //               onTap: () {
+  //                 _pickImage1(ImageSource.gallery);
+  //                 Navigator.of(context).pop();
+  //               },
+  //             ),
+  //             ListTile(
+  //               leading: Icon(Icons.photo_camera),
+  //               title: Text('Camera'),
+  //               onTap: () {
+  //                 _pickImage1(ImageSource.camera);
+  //                 Navigator.of(context).pop();
+  //               },
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   String? stateId;
   String? states;
@@ -279,9 +338,10 @@ class _Vendor_FormState extends State<Vendor_Form> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+
         elevation: 0,
         backgroundColor: colors.secondary,
-        title:const Center(child: Text("Vendor")),
+        title:const Text("Vendor"),
             centerTitle: true,
             
       ),
@@ -610,38 +670,104 @@ class _Vendor_FormState extends State<Vendor_Form> {
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(primary: colors.secondary),
                             onPressed: () {
+                              setState(() {
+                                isProfilePic = true;
+                              });
                               _showImagePicker(context);
                             },
-                            child: const Text("Select Image")),
+                            child: const Text("Profile Picture")),
                       ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * .02,
                       ),
-                      Center(
-                        child: Container(
-                          height: 150,
-                          width: 150,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black)),
-                          child: _adharimageFile != null
-                              ? Image.file(
-                            _adharimageFile!.absolute,
-                            fit: BoxFit.fill,
-                          ):Center(
-                              child: Image.asset('assets/images/aadharimage.png')),
-                        ),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround
+                        ,
+                        children: [
+                          Column(
+                            children: [
+                              Center(
+                                child: Container(
+                                  height: 120,
+                                  width: 150,
+                                  clipBehavior: Clip.hardEdge,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+
+                                  child: _adharFrontImageFile != null
+                                      ? Image.file(
+                                    _adharFrontImageFile!.absolute,
+                                    fit: BoxFit.fill,
+                                  ):Center(
+                                      child: Image.asset('assets/images/aadharimage.png')),
+                                ),
+                              ),
+                              SizedBox(
+                                height: MediaQuery.of(context).size.height * .01,
+                              ),
+                              Center(
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(primary: colors.secondary),
+                                    onPressed: () {
+                                      setState(() {
+                                        isAdharFrontPic = true;
+                                      });
+                                      _showImagePicker(context);
+                                    },
+                                    child: const Padding(
+                                      padding:  EdgeInsets.all(4.0),
+                                      child:  Text("Aadhar\n front Image",textAlign: TextAlign.center,),
+                                    )),
+                              ),
+
+                            ],
+                          ),
+                          const SizedBox(
+                            width: 12,
+                          ),
+                          Column(
+                            children: [
+                              Center(
+                                child: Container(
+                                  height: 120,
+                                  width: 150,
+                                  clipBehavior: Clip.hardEdge,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(color: Colors.black)),
+                                  child: _adharBackImageFile != null
+                                      ? Image.file(
+                                    _adharBackImageFile!.absolute,
+                                    fit: BoxFit.fill,
+                                  ):Center(
+                                      child: Image.asset('assets/images/aadharimage.png')),
+                                ),
+                              ),
+                              SizedBox(
+                                height: MediaQuery.of(context).size.height * .01,
+                              ),
+                              Center(
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(primary: colors.secondary),
+                                    onPressed: () {
+                                      setState(() {
+                                        isAdharBackPic= true;
+                                      });
+                                      _showImagePicker(context);
+                                    },
+                                    child: const Padding(
+                                      padding:  EdgeInsets.all(4.0),
+                                      child:  Text("Aadhar\n back Image",textAlign: TextAlign.center,),
+                                    )),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * .01,
-                      ),
-                      Center(
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(primary: colors.secondary),
-                            onPressed: () {
-                              _showImagePicker1(context);
-                            },
-                            child: const Text("Select Aadhar Image")),
-                      ),
+
                     ],
                   ),
               ),

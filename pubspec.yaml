@@ -82,7 +82,8 @@ dependencies:
   flutter_local_notifications: ^9.8.0+1
   image_gallery_saver: ^2.0.3
   pdf: ^3.0.0
-  image_picker: 
+  image_picker:
+
 
 
 dev_dependencies:

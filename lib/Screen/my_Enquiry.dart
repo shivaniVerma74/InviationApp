@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Helper/Color.dart';
 import '../New_model/EventListModel.dart';
 import '../api/api_services.dart';
-import 'package:http/http.dart 'as http;
+import 'package:http/http.dart' as http;
 
 import 'EnquiryForm.dart';
 import 'EventDetails.dart';

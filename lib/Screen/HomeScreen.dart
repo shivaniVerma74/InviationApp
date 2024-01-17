@@ -681,6 +681,18 @@ class _HomeScreenState extends State<HomeScreen> {
     preferences.setString('LocalId', id);
   }
 
+
+  void _showReligionDialog(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: religion(),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -716,7 +728,8 @@ class _HomeScreenState extends State<HomeScreen> {
         key: _refreshIndicatorKey,
         onRefresh: _refresh,
         child: Scaffold(
-          backgroundColor: Colors.white,
+          // extendBodyBehindAppBar: true,
+          backgroundColor: colors.scaffoldBackground,
           key: _key,
           //appBar: customAppBar(context: context, text:"My Dashboard", isTrue: true, ),
           body: SafeArea(
@@ -821,21 +834,34 @@ class _HomeScreenState extends State<HomeScreen> {
                     borderRadius: BorderRadius.circular(5)),
                 child: Column(
                   children: [
-                    Image.asset(
-                      "assets/images/cardimage.png",
-                      height: 30,
-                      width: 30,
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'Saved',
-                      style: TextStyle(
-                        color: currentIndex == 1
-                            ? colors.secondary
-                            : colors.blackTemp,
-                        fontSize: 14,
+                    Container(
+                      width: 90,
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(4)
+                      ),
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            "assets/images/cardimage.png",
+                            height: 30,
+                            width: 30,
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            'Saved',
+                            style: TextStyle(
+                              color: currentIndex == 1
+                                  ? colors.secondary
+                                  : colors.blackTemp,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
+
                     Divider(
                       thickness: 4,
                       color: currentIndex == 1
@@ -852,7 +878,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   // Navigator.of(context).push(MaterialPageRoute(
                   //   builder: (context) => NextPage(),
                   // ));
-                  currentIndex = 3;
+                  currentIndex = 2;
                 });
               },
               child: Container(
@@ -864,29 +890,41 @@ class _HomeScreenState extends State<HomeScreen> {
                     //     : Colors.white,
                     // border: Border.all(color: colors.primary),
                     borderRadius: BorderRadius.circular(5)),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 1, left: 30, right: 10),
-                  child: Column(
+                child:
+                  // padding: const EdgeInsets.only(top: 1, left: 30, right: 10),
+                  Column(
                     children: [
-                      Image.asset(
-                        "assets/images/booking.png",
-                        height: 30,
-                        width: 30,
-                      ),
-                      const SizedBox(height: 5),
-                      Text(
-                        'Downloaded',
-                        style: TextStyle(
-                          color: currentIndex == 3 ? colors.secondary : colors.blackTemp, fontSize: 14,
+                      Container(
+                        width: 90,
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(4)
+                        ),
+                        child: Column(
+                          children: [
+                            Image.asset(
+                              "assets/images/booking.png",
+                              height: 30,
+                              width: 30,
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              'Downloaded',
+                              style: TextStyle(
+                                color: currentIndex == 2 ? colors.secondary : colors.blackTemp, fontSize: 12,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       Divider(
                         thickness: 4,
-                        color: currentIndex == 3 ? colors.secondary : Colors.white.withOpacity(0),
+                        color: currentIndex == 2 ? colors.secondary : Colors.white.withOpacity(0),
                       ),
                     ],
                   ),
-                ),
+
               ),
             ),
             InkWell(
@@ -895,7 +933,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   // Navigator.of(context).push(MaterialPageRoute(
                   //   builder: (context) => NextPage(),
                   // ));
-                  currentIndex = 2;
+                  currentIndex = 3;
                 });
               },
               child: Container(
@@ -908,34 +946,46 @@ class _HomeScreenState extends State<HomeScreen> {
                     // border: Border.all(color: colors.primary),
                     borderRadius: BorderRadius.circular(5),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 1, left: 30, right: 10),
-                  child: Column(
+                child:
+                  //padding: const EdgeInsets.only(top: 1, left: 30, right: 10),
+                  Column(
                     children: [
-                      Image.asset(
-                        "assets/images/eventimage.png",
-                        height: 30,
-                        width: 30,
-                      ),
-                      const SizedBox(height: 5),
-                      Text(
-                        'Invite',
-                        style: TextStyle(
-                          color: currentIndex == 2
-                              ? colors.secondary
-                              : colors.blackTemp,
-                          fontSize: 14,
+                      Container(
+                        width: 90,
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(4)
+                        ),
+                        child: Column(
+                          children: [
+                            Image.asset(
+                              "assets/images/eventimage.png",
+                              height: 30,
+                              width: 30,
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              'Invite',
+                              style: TextStyle(
+                                color: currentIndex == 3
+                                    ? colors.secondary
+                                    : colors.blackTemp,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       Divider(
                         thickness: 4,
-                        color: currentIndex == 2
+                        color: currentIndex == 3
                             ? colors.secondary
                             : Colors.white.withOpacity(0),
                       ),
                     ],
                   ),
-                ),
+
               ),
             ),
           ],
@@ -953,12 +1003,12 @@ class _HomeScreenState extends State<HomeScreen> {
         //             : _CarouselSlider1(),
         //       )
         //     : Container(),
-        const SizedBox(
-          height: 20,
-        ),
+        // const SizedBox(
+        //   height: 20,
+        // ),
         currentIndex == 1
             ? myCard()
-            : currentIndex == 3
+            : currentIndex == 2
                ? getCategories()
                 // ?
                 : Container(child: const Center(child: Text("No Data Available"))),
@@ -994,7 +1044,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   String? selectedReligion;
-  religion() async{
+  religion() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -1002,15 +1052,16 @@ class _HomeScreenState extends State<HomeScreen> {
           'Select your religion:',
           style: TextStyle(fontSize: 18),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         DropdownButton<String>(
           value: selectedReligion,
-          icon: const Icon(Icons.arrow_downward),
+          // icon: const Icon(Icons.arrow_downward),
           iconSize: 24,
           elevation: 16,
           style: const TextStyle(color: Colors.deepPurple),
           onChanged: (String? newValue) {
             setState(() {
+
               selectedReligion = newValue;
             });
           },
@@ -1022,10 +1073,37 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }).toList(),
         ),
-        SizedBox(height: 20),
-        Text(
-          'Selected Religion: ${selectedReligion ?? 'None'}',
-          style: const TextStyle(fontSize: 18),
+        const SizedBox(height: 20),
+        // Text(
+        //   'Selected Religion: ${selectedReligion ?? 'None'}',
+        //   style: const TextStyle(fontSize: 18),
+        // ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    primary: colors.secondary,
+                    fixedSize: Size(100, 40)
+                ),
+                onPressed: () {
+
+                },
+                child: const Padding(
+                  padding:  EdgeInsets.all(4.0),
+                  child:  Text("Submit",),
+                )),
+            const SizedBox(width: 32,),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(primary: colors.secondary),
+                onPressed: () {
+
+                },
+                child: const Padding(
+                  padding:  EdgeInsets.all(4.0),
+                  child:  Text("Skip",),
+                )),
+          ],
         ),
       ],
     );
@@ -1042,91 +1120,159 @@ class _HomeScreenState extends State<HomeScreen> {
         physics: const NeverScrollableScrollPhysics(),
         itemCount: savedCardModel?.data?.length,
         itemBuilder: (context, i) {
-          return templateCard(i);
+          return templateCard1(i);
         });
   }
 
-  templateCard(int index) {
-    GlobalKey keyList = GlobalKey();
-    return Column(
-      children: [
-        Card(
-          elevation: 6,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                RepaintBoundary(
-                  key: keyList,
-                  child: Container(
-                    height: MediaQuery.of(context).size.height/2,
-                    child: Image.network(
-                      "${savedCardModel?.data?[index].image}", fit: BoxFit.fill,
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 70,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Card(
-                    elevation: 0,
-                    child: Column(
-                      children: [
-                        // const Text(
-                        //   "Save",
-                        //   style: TextStyle(
-                        //       fontSize: 12, fontWeight: FontWeight.w800),
-                        // ),
-                        // const SizedBox(width: 5),
-                        // Container(
-                        //   height: 40,
-                        //   width: 40,
-                        //   decoration: BoxDecoration(
-                        //       borderRadius: BorderRadius.circular(10),
-                        //       color: colors.secondary),
-                        //   child: IconButton(
-                        //       onPressed: () {
-                        //         // setState(() {
-                        //         // });
-                        //         // _share(keyList);
-                        //       },
-                        //       icon: const Icon(Icons.save,
-                        //           color: Colors.white)),
-                        // ),
-                        // SizedBox(
-                        //     width: MediaQuery.of(context).size.width / 2.7),
-                        const Text("Download",
-                            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800)),
-                        const SizedBox(width: 5),
-                        Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: colors.secondary),
-                          child: IconButton(
-                            onPressed: () async {
-                              openCheckout('100');
-                              // saveImage(keyList);
-                              // downloadFile();
-                            },
-                            icon: const Icon(Icons.download,
-                                color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+  templateCardGestures({String? text, Icon? icon, VoidCallback? onTap}){
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          icon!,
+          const SizedBox(height: 2,),
+          Text(text!, style: const TextStyle(color: Colors.black,fontSize: 16),)
+        ],
+      ),
+    );
+
+
+
+  }
+
+   templateCard1(int i){
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: (){
+              _showReligionDialog(context);
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => const WeddingForm()));
+            },
+            child: Container(
+              clipBehavior: Clip.hardEdge,
+              width: double.infinity,
+              height: 240,
+              decoration: BoxDecoration(
+                color: Colors.blueGrey,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Image.network(
+                                    "${savedCardModel?.data?[i].image}", fit: BoxFit.fill,
+                                  ),
             ),
           ),
-        ),
-      ],
+          const SizedBox(height: 10,),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                 templateCardGestures(
+                   text: 'Saved',
+                   icon: Icon(Icons.download,color: Colors.black,),
+                   onTap: (){}
+                 ),
+              templateCardGestures(
+                  text: 'Downloaded',
+                  icon: Icon(Icons.download,color: Colors.black,),
+                  onTap: (){}
+              ),
+              templateCardGestures(
+                  text: 'invite',
+                  icon: Icon(Icons.insert_invitation,color: Colors.black),
+                  onTap: (){}
+              )
+            ],),
+          )
+        ],
+      ),
     );
-  }
+   }
+  // templateCard(int index) {
+  //   GlobalKey keyList = GlobalKey();
+  //   return Column(
+  //     children: [
+  //       Card(
+  //         elevation: 6,
+  //         child: Padding(
+  //           padding: const EdgeInsets.all(8.0),
+  //           child: Column(
+  //             children: [
+  //               RepaintBoundary(
+  //                 key: keyList,
+  //                 child: Container(
+  //                   height: MediaQuery.of(context).size.height/2,
+  //                   child: Image.network(
+  //                     "${savedCardModel?.data?[index].image}", fit: BoxFit.fill,
+  //                   ),
+  //                 ),
+  //               ),
+  //               Container(
+  //                 height: 70,
+  //                 decoration: BoxDecoration(
+  //                   borderRadius: BorderRadius.circular(10),
+  //                 ),
+  //                 child: Card(
+  //                   elevation: 0,
+  //                   child: Column(
+  //                     children: [
+  //                       // const Text(
+  //                       //   "Save",
+  //                       //   style: TextStyle(
+  //                       //       fontSize: 12, fontWeight: FontWeight.w800),
+  //                       // ),
+  //                       // const SizedBox(width: 5),
+  //                       // Container(
+  //                       //   height: 40,
+  //                       //   width: 40,
+  //                       //   decoration: BoxDecoration(
+  //                       //       borderRadius: BorderRadius.circular(10),
+  //                       //       color: colors.secondary),
+  //                       //   child: IconButton(
+  //                       //       onPressed: () {
+  //                       //         // setState(() {
+  //                       //         // });
+  //                       //         // _share(keyList);
+  //                       //       },
+  //                       //       icon: const Icon(Icons.save,
+  //                       //           color: Colors.white)),
+  //                       // ),
+  //                       // SizedBox(
+  //                       //     width: MediaQuery.of(context).size.width / 2.7),
+  //                       const Text("Download",
+  //                           style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800)),
+  //                       const SizedBox(width: 5),
+  //                       Container(
+  //                         height: 40,
+  //                         width: 40,
+  //                         decoration: BoxDecoration(
+  //                             borderRadius: BorderRadius.circular(10),
+  //                             color: colors.secondary),
+  //                         child: IconButton(
+  //                           onPressed: () async {
+  //                             openCheckout('100');
+  //                             // saveImage(keyList);
+  //                             // downloadFile();
+  //                           },
+  //                           icon: const Icon(Icons.download,
+  //                               color: Colors.white),
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Razorpay? _razorpay;
   int? pricerazorpayy;
@@ -1562,94 +1708,145 @@ class _HomeScreenState extends State<HomeScreen> {
         physics: NeverScrollableScrollPhysics(),
         itemCount: savedCardModel?.data?.length,
         itemBuilder: (context, i) {
-          return downloadCard(i);
+          return downloadCard1(i);
+            // downloadCard(i);
         });
   }
 
-
-  downloadCard(int index) {
-    GlobalKey keyList = GlobalKey();
-    return Column(
-      children: [
-        Card(
-          elevation: 6,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                RepaintBoundary(
-                  key: keyList,
-                  child: Container(
-                    height: MediaQuery.of(context).size.height/2,
-                    child: Image.network(
-                      "${savedCardModel?.data?[index].image}", fit: BoxFit.fill,
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 70,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Card(
-                    elevation: 0,
-                    child: Column(
-                      children: [
-                        // const Text(
-                        //   "Save",
-                        //   style: TextStyle(
-                        //       fontSize: 12, fontWeight: FontWeight.w800),
-                        // ),
-                        // const SizedBox(width: 5),
-                        // Container(
-                        //   height: 40,
-                        //   width: 40,
-                        //   decoration: BoxDecoration(
-                        //       borderRadius: BorderRadius.circular(10),
-                        //       color: colors.secondary),
-                        //   child: IconButton(
-                        //       onPressed: () {
-                        //         // setState(() {
-                        //         // });
-                        //         // _share(keyList);
-                        //       },
-                        //       icon: const Icon(Icons.save,
-                        //           color: Colors.white)),
-                        // ),
-                        // SizedBox(
-                        //     width: MediaQuery.of(context).size.width / 2.7),
-                        const Text("Share",
-                            style: TextStyle(
-                                fontSize: 11, fontWeight: FontWeight.w800)),
-                        const SizedBox(width: 5),
-                        Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: colors.secondary),
-                          child: IconButton(
-                            onPressed: () async {
-                              share();
-                              // saveImage(keyList);
-                              // downloadFile();
-                            },
-                            icon: const Icon(Icons.share,
-                                color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+  downloadCard1(int i){
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const WeddingForm()));
+            },
+            child: Container(
+              clipBehavior: Clip.hardEdge,
+              width: double.infinity,
+              height: 240,
+              decoration: BoxDecoration(
+                color: Colors.blueGrey,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Image.network(
+                "${savedCardModel?.data?[i].image}", fit: BoxFit.fill,
+              ),
             ),
           ),
-        ),
-
-      ],
+          const SizedBox(height: 10,),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                // templateCardGestures(
+                //     text: 'Saved',
+                //     icon: Icon(Icons.download,color: Colors.black,),
+                //     onTap: (){}
+                // ),
+                templateCardGestures(
+                    text: 'Downloaded',
+                    icon: Icon(Icons.download,color: Colors.black,),
+                    onTap: (){}
+                ),
+                templateCardGestures(
+                    text: 'invite',
+                    icon: Icon(Icons.insert_invitation,color: Colors.black),
+                    onTap: (){}
+                )
+              ],),
+          )
+        ],
+      ),
     );
   }
+
+  // downloadCard(int index) {
+  //   GlobalKey keyList = GlobalKey();
+  //   return Column(
+  //     children: [
+  //       Card(
+  //         elevation: 6,
+  //         child: Padding(
+  //           padding: const EdgeInsets.all(8.0),
+  //           child: Column(
+  //             children: [
+  //               RepaintBoundary(
+  //                 key: keyList,
+  //                 child: Container(
+  //                   height: MediaQuery.of(context).size.height/2,
+  //                   child: Image.network(
+  //                     "${savedCardModel?.data?[index].image}", fit: BoxFit.fill,
+  //                   ),
+  //                 ),
+  //               ),
+  //               Container(
+  //                 height: 70,
+  //                 decoration: BoxDecoration(
+  //                   borderRadius: BorderRadius.circular(10),
+  //                 ),
+  //                 child: Card(
+  //                   elevation: 0,
+  //                   child: Column(
+  //                     children: [
+  //                       // const Text(
+  //                       //   "Save",
+  //                       //   style: TextStyle(
+  //                       //       fontSize: 12, fontWeight: FontWeight.w800),
+  //                       // ),
+  //                       // const SizedBox(width: 5),
+  //                       // Container(
+  //                       //   height: 40,
+  //                       //   width: 40,
+  //                       //   decoration: BoxDecoration(
+  //                       //       borderRadius: BorderRadius.circular(10),
+  //                       //       color: colors.secondary),
+  //                       //   child: IconButton(
+  //                       //       onPressed: () {
+  //                       //         // setState(() {
+  //                       //         // });
+  //                       //         // _share(keyList);
+  //                       //       },
+  //                       //       icon: const Icon(Icons.save,
+  //                       //           color: Colors.white)),
+  //                       // ),
+  //                       // SizedBox(
+  //                       //     width: MediaQuery.of(context).size.width / 2.7),
+  //                       const Text("Share",
+  //                           style: TextStyle(
+  //                               fontSize: 11, fontWeight: FontWeight.w800)),
+  //                       const SizedBox(width: 5),
+  //                       Container(
+  //                         height: 40,
+  //                         width: 40,
+  //                         decoration: BoxDecoration(
+  //                             borderRadius: BorderRadius.circular(10),
+  //                             color: colors.secondary),
+  //                         child: IconButton(
+  //                           onPressed: () async {
+  //                             share();
+  //                             // saveImage(keyList);
+  //                             // downloadFile();
+  //                           },
+  //                           icon: const Icon(Icons.share,
+  //                               color: Colors.white),
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //
+  //     ],
+  //   );
+  // }
 
 
   Future<void> share() async {

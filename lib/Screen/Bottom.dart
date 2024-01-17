@@ -4,6 +4,7 @@ import 'package:doctorapp/Profile/profile_screen.dart';
 import 'package:doctorapp/Screen/Faq.dart';
 import 'package:doctorapp/Screen/Histroy.dart';
 import 'package:doctorapp/Screen/HomeScreen.dart';
+import 'package:doctorapp/Screen/NotificationScreen.dart';
 import 'package:doctorapp/Screen/WishlistScreen.dart';
 import 'package:doctorapp/Screen/vender_form.dart';
 import 'package:flutter/material.dart';
@@ -125,49 +126,81 @@ class _BottomScreenState extends State<BottomScreen> {
       },
       child: SafeArea(
         child: Scaffold(
+          extendBodyBehindAppBar: true,
+          backgroundColor: colors.scaffoldBackground,
           key: _scaffoldKey,
           drawer: getDrawer(),
           appBar: AppBar(
             centerTitle: true,
-            leading: IconButton(
-              icon: const Icon(
-                Icons.menu,
+
+            leading: Container(
+              margin: const EdgeInsets.fromLTRB(14,10,5,10),
+              decoration: BoxDecoration(
                 color: Colors.white,
+                borderRadius: BorderRadius.circular(4)
               ),
-              onPressed: () {
-                _scaffoldKey.currentState!.openDrawer();
-              },
+              child: Center(
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.menu,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    _scaffoldKey.currentState!.openDrawer();
+                  },
+                ),
+              ),
             ),
-            actions: const [
-              Padding(
-                padding: EdgeInsets.only(right: 5, top: 5),
-                child: Icon(Icons.notifications, color: Colors.white),
-              )
+            actions:  [
+              Container(
+                width: 36,
+                margin: const EdgeInsets.symmetric(horizontal: 14,vertical: 10),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(4)
+                ),
+                child:
+                //Image.asset("assets/home icon/Events.png",color: Colors.black,scale: 3.5,),
+                IconButton(
+                  icon: const Icon(Icons.notifications, color: Colors.black),
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const NotificationScreen()));
+                  },
+                ),
+              ),
             ],
-            backgroundColor: colors.secondary,
+            // backgroundColor: colors.transparent,
             elevation: 0,
-            title: Image.asset("assets/images/homeimage.png", height: 60, width: 60),
+            title: Image.asset("assets/images/homeimage.png", height: 60, width: 60,color: Colors.white,),
+            flexibleSpace: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: const BoxDecoration(
+            color: colors.secondary,
+            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(18),bottomRight: Radius.circular(18),)
+          ),
+        ),
           ),
           body: Center(
             child: pages1.elementAt(currentindex),
           ),
           bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: colors.whiteTemp,
+            unselectedItemColor: colors.whiteTemp,
+            backgroundColor: colors.secondary,
             selectedIconTheme: const IconThemeData(color: colors.black54),
-            unselectedIconTheme: const IconThemeData(color: Colors.black),
-            selectedLabelStyle: const TextStyle(color: Colors.black),
-            unselectedLabelStyle: const TextStyle(color: Colors.black),
+            unselectedIconTheme: const IconThemeData(color: colors.whiteTemp),
+            selectedLabelStyle: const TextStyle(color: colors.black54),
+            unselectedLabelStyle: const TextStyle(color: colors.whiteTemp),
             //  elevation: 1,
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 label: 'Design',
-                icon: Icon(Icons.card_giftcard_outlined)),
+                icon: Icon(Icons.card_giftcard_outlined,)),
               // BottomNavigationBarItem(label: 'Accessories', icon: Icon(Icons.calendar_today_rounded)),
               BottomNavigationBarItem(label: 'Home', icon: Icon(Icons.home,)),
               BottomNavigationBarItem(label: 'Coming Event', icon: Icon(Icons.event)),
             ],
             currentIndex: currentindex,
-            selectedItemColor: colors.secondary,
+            selectedItemColor: Colors.black,
             // unselectedItemColor: colors.secondary,
             onTap: _onItemTapped,
             showUnselectedLabels: true,
