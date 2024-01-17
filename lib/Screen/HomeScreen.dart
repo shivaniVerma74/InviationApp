@@ -874,6 +874,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             InkWell(
               onTap: () {
+
+                print("");
                 setState(() {
                   // Navigator.of(context).push(MaterialPageRoute(
                   //   builder: (context) => NextPage(),
