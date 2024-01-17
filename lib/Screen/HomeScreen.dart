@@ -1062,10 +1062,11 @@ class _HomeScreenState extends State<HomeScreen> {
           elevation: 16,
           style: const TextStyle(color: Colors.deepPurple),
           onChanged: (String? newValue) {
-            setState(() {
-
+            if(newValue != null) {
+              setState(() {
               selectedReligion = newValue;
             });
+            }
           },
           items: <String>['Christianity', 'Islam', 'Hinduism', 'Buddhism', 'Judaism']
               .map<DropdownMenuItem<String>>((String value) {
