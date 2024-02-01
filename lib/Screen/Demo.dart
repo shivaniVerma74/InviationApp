@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../Helper/Color.dart';
+
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -16,7 +18,17 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Weekday Counter'),
+        centerTitle: true,
+        title: const Text('Weekday Counter'),
+        backgroundColor: colors.whiteTemp,
+        elevation: 0,
+        flexibleSpace: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: const BoxDecoration(
+              color: colors.secondary,
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),bottomRight: Radius.circular(20),)
+          ),
+        ),
       ),
       body: Center(
         child: Column(

@@ -437,6 +437,7 @@
 // }
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:doctorapp/Helper/Color.dart';
@@ -445,6 +446,7 @@ import 'package:doctorapp/Screen/Histroy.dart';
 import 'package:doctorapp/api/api_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -485,7 +487,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   SpeciplyData? localFilter;
   int currentindex = 0;
-
 
   _CarouselSlider1() {
     return CarouselSlider(
@@ -538,7 +539,7 @@ class _HomeScreenState extends State<HomeScreen> {
       print(response.reasonPhrase);
     }
   }
-
+  @override
   void initState() {
     super.initState();
     getSliderApi();
@@ -555,9 +556,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _handlePaymentSuccess(PaymentSuccessResponse response) async {
-    Fluttertoast.showToast(msg: "Card added successfully");
-    // purchaseCard();
-    // Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+    Fluttertoast.showToast(msg: "Card Saved successfully");
+      setState(() {
+       currentIndex = 2;
+       });
+     // purchaseCard();
+    //  Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
@@ -683,11 +687,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
   void _showReligionDialog(BuildContext context) {
-    showModalBottomSheet(
+    showDialog(
       context: context,
       builder: (BuildContext context) {
-        return SafeArea(
-          child: religion(),
+        return AlertDialog(
+          title: const Text("Select Your Religion"),
+          content: SafeArea(
+            child: religion(),
+          ),
         );
       },
     );
@@ -808,15 +815,13 @@ class _HomeScreenState extends State<HomeScreen> {
       'id': 2,
     },
   ];
-
   int currentIndex = 1;
-
   customTabbar() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+     children: [
         Row(
-          children: [
+        children: [
             InkWell(
               onTap: () {
                 setState(() {
@@ -1049,14 +1054,16 @@ class _HomeScreenState extends State<HomeScreen> {
   religion() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        const Text(
-          'Select your religion:',
-          style: TextStyle(fontSize: 18),
-        ),
-        const SizedBox(height: 20),
+        // const Text(
+        //   'Select your religion:',
+        //   style: TextStyle(fontSize: 18),
+        // ),
+        // const SizedBox(height: 20),
         DropdownButton<String>(
-          value: selectedReligion,
+          hint: const Text("Select Religion"),
+           value: selectedReligion,
           // icon: const Icon(Icons.arrow_downward),
           iconSize: 24,
           elevation: 16,
@@ -1065,6 +1072,9 @@ class _HomeScreenState extends State<HomeScreen> {
             if(newValue != null) {
               setState(() {
               selectedReligion = newValue;
+              Navigator.pop(context);
+              _showReligionDialog(context);
+
             });
             }
           },
@@ -1087,10 +1097,20 @@ class _HomeScreenState extends State<HomeScreen> {
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     primary: colors.secondary,
-                    fixedSize: Size(100, 40)
+                    fixedSize: const Size(100, 32)
                 ),
                 onPressed: () {
+                  if(selectedReligion != null){
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> const WeddingForm()));
 
+                  }
+                  else{
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Please Select Religion"),backgroundColor: Colors.red,)
+                    );
+                  }
                 },
                 child: const Padding(
                   padding:  EdgeInsets.all(4.0),
@@ -1098,7 +1118,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 )),
             const SizedBox(width: 32,),
             ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: colors.secondary),
+                style: ElevatedButton.styleFrom(primary: colors.secondary,
+                    fixedSize: const Size(100, 32)),
                 onPressed: () {
 
                 },
@@ -1135,7 +1156,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           icon!,
           const SizedBox(height: 2,),
-          Text(text!, style: const TextStyle(color: Colors.black,fontSize: 16),)
+          Text(text!, style: const TextStyle(color: colors.secondary,fontSize: 16),)
         ],
       ),
     );
@@ -1146,52 +1167,60 @@ class _HomeScreenState extends State<HomeScreen> {
 
    templateCard1(int i){
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-      child: Column(
-        children: [
-          GestureDetector(
-            onTap: (){
-              _showReligionDialog(context);
-              // Navigator.push(context, MaterialPageRoute(builder: (context) => const WeddingForm()));
-            },
-            child: Container(
-              clipBehavior: Clip.hardEdge,
-              width: double.infinity,
-              height: 240,
-              decoration: BoxDecoration(
-                color: Colors.blueGrey,
-                borderRadius: BorderRadius.circular(16),
+      padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          gradient: LinearGradient(
+              colors: [Colors.white.withOpacity(0.05),Colors.white.withOpacity(0.1),Colors.white.withOpacity(0.05)]
+          )),
+
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: (){
+                _showReligionDialog(context);
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => const WeddingForm()));
+              },
+              child: Container(
+                clipBehavior: Clip.hardEdge,
+                width: double.infinity,
+                height: 240,
+                decoration: BoxDecoration(
+                  color: Colors.blueGrey,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Image.network(
+                                      "${savedCardModel?.data?[i].image}", fit: BoxFit.fill,
+                                    ),
               ),
-              child: Image.network(
-                                    "${savedCardModel?.data?[i].image}", fit: BoxFit.fill,
-                                  ),
             ),
-          ),
-          const SizedBox(height: 10,),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                 templateCardGestures(
-                   text: 'Saved',
-                   icon: Icon(Icons.download,color: Colors.black,),
-                   onTap: (){}
-                 ),
-              templateCardGestures(
-                  text: 'Downloaded',
-                  icon: Icon(Icons.download,color: Colors.black,),
-                  onTap: (){}
-              ),
-              templateCardGestures(
-                  text: 'invite',
-                  icon: Icon(Icons.insert_invitation,color: Colors.black),
-                  onTap: (){}
-              )
-            ],),
-          )
-        ],
+            const SizedBox(height: 10,),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                   templateCardGestures(
+                     text: 'Save',
+                     icon: const Icon(Icons.download,color: colors.secondary,),
+                     onTap: (){
+                       openCheckout(300);
+                     }
+                   ),
+                templateCardGestures(
+                    text: 'invite',
+                    icon: const Icon(Icons.share,color: colors.secondary),
+                    onTap: (){
+                    share();
+                    }
+                )
+              ],),
+            )
+          ],
+        ),
       ),
     );
    }
@@ -1297,6 +1326,14 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       debugPrint('Error: e');
     }
+  }
+  Future<void> share() async {
+    await FlutterShare.share(
+        title: 'Atithi',
+        // text: 'Example share text',
+        // linkUrl: 'https://developmentalphawizz.com/dr_booking/',
+        linkUrl: "https://developmentalphawizz.com/invitation_design/",
+        chooserTitle: 'Atithi');
   }
 
   // customTabbar() {
@@ -1715,7 +1752,30 @@ class _HomeScreenState extends State<HomeScreen> {
             // downloadCard(i);
         });
   }
+  downloadFile(String url, String filename) async {
+    FileDownloader.downloadFile(
 
+        url: url,
+        name: filename,
+        onDownloadCompleted: (path) {
+          debugPrint(path);
+          String tempPath = path.toString().replaceAll("Download", "doctorapp");
+          final File file = File(tempPath);
+          debugPrint("path here ${file}");
+          var snackBar = SnackBar(
+            backgroundColor: colors.secondary,
+            content: Row(
+              children: [
+                const Text('Card downloaded successfully'),
+                TextButton(onPressed: () {}, child: const Text("View"))
+
+              ],
+            ),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          //This will be the path of the downloaded file
+        });
+  }
   downloadCard1(int i){
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
@@ -1751,13 +1811,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 //     onTap: (){}
                 // ),
                 templateCardGestures(
-                    text: 'Downloaded',
-                    icon: Icon(Icons.download,color: Colors.black,),
-                    onTap: (){}
+                    text: 'Download',
+                    icon: const Icon(Icons.download,color: colors.secondary,),
+                    onTap: (){
+                      downloadFile(savedCardModel!.data![i].image.toString(), "Invitation_Card");
+                    }
                 ),
                 templateCardGestures(
                     text: 'invite',
-                    icon: Icon(Icons.insert_invitation,color: Colors.black),
+                    icon: const Icon(Icons.share,color: colors.secondary),
                     onTap: (){}
                 )
               ],),
@@ -1852,13 +1914,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // }
 
 
-  Future<void> share() async {
-    await FlutterShare.share(
-        title: 'Atithi',
-        // text: 'Example share text',
-        linkUrl: 'https://developmentalphawizz.com/dr_booking/',
-        chooserTitle: 'Atithi');
-  }
+
 
 
   // getCategories(){

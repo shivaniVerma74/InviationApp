@@ -63,7 +63,7 @@ class _BottomScreenState extends State<BottomScreen> {
     getuserProfile();
   }
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   GetUserProfileModel? getprofile;
   getuserProfile() async {
@@ -133,50 +133,32 @@ class _BottomScreenState extends State<BottomScreen> {
           appBar: AppBar(
             centerTitle: true,
 
-            leading: Container(
-              margin: const EdgeInsets.fromLTRB(14,10,5,10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(4)
+            leading: IconButton(
+              icon: Padding(
+                padding: const EdgeInsets.only(left: 6),
+                child: Image.asset("assets/home icon/homeMenuIcon.png",scale: 1.45,),
               ),
-              child: Center(
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.menu,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    _scaffoldKey.currentState!.openDrawer();
-                  },
-                ),
-              ),
+              onPressed: () {
+                _scaffoldKey.currentState!.openDrawer();
+              },
             ),
             actions:  [
-              Container(
-                width: 36,
-                margin: const EdgeInsets.symmetric(horizontal: 14,vertical: 10),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(4)
-                ),
-                child:
-                //Image.asset("assets/home icon/Events.png",color: Colors.black,scale: 3.5,),
-                IconButton(
-                  icon: const Icon(Icons.notifications, color: Colors.black),
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const NotificationScreen()));
-                  },
-                ),
+              IconButton(
+                icon: Image.asset("assets/home icon/homeNotificationIcon.png",scale: 1,),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const NotificationScreen()));
+                },
               ),
+              const SizedBox(width: 6,)
             ],
-            // backgroundColor: colors.transparent,
+             backgroundColor: colors.scaffoldBackground,
             elevation: 0,
-            title: Image.asset("assets/images/homeimage.png", height: 60, width: 60,color: Colors.white,),
+            title: Image.asset("assets/images/homeimage.png", scale: 4,color: Colors.white,),
             flexibleSpace: Container(
           padding: const EdgeInsets.all(24),
           decoration: const BoxDecoration(
             color: colors.secondary,
-            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(18),bottomRight: Radius.circular(18),)
+            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),bottomRight: Radius.circular(20),)
           ),
         ),
           ),

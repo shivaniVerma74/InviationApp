@@ -141,7 +141,7 @@ AppBar customAppBar(
     centerTitle: true,
     flexibleSpace: Container(
       decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(bottomRight: Radius.circular(1),bottomLeft: Radius.circular(1)),
+        borderRadius: BorderRadius.only(bottomRight: Radius.circular(20),bottomLeft: Radius.circular(20)),
         gradient: LinearGradient(
             begin: Alignment.bottomLeft,
             end: Alignment.bottomRight,

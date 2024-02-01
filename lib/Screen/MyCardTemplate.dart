@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:doctorapp/Screen/AllCards.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
@@ -8,6 +10,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:ui' as ui;
 import '../Helper/Color.dart';
 import '../New_model/AllCategoryModel.dart';
@@ -17,7 +20,9 @@ import '../New_model/SavedCardModel.dart';
 import '../New_model/TemplateForm.dart';
 import '../New_model/TemplatesModel.dart';
 import '../api/api_services.dart';
+import 'CardWebview.dart';
 import 'WeddingForm.dart';
+import 'my_Enquiry.dart';
 
 class MyCardTemplate extends StatefulWidget {
   const MyCardTemplate({Key? key}) : super(key: key);
@@ -343,89 +348,177 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
   // }
   customTabBar(){
     return SizedBox(
+
       child: GridView.builder(
-        physics:const NeverScrollableScrollPhysics(),
+          physics:const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            mainAxisSpacing: 12,
-            crossAxisSpacing:12,
-            childAspectRatio: 0.85
+              crossAxisCount: 3,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              childAspectRatio: 0.75
           ),
-          itemCount: 6,
+          itemCount: allCategoriesModel?.data?.length ?? 0,
           itemBuilder: (_,index){
-            return Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: const [
-                   BoxShadow(
-                    color: colors.black54,
-                    // spreadRadius: 0.5,
-                    blurRadius: 1,
-                    offset: Offset(0, 1)
-                  )
-                ]
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                   Image.asset("assets/home icon/Editorial.png",color: Colors.black,scale: 1.2,),
-                  const SizedBox(height: 12,),
-                  Text("Design",style: TextStyle(fontSize: 20,),),
-                  const SizedBox(height: 4,),
-                ],
+            return InkWell(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                    //   return BookingDetails(
+                    //   model: allCategoriesModel?.data?[index].temp,
+                    //   ind: index,
+                    // );
+
+                      return  AllCardsView(cardName: allCategoriesModel!.data![index].cName.toString(),);
+                    }
+                  ),
+                );
+              },
+              child: Container(
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: const [
+                    BoxShadow(
+                        color: colors.black54,
+                        // spreadRadius: 0.5,
+                        blurRadius: 1,
+                        offset: Offset(0, 1)
+                    ),
+                  ],
+                ),
+                child:
+                // Image.asset(
+                //   "assets/images/weddingtwo.png",
+                //   fit: BoxFit.fill,
+                // ),
+                Column(
+                  //  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.network(
+                      "${allCategoriesModel?.data?[index].img}",
+                      fit: BoxFit.fill,
+                    ),
+                    const SizedBox(height: 6),
+                    Text("${allCategoriesModel?.data?[index].cName}",style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),),
+                    // const SizedBox(height: 4),
+                  ],
+                ),
               ),
             );
           }),
     );
   }
+  // customTabBar(){
+  //   return SizedBox(
+  //     child: GridView.builder(
+  //       physics:const NeverScrollableScrollPhysics(),
+  //         shrinkWrap: true,
+  //         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+  //           crossAxisCount: 3,
+  //           mainAxisSpacing: 12,
+  //           crossAxisSpacing:12,
+  //           childAspectRatio: 0.65
+  //         ),
+  //         itemCount: allCategoriesModel?.data!.length,
+  //         itemBuilder: (_,index){
+  //           return Container(
+  //             decoration: BoxDecoration(
+  //               color: Colors.white,
+  //               borderRadius: BorderRadius.circular(12),
+  //               boxShadow: const [
+  //                  BoxShadow(
+  //                   color: colors.black54,
+  //                   // spreadRadius: 0.5,
+  //                   blurRadius: 1,
+  //                   offset: Offset(0, 1)
+  //                 )
+  //               ]
+  //             ),
+  //             child: Column(
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               children: [
+  //                  Image.asset("assets/home icon/Editorial.png",color: Colors.black,scale: 1.2,),
+  //                 const SizedBox(height: 12,),
+  //                 Text("Design",style: TextStyle(fontSize: 20,),),
+  //                 const SizedBox(height: 4,),
+  //               ],
+  //             ),
+  //           );
+  //         }),
+  //   );
+  // }
 
   @override
   void initState() {
     super.initState();
     getCity_id();
-    getCategory();
-    // getCard();
-    // _getEnquiry();
+    //getCategory();
+    allCategory();
+    //getCard();
+    //_getEnquiry();
   }
 
   NewCategoryModel? weddingCardList;
   NewCategoryModel? birthDayCardList;
   AllCategoryModel? allCategoriesModel;
 
-  getCategory() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    print("Get category APiiii");
+  allCategory() async {
     var headers = {
       'Cookie': 'ci_session=967018c55118c57e9b50bc9d10a91f021f6744e1'
     };
-    var request =
-    http.MultipartRequest('POST', Uri.parse(ApiService.categories));
-
+    var request = http.MultipartRequest('POST', Uri.parse(ApiService.categories));
+    request.fields.addAll({'cat_type': '1'});
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       var result = await response.stream.bytesToString();
-      weddingCardList = NewCategoryModel.fromJson(jsonDecode(result));
-      birthDayCardList = NewCategoryModel.fromJson(jsonDecode(result));
-      if (weddingCardList!.status == true) {
-        String? cat_id = weddingCardList!.data![0].id.toString();
-        getCity_id();
-        preferences.setString("cat_id", cat_id);
-        print("Category iddd iss $cat_id");
-      } else {
-        // Navigator.push(context, MaterialPageRoute(builder: (context)=>SubscriptionPlan()));
-      }
+      final jsonResponse = AllCategoryModel.fromJson(json.decode(result));
+      print('categoriess responsee $jsonResponse');
       setState(() {
-        weddingCardList!.data!.removeWhere((element) => element.cName != "Wedding Card");
-        birthDayCardList!.data!.removeWhere((element) => element.cName != "Birthday Card");
+        allCategoriesModel = jsonResponse;
+        print("alll catetetetetety ${allCategoriesModel?.data?.first.cName}");
       });
-      print(weddingCardList);
     } else {
       print(response.reasonPhrase);
     }
   }
+
+  // getCategory() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   print("Get category APiiii");
+  //   var headers = {
+  //     'Cookie': 'ci_session=967018c55118c57e9b50bc9d10a91f021f6744e1'
+  //   };
+  //   var request =
+  //   http.MultipartRequest('POST', Uri.parse(ApiService.categories));
+  //
+  //   request.headers.addAll(headers);
+  //   http.StreamedResponse response = await request.send();
+  //   if (response.statusCode == 200) {
+  //     var result = await response.stream.bytesToString();
+  //     weddingCardList = NewCategoryModel.fromJson(jsonDecode(result));
+  //     birthDayCardList = NewCategoryModel.fromJson(jsonDecode(result));
+  //     if (weddingCardList!.status == true) {
+  //       String? cat_id = weddingCardList!.data![0].id.toString();
+  //       getCity_id();
+  //       preferences.setString("cat_id", cat_id);
+  //       print("Category iddd iss $cat_id");
+  //     } else {
+  //       // Navigator.push(context, MaterialPageRoute(builder: (context)=>SubscriptionPlan()));
+  //     }
+  //     setState(() {
+  //       weddingCardList!.data!.removeWhere((element) => element.cName != "Wedding Card");
+  //       birthDayCardList!.data!.removeWhere((element) => element.cName != "Birthday Card");
+  //     });
+  //     print(weddingCardList);
+  //   } else {
+  //     print(response.reasonPhrase);
+  //   }
+  // }
 
   String? cityID;
   getCity_id() async {
@@ -533,16 +626,16 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
         getEnquiryModel?.status == false
             ? Text("No enquiry Found")
             : getEnquiryModel == null
-                ? Center(
+                ? const Center(
                     child: CircularProgressIndicator(color: colors.secondary))
                 : ListView.builder(
                      shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: getEnquiryModel?.data?.length,
                     scrollDirection: Axis.vertical,
                     itemBuilder: (BuildContext context, int index) {
                       return Card(
-                        margin: EdgeInsets.all(10),
+                        margin: const EdgeInsets.all(10),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                         elevation: 5.0,

@@ -83,6 +83,7 @@ dependencies:
   image_gallery_saver: ^2.0.3
   pdf: ^3.0.0
   image_picker:
+  webview_flutter:
 
 
 

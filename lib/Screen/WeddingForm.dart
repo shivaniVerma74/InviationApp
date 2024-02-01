@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import '../Helper/Color.dart';
 import 'SecondWeddingForm.dart';
@@ -89,25 +90,25 @@ class _WeddingFormState extends State<WeddingForm> {
   @override
   void dispose() {
     // TODO: implement dispose
-    GroomNameController.dispose();
-    BrideNameController.dispose();
-    GfatherNameController.dispose();
-    GmotherNameController.dispose();
-    BfatherNameController.dispose();
-    BmotherNameController.dispose();
-    ProgramNameController.dispose();
-    VenueController.dispose();
-    dateinput.dispose();
-    timecon.dispose();
-    secondProgrameCtr.dispose();
-    venueCtr.dispose();
-    dateCtr.dispose();
-    timeCtr.dispose();
-    thirdProgrameCtr.dispose();
-    venueNameCtr.dispose();
-    dateNameCtr.dispose();
-    timeNameCtr.dispose();
-    GfatherNameController.dispose();
+    // GroomNameController.dispose();
+    // BrideNameController.dispose();
+    // GfatherNameController.dispose();
+    // GmotherNameController.dispose();
+    // BfatherNameController.dispose();
+    // BmotherNameController.dispose();
+    // ProgramNameController.dispose();
+    // VenueController.dispose();
+    // dateinput.dispose();
+    // timecon.dispose();
+    // secondProgrameCtr.dispose();
+    // venueCtr.dispose();
+    // dateCtr.dispose();
+    // timeCtr.dispose();
+    // thirdProgrameCtr.dispose();
+    // venueNameCtr.dispose();
+    // dateNameCtr.dispose();
+    // timeNameCtr.dispose();
+    // GfatherNameController.dispose();
 
     GroomNameController.clear();
     BrideNameController.clear();
@@ -1017,6 +1018,7 @@ class _WeddingFormState extends State<WeddingForm> {
                           const SizedBox(height: 15),
                           TextFormField(
                             controller: dateinput,
+                            keyboardType: TextInputType.none,
                             decoration: InputDecoration(
                                 prefixIcon: IconButton(
                                     onPressed: () async {
@@ -1091,6 +1093,7 @@ class _WeddingFormState extends State<WeddingForm> {
                           ),
                           TextFormField(
                             controller: timecon,
+                            keyboardType: TextInputType.none,
                             decoration: InputDecoration(
                                 hintText: "Time",
                                 prefixIcon: IconButton(
@@ -1165,6 +1168,7 @@ class _WeddingFormState extends State<WeddingForm> {
                           const SizedBox(height: 15),
                           TextFormField(
                             controller: dateCtr,
+                            keyboardType: TextInputType.none,
                             decoration: InputDecoration(
                                 prefixIcon: IconButton(
                                     onPressed: () async {
@@ -1222,7 +1226,7 @@ class _WeddingFormState extends State<WeddingForm> {
                             },
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return "Please Enter Date and time";
+                                return "Please select Date";
                               }
                               return null;
                             },
@@ -1232,6 +1236,7 @@ class _WeddingFormState extends State<WeddingForm> {
                           ),
                           TextFormField(
                             controller: timeCtr,
+                            keyboardType: TextInputType.none,
                             decoration: InputDecoration(
                                 hintText: "Time",
                                 prefixIcon: IconButton(
@@ -1293,6 +1298,9 @@ class _WeddingFormState extends State<WeddingForm> {
                           ),
                           TextFormField(
                             controller: venueNameCtr,
+                            // inputFormatters: [
+                            //   FilteringTextInputFormatter.allow(RegExp("[\u0900\u0901\u0902 ... \u097D\u097E\u097F]"))
+                            // ],
                             decoration: InputDecoration(
                               hintText: "Venue",
                               prefixIcon: const Icon(Icons.person),
@@ -1310,6 +1318,7 @@ class _WeddingFormState extends State<WeddingForm> {
                           const SizedBox(height: 15),
                           TextFormField(
                             controller: dateNameCtr,
+                            keyboardType: TextInputType.none,
                             decoration: InputDecoration(
                                 prefixIcon: IconButton(
                                     onPressed: () async {
@@ -1375,7 +1384,7 @@ class _WeddingFormState extends State<WeddingForm> {
                             },
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return "Please Enter Date and time";
+                                return "Please Select Date";
                               }
                               return null;
                             },
@@ -1384,7 +1393,9 @@ class _WeddingFormState extends State<WeddingForm> {
                             height: 15,
                           ),
                           TextFormField(
+                            
                             controller: timeNameCtr,
+                            keyboardType: TextInputType.none,
                             decoration: InputDecoration(
                                 hintText: "Time",
                                 prefixIcon: IconButton(

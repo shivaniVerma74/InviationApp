@@ -319,7 +319,7 @@ class _EventsEmageScreenState extends State<EventsEmageScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: eventListDeteilsModel?.data?[0].profileImage == null ||
                     eventListDeteilsModel?.data?[0].profileImage == "" ? Image
-                    .asset("assets/images/event img.png") : Container(
+                    .asset("assets/images/event homeMenuIcon.png") : Container(
                     width: double.infinity,
                     child: Image.network(
                       "${ApiService.imageUrl}${eventListDeteilsModel?.data?[0]
