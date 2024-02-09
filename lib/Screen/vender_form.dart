@@ -338,10 +338,18 @@ class _Vendor_FormState extends State<Vendor_Form> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+
         elevation: 0,
-        backgroundColor: colors.secondary,
+        backgroundColor: colors.whiteTemp,
         title:const Text("Vendor"),
             centerTitle: true,
+        flexibleSpace: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: const BoxDecoration(
+              color: colors.secondary,
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),bottomRight: Radius.circular(20),)
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -680,7 +688,7 @@ class _Vendor_FormState extends State<Vendor_Form> {
                       ),
 
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween
                         ,
                         children: [
                           Column(
@@ -688,7 +696,7 @@ class _Vendor_FormState extends State<Vendor_Form> {
                               Center(
                                 child: Container(
                                   height: 120,
-                                  width: 150,
+                                  width: 160,
                                   clipBehavior: Clip.hardEdge,
                                   decoration: BoxDecoration(
                                       border: Border.all(color: Colors.black),
@@ -700,7 +708,7 @@ class _Vendor_FormState extends State<Vendor_Form> {
                                     _adharFrontImageFile!.absolute,
                                     fit: BoxFit.fill,
                                   ):Center(
-                                      child: Image.asset('assets/images/aadharimage.png')),
+                                      child: Image.asset('assets/images/aadharimage.png',)),
                                 ),
                               ),
                               SizedBox(
@@ -723,15 +731,13 @@ class _Vendor_FormState extends State<Vendor_Form> {
 
                             ],
                           ),
-                          const SizedBox(
-                            width: 12,
-                          ),
+
                           Column(
                             children: [
                               Center(
                                 child: Container(
                                   height: 120,
-                                  width: 150,
+                                  width: 160,
                                   clipBehavior: Clip.hardEdge,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),

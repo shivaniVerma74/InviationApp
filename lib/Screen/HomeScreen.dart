@@ -437,15 +437,16 @@
 // }
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:doctorapp/Helper/Color.dart';
 import 'package:doctorapp/Screen/CardScreen.dart';
 import 'package:doctorapp/Screen/Histroy.dart';
 import 'package:doctorapp/api/api_services.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -462,12 +463,12 @@ import '../New_model/NewCategoryModel.dart';
 import '../New_model/SavedCardModel.dart';
 import '../New_model/TemplateForm.dart';
 import '../New_model/TemplatesModel.dart';
+import '../SubscriptionPlan/addPosterScreen.dart';
+import '../SubscriptionPlan/subscription_plan.dart';
 import '../widgets/widgets/commen_slider.dart';
-import 'AllCards.dart';
 import 'EventDetails.dart';
 import 'Events.dart';
 import 'MyEnquiry.dart';
-import 'SavedCard.dart';
 import 'TemplateScreen.dart';
 import 'WeddingForm.dart';
 import 'WishlistScreen.dart';
@@ -486,7 +487,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   SpeciplyData? localFilter;
   int currentindex = 0;
-
 
   _CarouselSlider1() {
     return CarouselSlider(
@@ -539,28 +539,7 @@ class _HomeScreenState extends State<HomeScreen> {
       print(response.reasonPhrase);
     }
   }
-
-  allCategory() async {
-    var headers = {
-      'Cookie': 'ci_session=967018c55118c57e9b50bc9d10a91f021f6744e1'
-    };
-    var request = http.MultipartRequest('POST', Uri.parse(ApiService.categories));
-    request.fields.addAll({'cat_type': '0'});
-    request.headers.addAll(headers);
-    http.StreamedResponse response = await request.send();
-    if (response.statusCode == 200) {
-      var result = await response.stream.bytesToString();
-      final jsonResponse = AllCategoryModel.fromJson(json.decode(result));
-      print('categoriess responsee $jsonResponse');
-      setState(() {
-        allCategoriesModel = jsonResponse;
-        print("alll catetetetetety ${allCategoriesModel?.data?.first.cName}");
-      });
-    } else {
-      print(response.reasonPhrase);
-    }
-  }
-
+  @override
   void initState() {
     super.initState();
     getSliderApi();
@@ -577,9 +556,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _handlePaymentSuccess(PaymentSuccessResponse response) async {
-    Fluttertoast.showToast(msg: "Card added successfully");
-    // purchaseCard();
-    // Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+    Fluttertoast.showToast(msg: "Card Saved successfully");
+      setState(() {
+       currentIndex = 2;
+       });
+     // purchaseCard();
+    //  Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
@@ -674,6 +656,30 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 
+  allCategory() async {
+    var headers = {
+      'Cookie': 'ci_session=967018c55118c57e9b50bc9d10a91f021f6744e1'
+    };
+    var request =
+    http.MultipartRequest('POST', Uri.parse(ApiService.categories));
+    request.fields.addAll({
+      'cat_type': '1'
+    });
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      var result = await response.stream.bytesToString();
+      final jsonResponse = AllCategoryModel.fromJson(json.decode(result));
+      print('categoriess responsee $jsonResponse');
+      setState(() {
+        allCategoriesModel = jsonResponse;
+        print("alll catetetetetety ${allCategoriesModel?.data?.first.cName}");
+      });
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
   setFilterDataId(String id) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.setString('LocalId', id);
@@ -685,66 +691,12 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Select Religion"),
+          title: const Text("Select Your Religion"),
           content: SafeArea(
             child: religion(),
           ),
         );
       },
-    );
-  }
-
-  cardsCategory(){
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SizedBox(
-        child: GridView.builder(
-            physics:const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 12,
-                childAspectRatio: 0.65
-            ),
-            itemCount: allCategoriesModel?.data?.length ?? 0,
-            itemBuilder: (_,index){
-              return InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) =>  AllCards(),)
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: const [
-                      BoxShadow(
-                          color: colors.black54,
-                          // spreadRadius: 0.5,
-                          blurRadius: 1,
-                          offset: Offset(0, 1)
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.network(
-                        "${allCategoriesModel?.data?[index].img}",
-                        height: 120,
-                        width: double.infinity,
-                      ),
-                      Text("${allCategoriesModel?.data?[index].cName}",style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),),
-                      const SizedBox(height: 4),
-                    ],
-                  ),
-                ),
-              );
-            }),
-      ),
     );
   }
 
@@ -784,7 +736,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onRefresh: _refresh,
         child: Scaffold(
           // extendBodyBehindAppBar: true,
-          backgroundColor: Color(0Xff00B5EE),
+          backgroundColor: colors.scaffoldBackground,
           key: _key,
           //appBar: customAppBar(context: context, text:"My Dashboard", isTrue: true, ),
           body: SafeArea(
@@ -795,7 +747,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 10,
                   ),
                   customTabbar(),
-                  cardsCategory(),
                   // SizedBox(height: 100,),
                 ],
               ),
@@ -864,21 +815,18 @@ class _HomeScreenState extends State<HomeScreen> {
       'id': 2,
     },
   ];
-
   int currentIndex = 1;
-
   customTabbar() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+     children: [
         Row(
-          children: [
+        children: [
             InkWell(
               onTap: () {
                 setState(() {
                   currentIndex = 1;
                 });
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SavedCardScreen()));
               },
               child: Container(
                 height: 90,
@@ -983,6 +931,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
+
               ),
             ),
             InkWell(
@@ -1064,12 +1013,12 @@ class _HomeScreenState extends State<HomeScreen> {
         // const SizedBox(
         //   height: 20,
         // ),
-        // currentIndex == 1
-        //     ? myCard()
-        //     : currentIndex == 2
-        //        ? getCategories()
-        //         // ?
-        //         : Container(child: const Center(child: Text("No Data Available"))),
+        currentIndex == 1
+            ? myCard()
+            : currentIndex == 2
+               ? getCategories()
+                // ?
+                : Container(child: const Center(child: Text("No Data Available"))),
       ],
     );
   }
@@ -1101,16 +1050,20 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  String?selectedReligion;
-
+  String? selectedReligion;
   religion() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
+        // const Text(
+        //   'Select your religion:',
+        //   style: TextStyle(fontSize: 18),
+        // ),
+        // const SizedBox(height: 20),
         DropdownButton<String>(
           hint: const Text("Select Religion"),
-          value: selectedReligion,
+           value: selectedReligion,
           // icon: const Icon(Icons.arrow_downward),
           iconSize: 24,
           elevation: 16,
@@ -1118,10 +1071,11 @@ class _HomeScreenState extends State<HomeScreen> {
           onChanged: (String? newValue) {
             if(newValue != null) {
               setState(() {
-                selectedReligion = newValue;
-                Navigator.pop(context);
-                _showReligionDialog(context);
-              });
+              selectedReligion = newValue;
+              Navigator.pop(context);
+              _showReligionDialog(context);
+
+            });
             }
           },
           items: <String>['Christianity', 'Islam', 'Hinduism', 'Buddhism', 'Judaism']
@@ -1147,32 +1101,32 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 onPressed: () {
                   if(selectedReligion != null){
+                    Navigator.pop(context);
                     Navigator.push(context, MaterialPageRoute(builder: (context)=> const WeddingForm()));
+
                   }
                   else{
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Please Select Religion"),backgroundColor: Colors.black45,)
+                      const SnackBar(content: Text("Please Select Religion"),backgroundColor: Colors.red,)
                     );
                   }
                 },
                 child: const Padding(
                   padding:  EdgeInsets.all(4.0),
-                  child:  Text("Submit"),
-                ),
-            ),
+                  child:  Text("Submit",),
+                )),
             const SizedBox(width: 32,),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: colors.secondary,
                     fixedSize: const Size(100, 32)),
                 onPressed: () {
-                  Navigator.pop(context);
+
                 },
                 child: const Padding(
                   padding:  EdgeInsets.all(4.0),
-                  child: Text("Skip",),
-                ),
-            ),
+                  child:  Text("Skip",),
+                )),
           ],
         ),
       ],
@@ -1195,66 +1149,78 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   templateCardGestures({String? text, Icon? icon, VoidCallback? onTap}){
+
     return GestureDetector(
       onTap: onTap,
       child: Column(
         children: [
           icon!,
           const SizedBox(height: 2,),
-          Text(text!, style: const TextStyle(color: Colors.black,fontSize: 16),)
+          Text(text!, style: const TextStyle(color: colors.secondary,fontSize: 16),)
         ],
       ),
     );
+
+
+
   }
 
    templateCard1(int i){
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-      child: Column(
-        children: [
-          GestureDetector(
-            onTap: (){
-              _showReligionDialog(context);
-              // Navigator.push(context, MaterialPageRoute(builder: (context) => const WeddingForm()));
-            },
-            child: Container(
-              clipBehavior: Clip.hardEdge,
-              width: double.infinity,
-              height: 240,
-              decoration: BoxDecoration(
-                color: Colors.blueGrey,
-                borderRadius: BorderRadius.circular(16),
+      padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          gradient: LinearGradient(
+              colors: [Colors.white.withOpacity(0.05),Colors.white.withOpacity(0.1),Colors.white.withOpacity(0.05)]
+          )),
+
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: (){
+                _showReligionDialog(context);
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => const WeddingForm()));
+              },
+              child: Container(
+                clipBehavior: Clip.hardEdge,
+                width: double.infinity,
+                height: 240,
+                decoration: BoxDecoration(
+                  color: Colors.blueGrey,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Image.network(
+                                      "${savedCardModel?.data?[i].image}", fit: BoxFit.fill,
+                                    ),
               ),
-              child: Image.network(
-                                    "${savedCardModel?.data?[i].image}", fit: BoxFit.fill,
-                                  ),
             ),
-          ),
-          const SizedBox(height: 10,),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                 templateCardGestures(
-                   text: 'Saved',
-                   icon: Icon(Icons.download,color: Colors.black,),
-                   onTap: (){}
-                 ),
-              templateCardGestures(
-                  text: 'Downloaded',
-                  icon: Icon(Icons.download,color: Colors.black,),
-                  onTap: (){}
-              ),
-              templateCardGestures(
-                  text: 'invite',
-                  icon: Icon(Icons.insert_invitation,color: Colors.black),
-                  onTap: (){}
-              )
-            ],),
-          )
-        ],
+            const SizedBox(height: 10,),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                   templateCardGestures(
+                     text: 'Save',
+                     icon: const Icon(Icons.download,color: colors.secondary,),
+                     onTap: (){
+                       openCheckout(300);
+                     }
+                   ),
+                templateCardGestures(
+                    text: 'invite',
+                    icon: const Icon(Icons.share,color: colors.secondary),
+                    onTap: (){
+                    share();
+                    }
+                )
+              ],),
+            )
+          ],
+        ),
       ),
     );
    }
@@ -1360,6 +1326,14 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       debugPrint('Error: e');
     }
+  }
+  Future<void> share() async {
+    await FlutterShare.share(
+        title: 'Atithi',
+        // text: 'Example share text',
+        // linkUrl: 'https://developmentalphawizz.com/dr_booking/',
+        linkUrl: "https://developmentalphawizz.com/invitation_design/",
+        chooserTitle: 'Atithi');
   }
 
   // customTabbar() {
@@ -1778,7 +1752,30 @@ class _HomeScreenState extends State<HomeScreen> {
             // downloadCard(i);
         });
   }
+  downloadFile(String url, String filename) async {
+    FileDownloader.downloadFile(
 
+        url: url,
+        name: filename,
+        onDownloadCompleted: (path) {
+          debugPrint(path);
+          String tempPath = path.toString().replaceAll("Download", "doctorapp");
+          final File file = File(tempPath);
+          debugPrint("path here ${file}");
+          var snackBar = SnackBar(
+            backgroundColor: colors.secondary,
+            content: Row(
+              children: [
+                const Text('Card downloaded successfully'),
+                TextButton(onPressed: () {}, child: const Text("View"))
+
+              ],
+            ),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          //This will be the path of the downloaded file
+        });
+  }
   downloadCard1(int i){
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
@@ -1814,13 +1811,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 //     onTap: (){}
                 // ),
                 templateCardGestures(
-                    text: 'Downloaded',
-                    icon: Icon(Icons.download,color: Colors.black,),
-                    onTap: (){}
+                    text: 'Download',
+                    icon: const Icon(Icons.download,color: colors.secondary,),
+                    onTap: (){
+                      downloadFile(savedCardModel!.data![i].image.toString(), "Invitation_Card");
+                    }
                 ),
                 templateCardGestures(
                     text: 'invite',
-                    icon: Icon(Icons.insert_invitation,color: Colors.black),
+                    icon: const Icon(Icons.share,color: colors.secondary),
                     onTap: (){}
                 )
               ],),
@@ -1915,13 +1914,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // }
 
 
-  Future<void> share() async {
-    await FlutterShare.share(
-        title: 'Atithi',
-        // text: 'Example share text',
-        linkUrl: 'https://developmentalphawizz.com/dr_booking/',
-        chooserTitle: 'Atithi');
-  }
+
 
 
   // getCategories(){

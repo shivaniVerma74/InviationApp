@@ -11,15 +11,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../AuthenticationView/LoginScreen.dart';
+import '../Booking/booking_screen.dart';
 import '../Helper/Appbar.dart';
 import '../Helper/Color.dart';
 import '../New_model/getUserProfileModel.dart';
 import '../Profile/Update_password.dart';
 import '../Static/privacy_Policy.dart';
 import '../Static/terms_condition.dart';
+import '../SubscriptionPlan/subscription_plan.dart';
 import '../api/api_services.dart';
 import 'package:http/http.dart' as http;
+
 import 'Demo.dart';
 import 'EventsForm.dart';
 import 'ExampleScreen.dart';
@@ -27,7 +31,6 @@ import 'MyCardTemplate.dart';
 import 'MyEnquiry.dart';
 import 'MyTemplate.dart';
 import 'NewScreen.dart';
-import 'NotificationScreen.dart';
 
 class BottomScreen extends StatefulWidget {
   const BottomScreen({super.key, this.cityId});
@@ -122,79 +125,49 @@ class _BottomScreenState extends State<BottomScreen> {
       },
       child: SafeArea(
         child: Scaffold(
-          extendBodyBehindAppBar: true,
-          backgroundColor: Color(0Xff00B5EE),
           key: _scaffoldKey,
           drawer: getDrawer(),
           appBar: AppBar(
             centerTitle: true,
-
-            leading: Container(
-              margin: const EdgeInsets.fromLTRB(14,10,5,10),
-              decoration: BoxDecoration(
+            leading: IconButton(
+              icon: const Icon(
+                Icons.menu,
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(4)
               ),
-              child: Center(
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.menu,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    _scaffoldKey.currentState!.openDrawer();
-                  },
-                ),
-              ),
+              onPressed: () {
+                _scaffoldKey.currentState!.openDrawer();
+              },
             ),
-            actions:  [
-              Container(
-                width: 36,
-                margin: const EdgeInsets.symmetric(horizontal: 14,vertical: 10),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(4)
-                ),
-                child:
-                //Image.asset("assets/home icon/Events.png",color: Colors.black,scale: 3.5,),
-                IconButton(
-                  icon: const Icon(Icons.notifications, color: Colors.black),
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const NotificationScreen()));
-                  },
-                ),
-              ),
+            actions: const [
+              Padding(
+                padding: EdgeInsets.only(right: 5, top: 5),
+                child: Icon(Icons.notifications, color: Colors.white),
+              )
             ],
-            // backgroundColor: colors.transparent,
+            backgroundColor: colors.secondary,
             elevation: 0,
-            title: Image.asset("assets/images/homeimage.png", height: 60, width: 60,color: Colors.white,),
-            flexibleSpace: Container(
-          padding: const EdgeInsets.all(24),
-          decoration: const BoxDecoration(
-            color: colors.secondary,
-            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(18),bottomRight: Radius.circular(18)))),
+            title: Image.asset("assets/images/homeimage.png", height: 60, width: 60),
           ),
           body: Center(
             child: pages1.elementAt(currentindex),
           ),
           bottomNavigationBar: BottomNavigationBar(
-            unselectedItemColor: colors.whiteTemp,
-            backgroundColor: colors.secondary,
+            backgroundColor: colors.whiteTemp,
             selectedIconTheme: const IconThemeData(color: colors.black54),
-            unselectedIconTheme: const IconThemeData(color: colors.whiteTemp),
-            selectedLabelStyle: const TextStyle(color: colors.black54),
-            unselectedLabelStyle: const TextStyle(color: colors.whiteTemp),
+            unselectedIconTheme: const IconThemeData(color: Colors.black),
+            selectedLabelStyle: const TextStyle(color: Colors.black),
+            unselectedLabelStyle: const TextStyle(color: Colors.black),
             //  elevation: 1,
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 label: 'Design',
-                icon: Icon(Icons.card_giftcard_outlined,)),
+                icon: Icon(Icons.card_giftcard_outlined)),
               // BottomNavigationBarItem(label: 'Accessories', icon: Icon(Icons.calendar_today_rounded)),
               BottomNavigationBarItem(label: 'Home', icon: Icon(Icons.home,)),
               BottomNavigationBarItem(label: 'Coming Event', icon: Icon(Icons.event)),
             ],
             currentIndex: currentindex,
-            selectedItemColor: Colors.black,
+            selectedItemColor: colors.secondary,
             // unselectedItemColor: colors.secondary,
             onTap: _onItemTapped,
             showUnselectedLabels: true,
@@ -326,7 +299,7 @@ class _BottomScreenState extends State<BottomScreen> {
           ListTile(
             leading: Image.asset(
               "assets/images/person.png",
-              color: colors.secondary,
+              color: colors.black54,
               height: 40,
               width: 40,
             ),
@@ -336,14 +309,14 @@ class _BottomScreenState extends State<BottomScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                MaterialPageRoute(builder: (context) => ProfileScreen()),
               );
             },
           ),
           ListTile(
             leading: Image.asset(
               "assets/images/home.png",
-              color: colors.secondary,
+              color: colors.black54,
               height: 40,
               width: 40,
             ),
@@ -353,14 +326,14 @@ class _BottomScreenState extends State<BottomScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const BottomScreen()),
+                MaterialPageRoute(builder: (context) => BottomScreen()),
               );
             },
           ),
           ListTile(
             leading: Image.asset(
               "assets/images/enquiry.png",
-              color: colors.secondary,
+              color: colors.black54,
               height: 40,
               width: 40,
             ),
@@ -377,7 +350,7 @@ class _BottomScreenState extends State<BottomScreen> {
           ListTile(
             leading: Image.asset(
               "assets/images/enquiry.png",
-              color: colors.secondary,
+              color: colors.black54,
               height: 40,
               width: 40,
             ),
@@ -385,14 +358,14 @@ class _BottomScreenState extends State<BottomScreen> {
               'Marriage Certificate',
             ),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePageOne()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));
               // Fluttertoast.showToast(msg: "Coming Soon");
             },
           ),
           ListTile(
             leading: Image.asset(
               "assets/images/enquiry.png",
-              color: colors.secondary,
+              color: colors.black54,
               height: 40,
               width: 40,
             ),
@@ -408,7 +381,7 @@ class _BottomScreenState extends State<BottomScreen> {
               "assets/images/Term & Conditions.png",
               height: 40,
               width: 40,
-              color: colors.secondary,
+              color: colors.black54,
             ),
             title: const Text(
               'Vendor Registartion',
@@ -416,14 +389,14 @@ class _BottomScreenState extends State<BottomScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Vendor_Form()),
+                MaterialPageRoute(builder: (context) => Vendor_Form()),
               );
             },
           ),
           ListTile(
             leading: Image.asset(
               "assets/images/share.png",
-              color: colors.secondary,
+              color: colors.black54,
               height: 40,
               width: 40,
             ),
@@ -490,7 +463,7 @@ class _BottomScreenState extends State<BottomScreen> {
               "assets/images/Term & Conditions.png",
               height: 40,
               width: 40,
-              color: colors.secondary,
+              color: colors.black54,
             ),
             title: const Text(
               'My Bills',
@@ -504,7 +477,7 @@ class _BottomScreenState extends State<BottomScreen> {
               "assets/images/Term & Conditions.png",
               height: 40,
               width: 40,
-              color: colors.secondary,
+              color: colors.black54,
             ),
             title: const Text(
               'Business Card',
@@ -518,7 +491,7 @@ class _BottomScreenState extends State<BottomScreen> {
               "assets/images/Term & Conditions.png",
               height: 40,
               width: 40,
-              color: colors.secondary,
+              color: colors.black54,
             ),
             title: const Text(
               'Terms & Conditions',
@@ -526,14 +499,14 @@ class _BottomScreenState extends State<BottomScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const TermsCondition()),
+                MaterialPageRoute(builder: (context) => TermsCondition()),
               );
             },
           ),
           ListTile(
             leading: Image.asset(
               "assets/images/Privacy Policy.png",
-              color: colors.secondary,
+              color: colors.black54,
               height: 40,
               width: 40,
             ),
@@ -543,7 +516,7 @@ class _BottomScreenState extends State<BottomScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const PrivacyPolicy()),
+                MaterialPageRoute(builder: (context) => PrivacyPolicy()),
               );
             },
           ),
@@ -581,7 +554,7 @@ class _BottomScreenState extends State<BottomScreen> {
           ListTile(
             leading: Image.asset(
               "assets/images/Sign Out.png",
-              color: colors.secondary,
+              color: colors.black54,
               height: 40,
               width: 40,
               //color: Colors.grey.withOpacity(0.8),
@@ -596,11 +569,13 @@ class _BottomScreenState extends State<BottomScreen> {
                   builder: (BuildContext context) {
                     return AlertDialog(
                       title: const Text("Confirm Sign out"),
-                      content: const Text("Are  sure to sign out from app now?"),
+                      content:
+                          const Text("Are  sure to sign out from app now?"),
                       actions: <Widget>[
                         ElevatedButton(
-                          style: ElevatedButton.styleFrom(primary: colors.secondary),
-                          child: const Text("YES"),
+                          style:
+                              ElevatedButton.styleFrom(primary: colors.secondary),
+                          child: Text("YES"),
                           onPressed: () async {
                             SharedPreferences prefs =
                                 await SharedPreferences.getInstance();
@@ -617,7 +592,7 @@ class _BottomScreenState extends State<BottomScreen> {
                         ElevatedButton(
                           style:
                               ElevatedButton.styleFrom(primary: colors.secondary),
-                          child: const Text("NO"),
+                          child: Text("NO"),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },

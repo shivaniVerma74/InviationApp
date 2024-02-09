@@ -84,7 +84,9 @@ dependencies:
 #  webview_flutter: ^4.4.1
   image_gallery_saver: ^2.0.3
   pdf: ^3.0.0
-  image_picker: 
+  image_picker:
+  webview_flutter:
+
 
 
 dev_dependencies:

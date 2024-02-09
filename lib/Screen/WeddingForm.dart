@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import '../Helper/Color.dart';
 import 'SecondWeddingForm.dart';
@@ -134,7 +135,7 @@ class _WeddingFormState extends State<WeddingForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0Xff00B5EE),
+      backgroundColor: colors.scaffoldBackground,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
@@ -186,9 +187,7 @@ class _WeddingFormState extends State<WeddingForm> {
                                 hintText: "Groom Name",
                                 prefixIcon: const Icon(Icons.person),
                                 border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                ),
-                            ),
+                                    borderRadius: BorderRadius.circular(10))),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return "Please Enter name";
@@ -324,6 +323,541 @@ class _WeddingFormState extends State<WeddingForm> {
                 ),
               ),
             ),
+            // Card(
+            //   margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            //   elevation: 5.0,
+            //   shape: RoundedRectangleBorder(
+            //     borderRadius: BorderRadius.circular(10),
+            //   ),
+            //   borderOnForeground: true,
+            //   child: Container(
+            //     height: MediaQuery.of(context).size.height / 2.3,
+            //     width: MediaQuery.of(context).size.width / 1,
+            //     decoration: const BoxDecoration(),
+            //     child: Center(
+            //       child: Padding(
+            //         padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
+            //         child: Form(
+            //           key: _formKey2,
+            //           child: Column(
+            //             children: [
+            //               const Text(
+            //                 "Bride Details",
+            //                 style: TextStyle(
+            //                     fontSize: 14, fontWeight: FontWeight.w500),
+            //               ),
+            //               const SizedBox(height: 9),
+            //               TextFormField(
+            //                 controller: BrideNameController,
+            //                 decoration: InputDecoration(
+            //                     hintText: "Bride Name",
+            //                     prefixIcon: const Icon(Icons.person),
+            //                     border: OutlineInputBorder(
+            //                         borderRadius: BorderRadius.circular(10))),
+            //                 validator: (value) {
+            //                   if (value == null || value.isEmpty)
+            //                     return "Please Enter name";
+            //                   return null;
+            //                 },
+            //               ),
+            //               const SizedBox(
+            //                 height: 15,
+            //               ),
+            //               TextFormField(
+            //                 controller: BfatherNameController,
+            //                 decoration: InputDecoration(
+            //                     hintText: "Father Name",
+            //                     prefixIcon: const Icon(Icons.person),
+            //                     border: OutlineInputBorder(
+            //                         borderRadius: BorderRadius.circular(10))),
+            //                 validator: (value) {
+            //                   if (value == null || value.isEmpty)
+            //                     return "Please Enter father name";
+            //                   return null;
+            //                 },
+            //               ),
+            //               const SizedBox(
+            //                 height: 10,
+            //               ),
+            //               // TextFormField(
+            //               //   controller: BmotherNameController,
+            //               //   decoration: InputDecoration(
+            //               //       hintText: "Mother Name",
+            //               //       prefixIcon: const Icon(Icons.person),
+            //               //       border: OutlineInputBorder(
+            //               //           borderRadius: BorderRadius.circular(10))),
+            //               //   validator: (value) {
+            //               //     if (value == null || value.isEmpty)
+            //               //       return "Please Enter mother name";
+            //               //     return null;
+            //               //   },
+            //               // ),
+            //             ],
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+
+            // Card(
+            //   margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            //   elevation: 5.0,
+            //   shape: RoundedRectangleBorder(
+            //     borderRadius: BorderRadius.circular(10),
+            //   ),
+            //   borderOnForeground: true,
+            //   child: Container(
+            //     // height: MediaQuery.of(context).size.height/1,
+            //     width: MediaQuery.of(context).size.width/1,
+            //     decoration: const BoxDecoration(),
+            //     child: Center(
+            //       child: Padding(
+            //         padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
+            //         child: Form(
+            //           key: _formKey3,
+            //           child: Column(
+            //             children: [
+            //               const Text(
+            //                 "Programe Details",
+            //                 style: TextStyle(
+            //                     fontSize: 14, fontWeight: FontWeight.w500),
+            //               ),
+            //               const SizedBox(height: 9),
+            //               TextFormField(
+            //                 controller: ProgramNameController,
+            //                 decoration: InputDecoration(
+            //                     hintText: "First Programe Name",
+            //                     prefixIcon: const Icon(Icons.person),
+            //                     border: OutlineInputBorder(
+            //                         borderRadius: BorderRadius.circular(10))),
+            //                 validator: (value) {
+            //                   if (value == null || value.isEmpty)
+            //                     return "Please Enter name";
+            //                   return null;
+            //                 },
+            //               ),
+            //               const SizedBox(
+            //                 height: 15,
+            //               ),
+            //               TextFormField(
+            //                 controller: VenueController,
+            //                 decoration: InputDecoration(
+            //                     hintText: "Venue",
+            //                     prefixIcon: const Icon(Icons.person),
+            //                     border: OutlineInputBorder(
+            //                         borderRadius: BorderRadius.circular(10))),
+            //                 validator: (value) {
+            //                   if (value == null || value.isEmpty)
+            //                     return "Please Enter name";
+            //                   return null;
+            //                 },
+            //               ),
+            //               const SizedBox(height: 15),
+            //               TextFormField(
+            //                 controller: dateinput,
+            //                 decoration: InputDecoration(
+            //                     prefixIcon: IconButton(
+            //                         onPressed: () async {
+            //                           DateTime? pickedDate =
+            //                           await showDatePicker(
+            //                               context: context,
+            //                               initialDate: DateTime.now(),
+            //                               firstDate: DateTime(1950),
+            //                               lastDate: DateTime(2100),
+            //                               builder: (context, child) {
+            //                                 return Theme(
+            //                                     data: Theme.of(context)
+            //                                         .copyWith(
+            //                                         colorScheme:
+            //                                         const ColorScheme
+            //                                             .light(
+            //                                           primary: colors.primary,
+            //                                         )),
+            //                                     child: child!);
+            //                               });
+            //                           if (pickedDate != null) {
+            //                             //pickedDate output format => 2021-03-10 00:00:00.000
+            //                             String formattedDate =
+            //                             DateFormat('yyyy-MM-dd')
+            //                                 .format(pickedDate);
+            //                             //formatted date output using intl package =>  2021-03-16
+            //                             setState(() {
+            //                               dateinput.text =
+            //                                   formattedDate; //set output date to TextField value.
+            //                             });
+            //                           }
+            //                         },
+            //                         icon: const Icon(Icons.calendar_today_outlined)),
+            //                     hintText: 'dd-mm-yyyy',
+            //                     border: OutlineInputBorder(
+            //                         borderRadius: BorderRadius.circular(10))),
+            //                 onTap: () async {
+            //                   DateTime? pickedDate = await showDatePicker(
+            //                       context: context,
+            //                       initialDate: DateTime.now(),
+            //                       firstDate: DateTime(1950),
+            //                       lastDate: DateTime(2100),
+            //                       builder: (context, child) {
+            //                         return Theme(
+            //                             data: Theme.of(context).copyWith(
+            //                                 colorScheme: const ColorScheme.light(
+            //                                   primary: colors.primary
+            //                                 ),
+            //                             ),
+            //                             child: child!);
+            //                       });
+            //                   if (pickedDate != null) {
+            //                     //pickedDate output format => 2021-03-10 00:00:00.000
+            //                     String formattedDate =
+            //                     DateFormat('yyyy-MM-dd').format(pickedDate);
+            //                     //formatted date output using intl package =>  2021-03-16
+            //                     setState(() {
+            //                       dateinput.text =
+            //                           formattedDate; //set output date to TextField value.
+            //                     });
+            //                   }
+            //                 },
+            //                 validator: (value) {
+            //                   if (value == null || value.isEmpty)
+            //                     return "Please Enter Date and time";
+            //                   return null;
+            //                 },
+            //               ),
+            //               const SizedBox(
+            //                 height: 15,
+            //               ),
+            //               TextFormField(
+            //                 controller: timecon,
+            //                 decoration: InputDecoration(
+            //                     hintText: "Time",
+            //                     prefixIcon: IconButton(
+            //                       onPressed: () async {
+            //                         showTimePicker(
+            //                           context: context,
+            //                           initialTime: selectedTime,
+            //                         ).then((value) {
+            //                           setState(() {
+            //                             selecttimee = value!;
+            //                             timecon.text = selecttimee
+            //                                 .format(context)
+            //                                 .toString();
+            //                           });
+            //                         });
+            //                       },
+            //                       icon: const Icon(Icons.watch_later_rounded),
+            //                     ),
+            //                     border: OutlineInputBorder(
+            //                         borderRadius: BorderRadius.circular(10))),
+            //                 onTap: () {
+            //                   showTimePicker(
+            //                     context: context,
+            //                     initialTime: selectedTime,
+            //                   ).then((value) {
+            //                     setState(() {
+            //                       selecttimee = value!;
+            //                       timecon.text =
+            //                           selecttimee.format(context).toString();
+            //                     });
+            //                   });
+            //                 },
+            //                 validator: (value) {
+            //                   if (value == null || value.isEmpty)
+            //                     return "Please Select Time";
+            //                   return null;
+            //                 },
+            //               ),
+            //               const SizedBox(height: 9),
+            //               TextFormField(
+            //                 controller: secondProgrameCtr,
+            //                 decoration: InputDecoration(
+            //                     hintText: "Second Programe Name",
+            //                     prefixIcon: const Icon(Icons.person),
+            //                     border: OutlineInputBorder(
+            //                         borderRadius: BorderRadius.circular(10))),
+            //                 validator: (value) {
+            //                   if (value == null || value.isEmpty)
+            //                     return "Please Enter name";
+            //                   return null;
+            //                 },
+            //               ),
+            //               const SizedBox(
+            //                 height: 15,
+            //               ),
+            //               TextFormField(
+            //                 controller: venueCtr,
+            //                 decoration: InputDecoration(
+            //                     hintText: "Venue",
+            //                     prefixIcon: const Icon(Icons.person),
+            //                     border: OutlineInputBorder(
+            //                         borderRadius: BorderRadius.circular(10))),
+            //                 validator: (value) {
+            //                   if (value == null || value.isEmpty)
+            //                     return "Please Enter name";
+            //                   return null;
+            //                 },
+            //               ),
+            //               const SizedBox(height: 15),
+            //               TextFormField(
+            //                 controller: dateCtr,
+            //                 decoration: InputDecoration(
+            //                     prefixIcon: IconButton(
+            //                         onPressed: () async {
+            //                           DateTime? pickedDate =
+            //                           await showDatePicker(
+            //                               context: context,
+            //                               initialDate: DateTime.now(),
+            //                               firstDate: DateTime(1950),
+            //                               lastDate: DateTime(2100),
+            //                               builder: (context, child) {
+            //                                 return Theme(
+            //                                     data: Theme.of(context)
+            //                                         .copyWith(
+            //                                         colorScheme:
+            //                                         const ColorScheme
+            //                                             .light(
+            //                                           primary: colors.primary,
+            //                                         )),
+            //                                     child: child!);
+            //                               });
+            //                           if (pickedDate != null) {
+            //                             //pickedDate output format => 2021-03-10 00:00:00.000
+            //                             String formattedDate =
+            //                             DateFormat('yyyy-MM-dd').format(pickedDate);
+            //                             //formatted date output using intl package =>  2021-03-16
+            //                             setState(() {
+            //                               dateCtr.text = formattedDate; //set output date to TextField value.
+            //                             });
+            //                           }
+            //                         },
+            //                         icon: const Icon(Icons.calendar_today_outlined)),
+            //                     hintText: 'dd-mm-yyyy',
+            //                     border: OutlineInputBorder(
+            //                         borderRadius: BorderRadius.circular(10))),
+            //                 onTap: () async {
+            //                   DateTime? pickedDate = await showDatePicker(
+            //                       context: context,
+            //                       initialDate: DateTime.now(),
+            //                       firstDate: DateTime(1950),
+            //                       lastDate: DateTime(2100),
+            //                       builder: (context, child) {
+            //                         return Theme(
+            //                             data: Theme.of(context).copyWith(
+            //                               colorScheme: const ColorScheme.light(
+            //                                   primary: colors.primary
+            //                               ),
+            //                             ),
+            //                             child: child!);
+            //                       });
+            //                   if (pickedDate != null) {
+            //                     //pickedDate output format => 2021-03-10 00:00:00.000
+            //                     String formattedDate =
+            //                     DateFormat('yyyy-MM-dd').format(pickedDate);
+            //                     //formatted date output using intl package =>  2021-03-16
+            //                     setState(() {
+            //                       dateCtr.text = formattedDate; //set output date to TextField value.
+            //                     });
+            //                   }
+            //                 },
+            //                 validator: (value) {
+            //                   if (value == null || value.isEmpty)
+            //                     return "Please Enter Date and time";
+            //                   return null;
+            //                 },
+            //               ),
+            //               const SizedBox(
+            //                 height: 15,
+            //               ),
+            //               TextFormField(
+            //                 controller: timeCtr,
+            //                 decoration: InputDecoration(
+            //                     hintText: "Time",
+            //                     prefixIcon: IconButton(
+            //                       onPressed: () async {
+            //                         showTimePicker(
+            //                           context: context,
+            //                           initialTime: selectedTime,
+            //                         ).then((value) {
+            //                           setState(() {
+            //                             selecttimee = value!;
+            //                             timeCtr.text = selecttimee
+            //                                 .format(context)
+            //                                 .toString();
+            //                           });
+            //                         });
+            //                       },
+            //                       icon: Icon(Icons.watch_later_rounded),
+            //                     ),
+            //                     border: OutlineInputBorder(
+            //                         borderRadius: BorderRadius.circular(10))),
+            //                 onTap: () {
+            //                   showTimePicker(
+            //                     context: context,
+            //                     initialTime: selectedTime,
+            //                   ).then((value) {
+            //                     setState(() {
+            //                       selecttimee = value!;
+            //                       timeCtr.text =
+            //                           selecttimee.format(context).toString();
+            //                     });
+            //                   });
+            //                 },
+            //                 validator: (value) {
+            //                   if (value == null || value.isEmpty)
+            //                     return "Please Select Time";
+            //                   return null;
+            //                 },
+            //               ),
+            //               const SizedBox(height: 9),
+            //               TextFormField(
+            //                 controller: thirdProgrameCtr,
+            //                 decoration: InputDecoration(
+            //                     hintText: "Third Programe Name",
+            //                     prefixIcon: const Icon(Icons.person),
+            //                     border: OutlineInputBorder(
+            //                         borderRadius: BorderRadius.circular(10))),
+            //                 validator: (value) {
+            //                   if (value == null || value.isEmpty)
+            //                     return "Please Enter name";
+            //                   return null;
+            //                 },
+            //               ),
+            //               const SizedBox(
+            //                 height: 15,
+            //               ),
+            //               TextFormField(
+            //                 controller: venueNameCtr,
+            //                 decoration: InputDecoration(
+            //                     hintText: "Venue",
+            //                     prefixIcon: const Icon(Icons.person),
+            //                     border: OutlineInputBorder(
+            //                         borderRadius: BorderRadius.circular(10))),
+            //                 validator: (value) {
+            //                   if (value == null || value.isEmpty)
+            //                     return "Please Enter name";
+            //                   return null;
+            //                 },
+            //               ),
+            //               const SizedBox(height: 15),
+            //               TextFormField(
+            //                 controller: dateNameCtr,
+            //                 decoration: InputDecoration(
+            //                     prefixIcon: IconButton(
+            //                         onPressed: () async {
+            //                           DateTime? pickedDate =
+            //                           await showDatePicker(
+            //                               context: context,
+            //                               initialDate: DateTime.now(),
+            //                               firstDate: DateTime(1950),
+            //                               lastDate: DateTime(2100),
+            //                               builder: (context, child) {
+            //                                 return Theme(
+            //                                     data: Theme.of(context)
+            //                                         .copyWith(
+            //                                         colorScheme:
+            //                                         const ColorScheme
+            //                                             .light(
+            //                                           primary: colors.primary,
+            //                                         )),
+            //                                     child: child!);
+            //                               });
+            //                           if (pickedDate != null) {
+            //                             //pickedDate output format => 2021-03-10 00:00:00.000
+            //                             String formattedDate =
+            //                             DateFormat('yyyy-MM-dd').format(pickedDate);
+            //                             //formatted date output using intl package =>  2021-03-16
+            //                             setState(() {
+            //                               dateNameCtr.text = formattedDate; //set output date to TextField value.
+            //                             });
+            //                           }
+            //                         },
+            //                         icon: const Icon(Icons.calendar_today_outlined)),
+            //                     hintText: 'dd-mm-yyyy',
+            //                     border: OutlineInputBorder(
+            //                         borderRadius: BorderRadius.circular(10))),
+            //                 onTap: () async {
+            //                   DateTime? pickedDate = await showDatePicker(
+            //                       context: context,
+            //                       initialDate: DateTime.now(),
+            //                       firstDate: DateTime(1950),
+            //                       lastDate: DateTime(2100),
+            //                       builder: (context, child) {
+            //                         return Theme(
+            //                             data: Theme.of(context).copyWith(
+            //                               colorScheme: const ColorScheme.light(
+            //                                   primary: colors.primary
+            //                               ),
+            //                             ),
+            //                             child: child!);
+            //                       });
+            //                   if (pickedDate != null) {
+            //                     //pickedDate output format => 2021-03-10 00:00:00.000
+            //                     String formattedDate =
+            //                     DateFormat('yyyy-MM-dd').format(pickedDate);
+            //                     //formatted date output using intl package =>  2021-03-16
+            //                     setState(() {
+            //                       dateNameCtr.text =
+            //                           formattedDate; //set output date to TextField value.
+            //                     });
+            //                   }
+            //                 },
+            //                 validator: (value) {
+            //                   if (value == null || value.isEmpty)
+            //                     return "Please Enter Date and time";
+            //                   return null;
+            //                 },
+            //               ),
+            //               const SizedBox(
+            //                 height: 15,
+            //               ),
+            //               TextFormField(
+            //                 controller: timeNameCtr,
+            //                 decoration: InputDecoration(
+            //                     hintText: "Time",
+            //                     prefixIcon: IconButton(
+            //                       onPressed: () async {
+            //                         showTimePicker(
+            //                           context: context,
+            //                           initialTime: selectedTime,
+            //                         ).then((value) {
+            //                           setState(() {
+            //                             selecttimee = value!;
+            //                             timeNameCtr.text = selecttimee
+            //                                 .format(context)
+            //                                 .toString();
+            //                           });
+            //                         });
+            //                       },
+            //                       icon: Icon(Icons.watch_later_rounded),
+            //                     ),
+            //                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+            //                 onTap: () {
+            //                   showTimePicker(
+            //                     context: context,
+            //                     initialTime: selectedTime,
+            //                   ).then((value) {
+            //                     setState(() {
+            //                       selecttimee = value!;
+            //                       timeNameCtr.text = selecttimee.format(context).toString();
+            //                     });
+            //                   });
+            //                 },
+            //                 validator: (value) {
+            //                   if (value == null || value.isEmpty)
+            //                     return "Please Select Time";
+            //                   return null;
+            //                 },
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // const SizedBox(
+            //   height: 20,
+            // ),
             Card(
               margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
               elevation: 5.0,
@@ -764,6 +1298,9 @@ class _WeddingFormState extends State<WeddingForm> {
                           ),
                           TextFormField(
                             controller: venueNameCtr,
+                            // inputFormatters: [
+                            //   FilteringTextInputFormatter.allow(RegExp("[\u0900\u0901\u0902 ... \u097D\u097E\u097F]"))
+                            // ],
                             decoration: InputDecoration(
                               hintText: "Venue",
                               prefixIcon: const Icon(Icons.person),
@@ -856,6 +1393,7 @@ class _WeddingFormState extends State<WeddingForm> {
                             height: 15,
                           ),
                           TextFormField(
+                            
                             controller: timeNameCtr,
                             keyboardType: TextInputType.none,
                             decoration: InputDecoration(

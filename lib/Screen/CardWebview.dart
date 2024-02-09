@@ -112,7 +112,7 @@ extendBodyBehindAppBar: false,
             ),
           ),
         ),
-        backgroundColor: const Color(0Xff00B5EE),
+        backgroundColor: colors.scaffoldBackground,
         body: Stack(
           children: [
             WebView(
@@ -142,7 +142,7 @@ extendBodyBehindAppBar: false,
             ),
            if (  loadingPercentage != null && loadingPercentage! < 100)
              Container(
-               color: const Color(0Xff00B5EE),
+               color: colors.scaffoldBackground,
                height: double.infinity,
                child:  Center(
                  child: CircularProgressIndicator(

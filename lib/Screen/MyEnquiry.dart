@@ -66,7 +66,14 @@ class _MyEnquiryState extends State<MyEnquiry> {
         title: const Text("My Booking"),
         elevation: 0,
         centerTitle: true,
-        backgroundColor: colors.secondary,
+        backgroundColor: colors.whiteTemp,
+        flexibleSpace: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: const BoxDecoration(
+              color: colors.secondary,
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),bottomRight: Radius.circular(20),)
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: RefreshIndicator(

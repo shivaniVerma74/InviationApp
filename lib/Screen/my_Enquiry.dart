@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Helper/Color.dart';
 import '../New_model/EventListModel.dart';
 import '../api/api_services.dart';
-import 'package:http/http.dart 'as http;
+import 'package:http/http.dart' as http;
 
 import 'EnquiryForm.dart';
 import 'EventDetails.dart';
@@ -35,7 +35,7 @@ class _BookingDetailsState extends State<BookingDetails> {
     var headers = {
       'Cookie': 'ci_session=e6545df7c1714023144b9f63cc94cd2118c2e751'
     };
-    var request = http.MultipartRequest('POST', Uri.parse(ApiService.categories));
+    var request = http.MultipartRequest('POST', Uri.parse('${ApiService.categories}'));
     request.fields.addAll(
         {'cat_type': '1'});
    print("ddddddddddd${request.fields}");
@@ -54,25 +54,21 @@ class _BookingDetailsState extends State<BookingDetails> {
   @override
   Widget build(BuildContext context) {
     int? inndx = widget.ind;
-    print("ssssssssssssssssssss${widget.model} --------- ${inndx}");
-    print("ssssssssssssssssssss${widget.ind}");
+    debugPrint("ssssssssssssssssssss${widget.model} --------- ${inndx}");
+    debugPrint("ssssssssssssssssssss${widget.ind}");
     return Scaffold(
-      backgroundColor: Color(0Xff00B5EE),
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        elevation: 0,
-        // backgroundColor: colors.transparent,
-        centerTitle: true,
-        title: const Text("Bookings"),
-        flexibleSpace: Container(
-          padding: const EdgeInsets.all(24),
-          decoration: const BoxDecoration(
-              color: colors.secondary,
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(18),bottomRight: Radius.circular(18),)
+        appBar: AppBar(
+          centerTitle: true,
+          elevation: 0,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),bottomRight: Radius.circular(20),)
           ),
+          backgroundColor: colors.secondary,
+          title:  const Text("Booking Details"),
         ),
-      ),
-      body: SingleChildScrollView(
+
+      body:
+      SingleChildScrollView(
         child: Column(
           children: [
             widget.model == null
@@ -93,24 +89,26 @@ class _BookingDetailsState extends State<BookingDetails> {
                     print('widget.model email ${widget.model[index].email}');
                     return InkWell(
                       child: Card(
-                        margin: EdgeInsets.all(10),
+                        margin: const EdgeInsets.all(10),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                         elevation: 5.0,
-                        child: Container(
+                        child: SizedBox(
                           height: MediaQuery.of(context).size.width / 3,
                           child: Row(
                             children: [
 
                               Container(
+                                padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
                                       borderRadius:
                                       BorderRadius.circular(10)),
-                                  height: 140,
-                                  width: 120,
+                                  clipBehavior: Clip.hardEdge,
+                                  height: 100,
+                                  width: 100,
                                   child:
                                   Image.network(
-                                      "${widget.model[index].profileImage ?? ''}")),
+                                      "${widget.model[index].profileImage ?? ''}",fit: BoxFit.fill,)),
                               const SizedBox(
                                 height: 15,
                               ),
@@ -129,23 +127,23 @@ class _BookingDetailsState extends State<BookingDetails> {
                                       children: [
                                         const Text("Name:",
                                             textAlign: TextAlign.right,style: TextStyle(color: colors.blackTemp,fontWeight: FontWeight.bold),),
-                                        SizedBox(width: 3),
-                                        Container(
-                                            width: 80,
+                                        const SizedBox(width: 3),
+                                        SizedBox(
+                                            width: 120,
                                             child: Text(
                                                 "${widget.model[index].uname}",
                                                 overflow:
                                                 TextOverflow.ellipsis)),
                                       ],
                                     ),
-                                    SizedBox(height: 5),
+                                    const SizedBox(height: 5),
                                     Row(
                                       children: [
                                         const Text("City:",
                                             textAlign: TextAlign.right,style: TextStyle(color: colors.blackTemp,fontWeight: FontWeight.bold)),
-                                        SizedBox(width: 3),
-                                        Container(
-                                          width: 170,
+                                        const SizedBox(width: 3),
+                                        SizedBox(
+                                          width: 180,
 
                                           child: Text(
                                               "${widget.model[index].address}",overflow: TextOverflow.ellipsis,),

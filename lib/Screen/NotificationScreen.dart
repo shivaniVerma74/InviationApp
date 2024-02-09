@@ -13,7 +13,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      backgroundColor: Color(0Xff00B5EE),
+      backgroundColor: colors.scaffoldBackground,
       appBar: AppBar(
         title: const Text("Notifications"),
         centerTitle: true,
@@ -30,7 +30,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
         itemCount: 12,
         itemBuilder: (context,index) {
           return InkWell(
-            onTap: () {},
+            onTap: (){
+
+            },
             child: Card(
               margin: const EdgeInsets.symmetric(horizontal: 12,vertical: 8),
               shape: RoundedRectangleBorder(
@@ -38,11 +40,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
               ),
               color: colors.whiteTemp,
               elevation: 6,
-              child:  const SizedBox(
+              child:  SizedBox(
                 width: double.infinity,
                 height: 80,
                 child: Padding(
-                   padding: EdgeInsets.all(0.0),
+                   padding: const EdgeInsets.all(0.0),
                   child: ListTile(
                       title: Text("Notifications"),
                   subtitle: Text("description"),
