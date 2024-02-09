@@ -452,6 +452,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 extension GlobalKeyExtension on GlobalKey {
   Rect? get globalPaintBounds {
@@ -607,6 +608,65 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+
+class MyHomePageOne extends StatefulWidget {
+  @override
+  _MyHomePageOneState createState() => _MyHomePageOneState();
+}
+
+class _MyHomePageOneState extends State<MyHomePageOne> {
+  // Controller for date input
+  TextEditingController dateController = TextEditingController();
+  // Variable to store the result
+  String result = "";
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Date to Day Converter'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Text input for date
+            TextField(
+              controller: dateController,
+              decoration: const InputDecoration(labelText: 'Enter Date (yyyy-MM-dd)'),
+            ),
+            const SizedBox(height: 20),
+            // Button to convert date to day
+            ElevatedButton(
+              onPressed: () {
+                // Get the date from the text input
+                String dateString = dateController.text;
+                DateTime date = DateTime.parse(dateString);
+                // Format the date to get the day
+                String day = DateFormat('EEEE').format(date);
+                // Display the result
+                setState(() {
+                  result = 'Day for $dateString is $day';
+                });
+              },
+              child: Text('Convert to Day'),
+            ),
+            SizedBox(height: 20),
+            // Display the result
+            Text(
+              result,
+              style: TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 
 
 

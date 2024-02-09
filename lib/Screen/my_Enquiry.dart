@@ -35,7 +35,7 @@ class _BookingDetailsState extends State<BookingDetails> {
     var headers = {
       'Cookie': 'ci_session=e6545df7c1714023144b9f63cc94cd2118c2e751'
     };
-    var request = http.MultipartRequest('POST', Uri.parse('${ApiService.categories}'));
+    var request = http.MultipartRequest('POST', Uri.parse(ApiService.categories));
     request.fields.addAll(
         {'cat_type': '1'});
    print("ddddddddddd${request.fields}");
@@ -57,15 +57,22 @@ class _BookingDetailsState extends State<BookingDetails> {
     print("ssssssssssssssssssss${widget.model} --------- ${inndx}");
     print("ssssssssssssssssssss${widget.ind}");
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Booking"),
-          elevation: 0,
-          centerTitle: true,
-          backgroundColor: colors.primary,
+      backgroundColor: Color(0Xff00B5EE),
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        elevation: 0,
+        // backgroundColor: colors.transparent,
+        centerTitle: true,
+        title: const Text("Bookings"),
+        flexibleSpace: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: const BoxDecoration(
+              color: colors.secondary,
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(18),bottomRight: Radius.circular(18),)
+          ),
         ),
-
-      body:
-      SingleChildScrollView(
+      ),
+      body: SingleChildScrollView(
         child: Column(
           children: [
             widget.model == null

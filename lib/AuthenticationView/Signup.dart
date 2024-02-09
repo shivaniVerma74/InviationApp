@@ -787,14 +787,16 @@ class _SignupScreenState extends State<SignupScreen> {
                             Text(
                               "States",
                               style: TextStyle(
-                                  color: colors.whiteTemp, fontWeight: FontWeight.bold),
+                                  color: colors.whiteTemp, fontWeight: FontWeight.bold,
+                              ),
                             ),
                             Text(
                               "*",
                               style: TextStyle(
-                                  color: colors.whiteTemp,
+                                  color: colors.red,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 10),
+                                  fontSize: 10,
+                              ),
                             ),
                           ],
                         ),

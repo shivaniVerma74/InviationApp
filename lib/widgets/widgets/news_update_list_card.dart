@@ -17,9 +17,6 @@ import 'package:http/http.dart' as http;
 import 'dart:ui' as ui;
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../News/update_screen.dart';
-
-
 
 class UpdateScreenListCard extends StatefulWidget {
   const UpdateScreenListCard({Key? key, this.newModel, required this.currentIndex , required this.index, required this.i}) : super(key: key);

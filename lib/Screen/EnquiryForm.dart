@@ -65,12 +65,20 @@ class _EnquiryFormState extends State<EnquiryForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0Xff00B5EE),
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: colors.primary,
         elevation: 0,
+        // backgroundColor: colors.transparent,
         centerTitle: true,
-        title: Text("Enquiry Form"),
+        title: const Text("Enquiry Form"),
+        flexibleSpace: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: const BoxDecoration(
+              color: colors.secondary,
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(18),bottomRight: Radius.circular(18),)
+          ),
+        ),
       ),
         body:SingleChildScrollView(
           child: Column(
@@ -88,13 +96,13 @@ class _EnquiryFormState extends State<EnquiryForm> {
                 child: Container(
                   height: MediaQuery.of(context).size.height/1.5,
                   width: MediaQuery.of(context).size.width/1,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                   ),
                   child: Center(
                     child: Form(
                       key: _formKey,
                       child: Padding(
-                        padding: EdgeInsets.only(top: 20,left: 15,right: 15),
+                        padding: const EdgeInsets.only(top: 20,left: 15,right: 15),
                         child: Column(
                           children: [
                             TextFormField(
@@ -102,17 +110,15 @@ class _EnquiryFormState extends State<EnquiryForm> {
                               controller: namectr,
                               decoration: InputDecoration(
                                   hintText: "Name",
-                                  prefixIcon: Icon(Icons.person),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10))
-                              ),
+                                  prefixIcon: const Icon(Icons.person, color: colors.secondary),
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
                               validator: (value){
-                                if(value==null||value.isEmpty)
+                                if(value== null || value.isEmpty)
                                   return "Please Enter name";
                                 return null;
                               },
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 15,
                             ),
                             TextFormField(
@@ -120,26 +126,26 @@ class _EnquiryFormState extends State<EnquiryForm> {
                               keyboardType: TextInputType.number,
                               controller: mobileCtr,
                               decoration: InputDecoration(
+                                counterText: "",
                                   hintText: "Mobile",
-                                  prefixIcon: Icon(Icons.phone),
+                                  prefixIcon: const Icon(Icons.phone, color: colors.secondary,),
                                   border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10))
                               ),
                               validator: (value){
-                                if(value==null||value.isEmpty)
+                                if(value==null || value.isEmpty)
                                   return "Please Enter mobile";
                                 return null;
                               },
                             ),
-                            SizedBox(height: 15,),
+                            const SizedBox(height: 15,),
                             TextFormField(
                               keyboardType: TextInputType.emailAddress,
                               controller: emailCtr,
                               decoration: InputDecoration(
                                   hintText: "Email",
-                                  prefixIcon: Icon(Icons.email),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10))
+                                  prefixIcon: const Icon(Icons.email, color: colors.secondary,),
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))
                               ),
                               validator: (value){
                                 if(value==null||value.isEmpty)
@@ -147,14 +153,14 @@ class _EnquiryFormState extends State<EnquiryForm> {
                                 return null;
                               },
                             ),
-                            SizedBox(height: 15),
+                            const SizedBox(height: 15),
                             TextFormField(
                               controller: messageCtr,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10)),
                                 hintText: "Message",
-                                prefixIcon: Icon(Icons.inbox),
+                                prefixIcon: const Icon(Icons.inbox, color: colors.secondary,),
                               ),
                               validator: (value){
                                 if(value==null||value.isEmpty) {
@@ -168,9 +174,9 @@ class _EnquiryFormState extends State<EnquiryForm> {
                             ),
                             Container(
                               height: 50,
-                              width: MediaQuery.of(context).size.width/1.3,
+                              width: MediaQuery.of(context).size.width/1.8,
                               child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(backgroundColor: colors.primary),
+                                  style: ElevatedButton.styleFrom(backgroundColor: colors.secondary),
                                   onPressed: (){
                                     if (_formKey.currentState!.validate()) {
                                       enquirySend();
@@ -178,7 +184,7 @@ class _EnquiryFormState extends State<EnquiryForm> {
                                       Fluttertoast.showToast(msg: "Pls fill all fields");
                                     }
                                   },
-                                  child: Text("Submit")
+                                  child: const Text("Submit")
                               ),
                             ),
                           ],
