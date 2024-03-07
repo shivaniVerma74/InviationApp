@@ -809,7 +809,7 @@ class _CardScreenState extends State<CardScreen> {
     var headers = {
       'Cookie': 'ci_session=79b222a1b7a3dc18c150b1366e8f9ceb03aaa932'
     };
-    var request = http.MultipartRequest('POST', Uri.parse('${ApiService.savemycard}'));
+    var request = http.MultipartRequest('POST', Uri.parse(ApiService.savemycard));
     request.fields.addAll({
       'user_id': '$userId',
       'template_id': widget.temp_Id.toString()

@@ -75,8 +75,8 @@ class Data {
       String? type, 
       dynamic pId, 
       String? serviceType, 
-      String? catType, 
-      List<Temp>? temp,}){
+      String? catType,
+      List<TempData>? temp,}){
     _id = id;
     _cName = cName;
     _cNameA = cNameA;
@@ -108,7 +108,7 @@ class Data {
     if (json['temp'] != null) {
       _temp = [];
       json['temp'].forEach((v) {
-        _temp?.add(Temp.fromJson(v));
+        _temp?.add(TempData.fromJson(v));
       });
     }
   }
@@ -124,7 +124,7 @@ class Data {
   dynamic _pId;
   String? _serviceType;
   String? _catType;
-  List<Temp>? _temp;
+  List<TempData>? _temp;
 Data copyWith({  String? id,
   String? cName,
   String? cNameA,
@@ -137,7 +137,7 @@ Data copyWith({  String? id,
   dynamic pId,
   String? serviceType,
   String? catType,
-  List<Temp>? temp,
+  List<TempData>? temp,
 }) => Data(  id: id ?? _id,
   cName: cName ?? _cName,
   cNameA: cNameA ?? _cNameA,
@@ -164,7 +164,7 @@ Data copyWith({  String? id,
   dynamic get pId => _pId;
   String? get serviceType => _serviceType;
   String? get catType => _catType;
-  List<Temp>? get temp => _temp;
+  List<TempData>? get temp => _temp;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -243,8 +243,8 @@ Data copyWith({  String? id,
 /// cash_collection : "0"
 /// commision_amount_type : ""
 
-class Temp {
-  Temp({
+class TempData {
+  TempData({
       String? id, 
       String? email, 
       String? mobile, 
@@ -355,7 +355,7 @@ class Temp {
     _commisionAmountType = commisionAmountType;
 }
 
-  Temp.fromJson(dynamic json) {
+  TempData.fromJson(dynamic json) {
     _id = json['id'];
     _email = json['email'];
     _mobile = json['mobile'];
@@ -465,7 +465,7 @@ class Temp {
   dynamic _gender;
   String? _cashCollection;
   String? _commisionAmountType;
-Temp copyWith({  String? id,
+  TempData copyWith({  String? id,
   String? email,
   String? mobile,
   String? address,
@@ -519,7 +519,7 @@ Temp copyWith({  String? id,
   dynamic gender,
   String? cashCollection,
   String? commisionAmountType,
-}) => Temp(  id: id ?? _id,
+}) => TempData(  id: id ?? _id,
   email: email ?? _email,
   mobile: mobile ?? _mobile,
   address: address ?? _address,

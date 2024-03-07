@@ -1,65 +1,26 @@
 {
   "project_info": {
-    "project_number": "447434886949",
-    "project_id": "doctoradmin-caef9",
-    "storage_bucket": "doctoradmin-caef9.appspot.com"
+    "project_number": "654688966922",
+    "project_id": "invitation-cafc6",
+    "storage_bucket": "invitation-cafc6.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:447434886949:android:27015e96b96fa692a594cc",
+        "mobilesdk_app_id": "1:654688966922:android:083f709f38e05292e7c2f3",
         "android_client_info": {
-          "package_name": "com.doctoradmin.doctoradmin"
+          "package_name": "com.invitation.design"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "447434886949-c6ls0nq0u6ab2medkulvkv4unqld1bam.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDDARk0T2twvEnO-7nsWr8fCDhuuAdhtzc"
+          "current_key": "AIzaSyAbnk-TTo-smbsIYt-JNfMw3w_dLhtQxxU"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "447434886949-c6ls0nq0u6ab2medkulvkv4unqld1bam.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:447434886949:android:c86d1a73f8600c9fa594cc",
-        "android_client_info": {
-          "package_name": "com.invitation"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "447434886949-c6ls0nq0u6ab2medkulvkv4unqld1bam.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDDARk0T2twvEnO-7nsWr8fCDhuuAdhtzc"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "447434886949-c6ls0nq0u6ab2medkulvkv4unqld1bam.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

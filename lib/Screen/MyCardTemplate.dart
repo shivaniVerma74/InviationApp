@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:doctorapp/Screen/AllCards.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,11 +16,17 @@ import 'dart:ui' as ui;
 import '../Helper/Color.dart';
 import '../New_model/AllCategoryModel.dart';
 import '../New_model/GetEnquiryModel.dart';
+import '../New_model/GetSliderModel.dart';
+import '../New_model/GetVendorModel.dart';
+import '../New_model/GetVendorModel.dart';
+import '../New_model/GetVendorModel.dart';
 import '../New_model/NewCategoryModel.dart';
 import '../New_model/SavedCardModel.dart';
 import '../New_model/TemplateForm.dart';
 import '../New_model/TemplatesModel.dart';
 import '../api/api_services.dart';
+import '../widgets/widgets/commen_slider.dart';
+import 'AllVendors.dart';
 import 'CardWebview.dart';
 import 'WeddingForm.dart';
 import 'my_Enquiry.dart';
@@ -32,6 +39,39 @@ class MyCardTemplate extends StatefulWidget {
 }
 
 class _MyCardTemplateState extends State<MyCardTemplate> {
+
+  @override
+  void initState() {
+    super.initState();
+    getSliderApi();
+    getCity_id();
+    //getCategory();
+    allCategory();
+    //getCard();
+    //_getEnquiry();
+  }
+
+  GetSliderModel? _sliderModel;
+  getSliderApi() async {
+    var headers = {
+      'Cookie': 'ci_session=ccb37a117d31b04c006884a89fbff3d1a39bffd7'
+    };
+    var request = http.Request('GET', Uri.parse(ApiService.getSlider));
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      var result = await response.stream.bytesToString();
+      print("this is a response===========> $result");
+      final finalResult = GetSliderModel.fromJson(json.decode(result));
+      print("this is a response $finalResult");
+      setState(() {
+        _sliderModel = finalResult;
+      });
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
   int currentIndex = 1;
   @override
   Widget build(BuildContext context) {
@@ -39,9 +79,11 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
       backgroundColor: colors.scaffoldBackground,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Column(
             children: [
+              _CarouselSlider1(),
+              SizedBox(height: 10,),
               customTabBar(),
             ],
           ),
@@ -232,7 +274,37 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
     );
   }
 
-
+  int _currentPost = 0;
+  _CarouselSlider1() {
+    return CarouselSlider(
+      options: CarouselOptions(
+          onPageChanged: (index, result) {
+            setState(() {
+              _currentPost = index;
+            });
+          },
+          viewportFraction: 1.0,
+          initialPage: 0,
+          enableInfiniteScroll: true,
+          reverse: false,
+          autoPlay: true,
+          autoPlayInterval: const Duration(seconds: 5),
+          autoPlayAnimationDuration: const Duration(milliseconds: 500),
+          enlargeCenterPage: false,
+          scrollDirection: Axis.horizontal,
+          height: 160.0),
+        items: _sliderModel?.data?.map((item) {
+        return Card(
+            elevation: 3,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: CommonSlider(
+              file: item.image ?? '',
+            ));
+      }).toList(),
+    );
+  }
   // customTabbarr() {
   //   return SingleChildScrollView(
   //     child: Column(
@@ -346,72 +418,135 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
   //     ),
   //   );
   // }
-  customTabBar(){
-    return SizedBox(
 
-      child: GridView.builder(
-          physics:const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 0.75
-          ),
-          itemCount: allCategoriesModel?.data?.length ?? 0,
-          itemBuilder: (_,index){
-            return InkWell(
-              onTap: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                    //   return BookingDetails(
-                    //   model: allCategoriesModel?.data?[index].temp,
-                    //   ind: index,
-                    // );
-
-                      return  AllCardsView(cardName: allCategoriesModel!.data![index].cName.toString(),);
-                    }
-                  ),
-                );
-              },
-              child: Container(
-                clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: colors.black54,
-                        // spreadRadius: 0.5,
-                        blurRadius: 1,
-                        offset: Offset(0, 1)
+  customTabBar() {
+    print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz${vendorModelModel!.data!.length}");
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      // height: vendorModelModel!.data!.length < 4
+      //     ? 150
+      // //
+      //
+      // :  MediaQuery.of(context).size.height/2,
+      // height: 150,
+      // decoration: BoxDecoration(
+      //     borderRadius: BorderRadius.circular(2), color: colors.whiteScaffold),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+        child: GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: vendorModelModel?.data?.length ?? 0,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4,
+                crossAxisSpacing: 7.0,
+                mainAxisSpacing: 7.0,
+                childAspectRatio: 0.7),
+            itemBuilder: (_, index) {
+              return InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context, MaterialPageRoute(
+                      builder: (context) => CategoriesImagesScreen(id: vendorModelModel?.data?[index].id),
                     ),
-                  ],
-                ),
-                child:
-                // Image.asset(
-                //   "assets/images/weddingtwo.png",
-                //   fit: BoxFit.fill,
-                // ),
-                Column(
-                  //  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.network(
-                      "${allCategoriesModel?.data?[index].img}",
-                      fit: BoxFit.fill,
-                    ),
-                    const SizedBox(height: 6),
-                    Text("${allCategoriesModel?.data?[index].cName}",style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),),
-                    // const SizedBox(height: 4),
-                  ],
-                ),
-              ),
-            );
-          }),
+                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => BookingDetails(
+                  //       model: vendorModelModel?.data?[index].temp,
+                  //       ind: index,
+                  //     ),
+                  //   ),
+                  // );
+                },
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Column(
+                            children: [
+                            ClipRRect(
+                            child: Image.network(
+                              "${vendorModelModel?.data?[index].img}",
+                              fit: BoxFit.cover,
+                              scale: 3,
+                              // color: Colors.purple[400],
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          Container(
+                            width: 70,
+                            child: Center(
+                              child: Text(
+                                  "${vendorModelModel?.data?[index].cName}", overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                 ),
+                               ),
+                          ),
+                           ],
+                        ),
+                      ),
+                    ]),
+              );
+            }),
+      ),
     );
+    // Container(
+    //   height: MediaQuery.of(context).size.height / 1.2,
+    //   child: GridView.builder(
+    //       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+    //         crossAxisCount: 2,
+    //         crossAxisSpacing: 5,
+    //         mainAxisSpacing: 5,
+    //       ),
+    //       itemCount: allCategoriesModel?.data?.length ?? 0,
+    //       itemBuilder: (BuildContext context, int index) {
+    //         return Padding(
+    //           padding: const EdgeInsets.all(0.0),
+    //           child: InkWell(
+    //             onTap: () {
+    //               Navigator.push(
+    //                 context, MaterialPageRoute(
+    //                   builder: (context) => BookingDetails(
+    //                     model: allCategoriesModel?.data?[index].temp,
+    //                     ind: index,
+    //                   ),
+    //                 ),
+    //               );
+    //             },
+    //             child: Card(
+    //               shape: RoundedRectangleBorder(
+    //                   borderRadius: BorderRadius.circular(10)),
+    //               elevation: 0,
+    //               color: colors.whiteTemp,
+    //               child: Column(
+    //                 children: [
+    //                   ClipRRect(
+    //                     borderRadius: BorderRadius.circular(10),
+    //                     child: Image.network(
+    //                       "${allCategoriesModel?.data?[index].img}",
+    //                       height: 130,
+    //                       width: double.infinity,
+    //                     ),
+    //                   ),
+    //                   const SizedBox(
+    //                     height: 5,
+    //                   ),
+    //                   Text("${allCategoriesModel?.data?[index].cName}")
+    //                 ],
+    //               ),
+    //             ),
+    //           ),
+    //         );
+    //       }),
+    // );
   }
+
   // customTabBar(){
   //   return SizedBox(
   //     child: GridView.builder(
@@ -452,35 +587,28 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
   //   );
   // }
 
-  @override
-  void initState() {
-    super.initState();
-    getCity_id();
-    //getCategory();
-    allCategory();
-    //getCard();
-    //_getEnquiry();
-  }
 
   NewCategoryModel? weddingCardList;
   NewCategoryModel? birthDayCardList;
-  AllCategoryModel? allCategoriesModel;
 
+  VendorModel? vendorModelModel;
   allCategory() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     var headers = {
       'Cookie': 'ci_session=967018c55118c57e9b50bc9d10a91f021f6744e1'
     };
-    var request = http.MultipartRequest('POST', Uri.parse(ApiService.categories));
+    var request =
+        http.MultipartRequest('POST', Uri.parse(ApiService.categories));
     request.fields.addAll({'cat_type': '1'});
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       var result = await response.stream.bytesToString();
-      final jsonResponse = AllCategoryModel.fromJson(json.decode(result));
+      final jsonResponse = VendorModel.fromJson(json.decode(result));
       print('categoriess responsee $jsonResponse');
       setState(() {
-        allCategoriesModel = jsonResponse;
-        print("alll catetetetetety ${allCategoriesModel?.data?.first.cName}");
+        vendorModelModel = jsonResponse;
+        print("alll catetetetetety ${vendorModelModel?.data?.first.cName}");
       });
     } else {
       print(response.reasonPhrase);
@@ -527,7 +655,6 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
     print("citiee in homeee pageee $cityID");
   }
 
-
   TemplatesModel? templatesModel;
   getTemplate() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -536,7 +663,7 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
       'Cookie': 'ci_session=a36a8335f024c7b97f4162931f63227153359896'
     };
     var request =
-    http.MultipartRequest('POST', Uri.parse('${ApiService.getservices}'));
+        http.MultipartRequest('POST', Uri.parse(ApiService.getservices));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -556,8 +683,6 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
     }
   }
 
-
-
   Future<Null> refreshFunction() async {
     await getCard();
     await _getEnquiry();
@@ -572,7 +697,7 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
       'Cookie': 'ci_session=de18d172f08f4702a5883be1ed7a82cdccd37f64'
     };
     var request =
-        http.MultipartRequest('POST', Uri.parse('${ApiService.savedcard}'));
+        http.MultipartRequest('POST', Uri.parse(ApiService.savedcard));
     request.fields.addAll({'user_id': '$userId'});
     print("rrrrrrrrrrrrrrrrrrrrr${request.fields}");
     request.headers.addAll(headers);
@@ -599,7 +724,7 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
       'Cookie': 'ci_session=1db2867fc5f287b9d5f70d2589a2e26f9e99c911'
     };
     var request =
-        http.MultipartRequest('POST', Uri.parse('${ApiService.getenquiries}'));
+        http.MultipartRequest('POST', Uri.parse(ApiService.getenquiries));
     request.fields.addAll({
       'mobile': '$userId',
     });
@@ -614,7 +739,7 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
       setState(() {
         getEnquiryModel = GetEnquiryModel.fromJson(json.decode(finalResponse));
       });
-      print("respmoseee ${getEnquiryModel}");
+      print("respmoseee $getEnquiryModel");
     } else {
       print(response.reasonPhrase);
     }
@@ -624,12 +749,12 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
     return Column(
       children: [
         getEnquiryModel?.status == false
-            ? Text("No enquiry Found")
+            ? const Text("No enquiry Found")
             : getEnquiryModel == null
                 ? const Center(
                     child: CircularProgressIndicator(color: colors.secondary))
                 : ListView.builder(
-                     shrinkWrap: true,
+                    shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: getEnquiryModel?.data?.length,
                     scrollDirection: Axis.vertical,
@@ -650,17 +775,17 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(10),
                                       // image: DecorationImage(image: AssetImage('assets/images/img.png'),fit: BoxFit.fill)
                                     ),
                                     height: 150,
-                                    width:
-                                        MediaQuery.of(context).size.width,
+                                    width: MediaQuery.of(context).size.width,
                                     child:
                                         // Image.asset('assets/images/img.png'),
                                         Image.network(
-                                            "${ApiService.imageUrl}${getEnquiryModel?.data?[index].profileImage}", fit: BoxFit.fill,),
+                                      "${ApiService.imageUrl}${getEnquiryModel?.data?[index].profileImage}",
+                                      fit: BoxFit.fill,
+                                    ),
                                   ),
                                 ),
                                 Container(
@@ -670,24 +795,22 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Padding(
-                                            padding:
-                                                EdgeInsets.only(top: 25)),
+                                        const Padding(
+                                            padding: EdgeInsets.only(top: 25)),
                                         Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             Container(
-                                                width:
-                                                    MediaQuery.of(context)
-                                                            .size
-                                                            .width /
-                                                        2.2,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    2.2,
                                                 child: Row(
-                                                  children: [
+                                                  children: const [
                                                     Text("Name:",
-                                                        textAlign: TextAlign
-                                                            .right),
+                                                        textAlign:
+                                                            TextAlign.right),
                                                   ],
                                                 )),
                                             Container(
@@ -699,20 +822,19 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
                                             )),
                                           ],
                                         ),
-                                        SizedBox(height: 7),
+                                        const SizedBox(height: 7),
                                         Row(
                                           children: [
                                             Container(
-                                                width:
-                                                    MediaQuery.of(context)
-                                                            .size
-                                                            .width /
-                                                        2.2,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    2.2,
                                                 child: Row(
                                                   children: const [
                                                     Text("Mobile No:",
-                                                        textAlign: TextAlign
-                                                            .right),
+                                                        textAlign:
+                                                            TextAlign.right),
                                                   ],
                                                 )),
                                             Container(
@@ -728,16 +850,15 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
                                         Row(
                                           children: [
                                             Container(
-                                                width:
-                                                    MediaQuery.of(context)
-                                                            .size
-                                                            .width /
-                                                        2.2,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    2.2,
                                                 child: Row(
-                                                  children: [
+                                                  children: const [
                                                     Text("City",
-                                                        textAlign: TextAlign
-                                                            .right),
+                                                        textAlign:
+                                                            TextAlign.right),
                                                   ],
                                                 )),
                                             Container(
@@ -753,16 +874,15 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
                                         Row(
                                           children: [
                                             Container(
-                                                width:
-                                                    MediaQuery.of(context)
-                                                            .size
-                                                            .width /
-                                                        2.2,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    2.2,
                                                 child: Row(
-                                                  children: [
+                                                  children: const [
                                                     Text("Event Name:",
-                                                        textAlign: TextAlign
-                                                            .right),
+                                                        textAlign:
+                                                            TextAlign.right),
                                                   ],
                                                 )),
                                             Container(
@@ -778,16 +898,15 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
                                         Row(
                                           children: [
                                             Container(
-                                                width:
-                                                    MediaQuery.of(context)
-                                                            .size
-                                                            .width /
-                                                        2.2,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    2.2,
                                                 child: Row(
-                                                  children: [
+                                                  children: const [
                                                     Text("Description:",
-                                                        textAlign: TextAlign
-                                                            .right),
+                                                        textAlign:
+                                                            TextAlign.right),
                                                   ],
                                                 )),
                                             Container(
@@ -814,17 +933,18 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
   }
 
   myCard() {
-    return savedCardModel?.status == false ? Text("No Card Found")
+    return savedCardModel?.status == false
+        ? const Text("No Card Found")
         : savedCardModel?.data?.length == null ||
                 savedCardModel?.data?.length == ""
-            ? Center(
+            ? const Center(
                 child: CircularProgressIndicator(
                   color: colors.secondary,
                 ),
               )
             : ListView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 itemCount: savedCardModel?.data?.length,
                 itemBuilder: (context, i) {
                   return templateCard(i);
@@ -842,11 +962,14 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
             child: Column(
               children: [
                 RepaintBoundary(
-                    key: keyList,
-                    child: Container(
-                        child: Image.network(
-                            "${savedCardModel?.data?[index].image}", fit: BoxFit.fill,
-                            ),),),
+                  key: keyList,
+                  child: Container(
+                    child: Image.network(
+                      "${savedCardModel?.data?[index].image}",
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
                 Container(
                   height: 90,
                   decoration: BoxDecoration(
@@ -903,10 +1026,12 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
                                         color: Colors.white)),
                               ),
                               SizedBox(
-                                  width: MediaQuery.of(context).size.width / 2.7),
+                                  width:
+                                      MediaQuery.of(context).size.width / 2.7),
                               const Text("Download",
                                   style: TextStyle(
-                                      fontSize: 12, fontWeight: FontWeight.w800)),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w800)),
                               SizedBox(width: 5),
                               Container(
                                 height: 40,
@@ -934,7 +1059,6 @@ class _MyCardTemplateState extends State<MyCardTemplate> {
             ),
           ),
         ),
-
       ],
     );
   }

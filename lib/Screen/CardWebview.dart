@@ -1,11 +1,11 @@
-
 import 'package:doctorapp/Helper/Color.dart';
 import 'package:doctorapp/Screen/CategoryCardView.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
 class WebViewExample extends StatefulWidget {
   final String url;
-  const WebViewExample({super.key,  required this.url});
+  const WebViewExample({super.key, required this.url});
 
   @override
   State<WebViewExample> createState() => _WebViewExampleState();
@@ -13,7 +13,7 @@ class WebViewExample extends StatefulWidget {
 
 class _WebViewExampleState extends State<WebViewExample> {
   int? loadingPercentage;
-  late final WebViewController _controller ;
+  late final WebViewController _controller;
 //   String kNavigationExamplePage = '''<!DOCTYPE html>
 //   <html>
 //   <head>
@@ -36,7 +36,6 @@ class _WebViewExampleState extends State<WebViewExample> {
   @override
   void initState() {
     super.initState();
-
     // final String contentBase64 = base64Encode(
     //   const Utf8Encoder().convert(kNavigationExamplePage),
     // );
@@ -93,23 +92,24 @@ class _WebViewExampleState extends State<WebViewExample> {
     // _controller = controller;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-extendBodyBehindAppBar: false,
+        extendBodyBehindAppBar: true,
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
-          backgroundColor: Colors.white,
-          title: const Text('Birthday Card'),
+          // backgroundColor: Colors.white,
+          title: const Text('Cards'),
           flexibleSpace: Container(
             padding: const EdgeInsets.all(24),
             decoration: const BoxDecoration(
                 color: colors.secondary,
-                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),bottomRight: Radius.circular(20),)
-            ),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
+                )),
           ),
         ),
         backgroundColor: colors.scaffoldBackground,
@@ -117,22 +117,22 @@ extendBodyBehindAppBar: false,
           children: [
             WebView(
               initialUrl: widget.url,
-              onPageStarted: (url){
+              onPageStarted: (url) {
                 setState(() {
                   loadingPercentage = 0;
                 });
               },
-              onProgress: (progress){
+              onProgress: (progress) {
                 setState(() {
                   loadingPercentage = progress;
                 });
               },
-              onPageFinished: (url){
+              onPageFinished: (url) {
                 setState(() {
                   loadingPercentage = 100;
                 });
               },
-               javascriptMode: JavascriptMode.unrestricted,
+              javascriptMode: JavascriptMode.unrestricted,
               // onPageFinished: (String url) {
               //   debugPrint('Page finished loading: $url');
               //   if(url.contains("phonepay_success")){
@@ -140,30 +140,32 @@ extendBodyBehindAppBar: false,
               //   }
               // },
             ),
-           if (  loadingPercentage != null && loadingPercentage! < 100)
-             Container(
-               color: colors.scaffoldBackground,
-               height: double.infinity,
-               child:  Center(
-                 child: CircularProgressIndicator(
-                   color: colors.secondary,
-                   value: loadingPercentage! /100,
-                 ),
-               ),
-             )
+            if (loadingPercentage != null && loadingPercentage! < 100)
+              Container(
+                color: colors.scaffoldBackground,
+                height: double.infinity,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: colors.secondary,
+                    value: loadingPercentage! / 100,
+                  ),
+                ),
+              ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          heroTag: null,
-          backgroundColor: colors.secondary,
-          onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context){
-              return const CategoryCardView(imgUrl: "",);
-            }));
-          },
-          tooltip: "Complete",
-          child: const Icon(Icons.done),
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   heroTag: null,
+        //   backgroundColor: colors.secondary,
+        //   onPressed: () {
+        //     Navigator.push(context, MaterialPageRoute(builder: (context) {
+        //       return const CategoryCardView(
+        //         imgUrl: "",
+        //       );
+        //     }));
+        //   },
+        //   tooltip: "Complete",
+        //   child: const Icon(Icons.done),
+        // ),
       ),
     );
   }

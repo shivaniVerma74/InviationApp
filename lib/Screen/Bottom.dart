@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
+import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:doctorapp/Profile/profile_screen.dart';
 import 'package:doctorapp/Screen/Faq.dart';
 import 'package:doctorapp/Screen/Histroy.dart';
@@ -13,14 +15,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../AuthenticationView/LoginScreen.dart';
-import '../Booking/booking_screen.dart';
 import '../Helper/Appbar.dart';
 import '../Helper/Color.dart';
 import '../New_model/getUserProfileModel.dart';
 import '../Profile/Update_password.dart';
 import '../Static/privacy_Policy.dart';
 import '../Static/terms_condition.dart';
-import '../SubscriptionPlan/subscription_plan.dart';
 import '../api/api_services.dart';
 import 'package:http/http.dart' as http;
 
@@ -31,6 +31,7 @@ import 'MyCardTemplate.dart';
 import 'MyEnquiry.dart';
 import 'MyTemplate.dart';
 import 'NewScreen.dart';
+import 'NotificationScreen.dart';
 
 class BottomScreen extends StatefulWidget {
   const BottomScreen({super.key, this.cityId});
@@ -41,7 +42,7 @@ class BottomScreen extends StatefulWidget {
 }
 
 class _BottomScreenState extends State<BottomScreen> {
-  int currentindex = 0;
+  int currentindex = 1;
   List<Widget> pages1 = <Widget>[
     const HomeScreen(),
     const MyCardTemplate(),
@@ -91,7 +92,7 @@ class _BottomScreenState extends State<BottomScreen> {
       print(response.reasonPhrase);
     }
   }
-
+  int index = 0;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -129,6 +130,9 @@ class _BottomScreenState extends State<BottomScreen> {
           drawer: getDrawer(),
           appBar: AppBar(
             centerTitle: true,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10),)
+            ),
             leading: IconButton(
               icon: const Icon(
                 Icons.menu,
@@ -138,10 +142,15 @@ class _BottomScreenState extends State<BottomScreen> {
                 _scaffoldKey.currentState!.openDrawer();
               },
             ),
-            actions: const [
-              Padding(
-                padding: EdgeInsets.only(right: 5, top: 5),
-                child: Icon(Icons.notifications, color: Colors.white),
+            actions:  [
+              InkWell(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationScreen()));
+                },
+                child: const Padding(
+                  padding: EdgeInsets.only(right: 5, top: 5),
+                  child: Icon(Icons.notifications, color: Colors.white),
+                ),
               )
             ],
             backgroundColor: colors.secondary,
@@ -151,31 +160,47 @@ class _BottomScreenState extends State<BottomScreen> {
           body: Center(
             child: pages1.elementAt(currentindex),
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: colors.whiteTemp,
-            selectedIconTheme: const IconThemeData(color: colors.black54),
-            unselectedIconTheme: const IconThemeData(color: Colors.black),
-            selectedLabelStyle: const TextStyle(color: Colors.black),
-            unselectedLabelStyle: const TextStyle(color: Colors.black),
-            //  elevation: 1,
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                label: 'Design',
-                icon: Icon(Icons.card_giftcard_outlined)),
-              // BottomNavigationBarItem(label: 'Accessories', icon: Icon(Icons.calendar_today_rounded)),
-              BottomNavigationBarItem(label: 'Home', icon: Icon(Icons.home,)),
-              BottomNavigationBarItem(label: 'Coming Event', icon: Icon(Icons.event)),
+          bottomNavigationBar: CurvedNavigationBar(
+            index: currentindex,
+            onTap:(index){
+              setState(() {
+                onTap: _onItemTapped(index);
+                // this.index = index;
+              });
+            },
+            backgroundColor: colors.scaffoldBackground,
+            color: colors.secondary,
+            items: const [
+              CurvedNavigationBarItem(label: "Design", labelStyle: TextStyle(color: Colors.white),child: Icon(Icons.card_giftcard_outlined, color: Colors.white,)),
+              CurvedNavigationBarItem(label: "Home", labelStyle: TextStyle(color: Colors.white),child: Icon(Icons.home, color: Colors.white)),
+              CurvedNavigationBarItem(label: "Coming Event", labelStyle: TextStyle(color: Colors.white),child: Icon(Icons.event, color: Colors.white)),
             ],
-            currentIndex: currentindex,
-            selectedItemColor: colors.secondary,
-            // unselectedItemColor: colors.secondary,
-            onTap: _onItemTapped,
-            showUnselectedLabels: true,
-            showSelectedLabels: true,
-            unselectedFontSize: 13,
-            selectedFontSize: 13,
-            type: BottomNavigationBarType.fixed,
           ),
+          // bottomNavigationBar:  BottomNavigationBar(
+          //   backgroundColor: colors.whiteTemp,
+          //   selectedIconTheme: const IconThemeData(color: colors.black54),
+          //   unselectedIconTheme: const IconThemeData(color: Colors.black),
+          //   selectedLabelStyle: const TextStyle(color: Colors.black),
+          //   unselectedLabelStyle: const TextStyle(color: Colors.black),
+          //   //  elevation: 1,
+          //   items: const <BottomNavigationBarItem>[
+          //     BottomNavigationBarItem(
+          //       label: 'Design',
+          //       icon: Icon(Icons.card_giftcard_outlined)),
+          //     // BottomNavigationBarItem(label: 'Accessories', icon: Icon(Icons.calendar_today_rounded)),
+          //     BottomNavigationBarItem(label: 'Home', icon: Icon(Icons.home,)),
+          //     BottomNavigationBarItem(label: 'Coming Event', icon: Icon(Icons.event)),
+          //   ],
+          //   currentIndex: currentindex,
+          //   selectedItemColor: colors.secondary,
+          //   // unselectedItemColor: colors.secondary,
+          //   onTap: _onItemTapped,
+          //   showUnselectedLabels: true,
+          //   showSelectedLabels: true,
+          //   unselectedFontSize: 13,
+          //   selectedFontSize: 13,
+          //   type: BottomNavigationBarType.fixed,
+          // ),
         ),
       ),
     );

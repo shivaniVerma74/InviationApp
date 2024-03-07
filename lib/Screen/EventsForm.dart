@@ -49,64 +49,66 @@ class _EventFormState extends State<EventForm> {
       backgroundColor: colors.scaffoldBackground,
       body: SingleChildScrollView(
         child: Column(
-          children: [
-            const SizedBox(
+          children: const [
+            SizedBox(
               height: 10,
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: MediaQuery.of(context).size.height / 1.2,
-                child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 5,
-                      mainAxisSpacing: 5,
-                    ),
-                    itemCount: allCategoriesModel?.data?.length ?? 0,
-                    itemBuilder: (BuildContext context, int index) {
-                      print('Ssssssss------${allCategoriesModel?.data?[index].temp.toString()}');
-                      return Padding(
-                        padding: const EdgeInsets.all(0.0),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => BookingDetails(
-                                  model: allCategoriesModel?.data?[index].temp,
-                                  ind: index,
-                                ),
-                              ),
-                            );
-                          },
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            elevation: 5,
-                            color: colors.whiteTemp,
-                            child: Column(
-                              children: [
-                                ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.network(
-                                      "${allCategoriesModel?.data?[index].img}",
-                                      height: 130,
-                                      width: double.infinity,
-                                    ),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Text("${allCategoriesModel?.data?[index].cName}")
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                ),
-             ),
+            Center(
+                child: Text("No Data Available", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19, color: Color(0xffEC407A)),))
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: Container(
+            //     height: MediaQuery.of(context).size.height / 1.2,
+            //     child: GridView.builder(
+            //         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            //           crossAxisCount: 2,
+            //           crossAxisSpacing: 5,
+            //           mainAxisSpacing: 5,
+            //         ),
+            //         itemCount: allCategoriesModel?.data?.length ?? 0,
+            //         itemBuilder: (BuildContext context, int index) {
+            //           print('Ssssssss------${allCategoriesModel?.data?[index].temp.toString()}');
+            //           return Padding(
+            //             padding: const EdgeInsets.all(0.0),
+            //             child: InkWell(
+            //               onTap: () {
+            //                 Navigator.push(
+            //                   context,
+            //                   MaterialPageRoute(
+            //                     builder: (context) => BookingDetails(
+            //                       model: allCategoriesModel?.data?[index].temp,
+            //                       ind: index,
+            //                     ),
+            //                   ),
+            //                 );
+            //               },
+            //               child: Card(
+            //                 shape: RoundedRectangleBorder(
+            //                     borderRadius: BorderRadius.circular(10)),
+            //                 elevation: 5,
+            //                 color: colors.whiteTemp,
+            //                 child: Column(
+            //                   children: [
+            //                     ClipRRect(
+            //                         borderRadius: BorderRadius.circular(10),
+            //                         child: Image.network(
+            //                           "${allCategoriesModel?.data?[index].img}",
+            //                           height: 130,
+            //                           width: double.infinity,
+            //                         ),
+            //                     ),
+            //                     const SizedBox(
+            //                       height: 5,
+            //                     ),
+            //                     Text("${allCategoriesModel?.data?[index].cName}")
+            //                   ],
+            //                 ),
+            //               ),
+            //             ),
+            //           );
+            //         }),
+            //     ),
+            //  ),
             // getCategories(),
           ],
         ),
@@ -114,57 +116,57 @@ class _EventFormState extends State<EventForm> {
     );
   }
 
-  getCategories() {
-    return Container(
-      height: MediaQuery.of(context).size.height / 1.2,
-      child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 5,
-            mainAxisSpacing: 5,
-          ),
-          itemCount: allCategoriesModel?.data?.length ?? 0,
-          itemBuilder: (BuildContext context, int index) {
-            print(
-                'Ssssss  ------${allCategoriesModel?.data?[index].temp.toString()}');
-            return Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BookingDetails(
-                        model: allCategoriesModel?.data?[index].temp,
-                        ind: index,
-                      ),
-                    ),
-                  );
-                },
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  elevation: 5,
-                  color: colors.whiteTemp,
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
-                            "${allCategoriesModel?.data?[index].img}",
-                            height: 130,
-                            width: double.infinity,
-                          )),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text("${allCategoriesModel?.data?[index].cName}")
-                    ],
-                  ),
-                ),
-              ),
-            );
-          }),
-    );
-  }
+  // getCategories() {
+  //   return Container(
+  //     height: MediaQuery.of(context).size.height / 1.2,
+  //     child: GridView.builder(
+  //         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+  //           crossAxisCount: 2,
+  //           crossAxisSpacing: 5,
+  //           mainAxisSpacing: 5,
+  //         ),
+  //         itemCount: allCategoriesModel?.data?.length ?? 0,
+  //         itemBuilder: (BuildContext context, int index) {
+  //           print(
+  //               'Ssssss  ------${allCategoriesModel?.data?[index].temp.toString()}');
+  //           return Padding(
+  //             padding: const EdgeInsets.all(0.0),
+  //             child: InkWell(
+  //               onTap: () {
+  //                 Navigator.push(
+  //                   context,
+  //                   MaterialPageRoute(
+  //                     builder: (context) => BookingDetails(
+  //                       model: allCategoriesModel?.data?[index].temp,
+  //                       ind: index,
+  //                     ),
+  //                   ),
+  //                 );
+  //               },
+  //               child: Card(
+  //                 shape: RoundedRectangleBorder(
+  //                     borderRadius: BorderRadius.circular(10)),
+  //                 elevation: 5,
+  //                 color: colors.whiteTemp,
+  //                 child: Column(
+  //                   children: [
+  //                     ClipRRect(
+  //                         borderRadius: BorderRadius.circular(10),
+  //                         child: Image.network(
+  //                           "${allCategoriesModel?.data?[index].img}",
+  //                           height: 130,
+  //                           width: double.infinity,
+  //                         )),
+  //                     SizedBox(
+  //                       height: 5,
+  //                     ),
+  //                     Text("${allCategoriesModel?.data?[index].cName}")
+  //                   ],
+  //                 ),
+  //               ),
+  //             ),
+  //           );
+  //         }),
+  //   );
+  // }
 }

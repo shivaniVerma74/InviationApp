@@ -4,9 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
-
 import 'Helper/notification_service.dart';
-
 
 Future<void> backgroundHandler(RemoteMessage message) async {
   WidgetsFlutterBinding.ensureInitialized();

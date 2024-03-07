@@ -1,7 +1,6 @@
 /*
 import 'dart:math';
 */
-
 import 'dart:math';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -64,11 +63,8 @@ class LocalNotificationService {
           print('${message.notification}_________________');
           print('${message.notification!.body}_________body____');
           print("message.data11 ${message.data}");
-
          display(message);
-
           //handleNotification(message.data);
-
         }
       },
     );
@@ -82,19 +78,11 @@ class LocalNotificationService {
           print(message.notification!.body);
           print("message.data22 ${message.data}");
 
-
           //handleNotification(message.data);
-
          // HomeScreenState().setSegmentValue(2) ;
-
-
-
-
         }
       },
     );
-
-
   }
   static  Future<void> handleNotification(Map<String, dynamic> message) async {
     final NotificationAppLaunchDetails? notificationAppLaunchDetails =
@@ -118,8 +106,8 @@ class LocalNotificationService {
       int id = random.nextInt(1000);
       const NotificationDetails notificationDetails = NotificationDetails(
           android: AndroidNotificationDetails(
-            "DR.Apps",
-            "DR.Apps",
+            "Invitation",
+            "Invitation",
             importance: Importance.max,
             priority: Priority.high,
           ));
@@ -134,7 +122,4 @@ class LocalNotificationService {
       print('Error>>>$e');
     }
   }
-
-
-
 }

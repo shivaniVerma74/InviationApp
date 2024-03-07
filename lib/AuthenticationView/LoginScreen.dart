@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
     String? token;
     try {
       token = await FirebaseMessaging.instance.getToken();
-      print("-----------token:-----${token}");
+      print("-----------token:-----$token");
     } on FirebaseException {
       print('__________FirebaseException_____________');
     }
@@ -57,14 +57,14 @@ class _LoginScreenState extends State<LoginScreen> {
     var request =
         http.MultipartRequest('POST', Uri.parse(ApiService.sendOTP));
     request.fields
-        .addAll({'mobile': mobileController.text, 'fcm_id': '${token}'});
+        .addAll({'mobile': mobileController.text, 'fcm_id': '$token'});
     print('____request.fields______${request.fields}_________');
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       var finalResponse = await response.stream.bytesToString();
       final jsonresponse = json.decode(finalResponse);
-      print("this is final responsesssssssssss${finalResponse}");
+      print("this is final responsesssssssssss$finalResponse");
       if (jsonresponse['status'] == true) {
         String otp = jsonresponse['data'][0]['otp'];
         String mobile = jsonresponse['data'][0]['mobile'];

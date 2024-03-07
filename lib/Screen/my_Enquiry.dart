@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:doctorapp/Helper/Constant.dart';
 import 'package:doctorapp/New_model/AllCategoryModel.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,17 +9,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Helper/Color.dart';
 import '../New_model/EventListModel.dart';
+import '../New_model/GetVendorModel.dart';
 import '../api/api_services.dart';
 import 'package:http/http.dart' as http;
 
+import '../widgets/widgets/commen_slider.dart';
 import 'EnquiryForm.dart';
 import 'EventDetails.dart';
 
 class BookingDetails extends StatefulWidget {
 
    BookingDetails({Key? key, this.ind, this.model}) : super(key: key);
-  final model;
-  int? ind;
+ final  List<Temp>? model;
+       int? ind;
   @override
   State<BookingDetails> createState() => _BookingDetailsState();
 }
@@ -30,12 +33,13 @@ class _BookingDetailsState extends State<BookingDetails> {
     super.initState();
     //nearByEvevt();
   }
+
    AllCategoryModel? eventListModel;
-  nearByEvevt() async {
+   nearByEvevt() async {
     var headers = {
       'Cookie': 'ci_session=e6545df7c1714023144b9f63cc94cd2118c2e751'
     };
-    var request = http.MultipartRequest('POST', Uri.parse('${ApiService.categories}'));
+    var request = http.MultipartRequest('POST', Uri.parse(ApiService.categories));
     request.fields.addAll(
         {'cat_type': '1'});
    print("ddddddddddd${request.fields}");
@@ -51,6 +55,40 @@ class _BookingDetailsState extends State<BookingDetails> {
       print(response.reasonPhrase);
     }
   }
+
+int _currentPost = 0;
+
+// _CarouselSlider1(index) {
+//   return CarouselSlider(
+//     options: CarouselOptions(
+//         onPageChanged: (index, result) {
+//           setState(() {
+//             _currentPost = index;
+//           });
+//         },
+//         viewportFraction: 1.0,
+//         initialPage: 0,
+//         enableInfiniteScroll: true,
+//         reverse: false,
+//         autoPlay: true,
+//         autoPlayInterval: const Duration(seconds: 5),
+//         autoPlayAnimationDuration: const Duration(milliseconds: 500),
+//         enlargeCenterPage: false,
+//         scrollDirection: Axis.horizontal,
+//         height: 100.0),
+//        items: widget.model[index].profileImage.data?.map((item) {
+//       return Card(
+//           elevation: 3,
+//           shape: RoundedRectangleBorder(
+//             borderRadius: BorderRadius.circular(15.0),
+//           ),
+//           child: CommonSlider(
+//             file: item.image ?? '',
+//           ));
+//     }).toList(),
+//   );
+// }
+
   @override
   Widget build(BuildContext context) {
     int? inndx = widget.ind;
@@ -66,28 +104,28 @@ class _BookingDetailsState extends State<BookingDetails> {
           backgroundColor: colors.secondary,
           title:  const Text("Booking Details"),
         ),
-
       body:
       SingleChildScrollView(
-        child: Column(
+        child:
+        Column(
           children: [
             widget.model == null
                 ? Center(child: CircularProgressIndicator(color: colors.secondary))
                 : InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => EnquiryForm()));
               },
                   child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: widget.model.length,
+                  itemCount: widget.model?.length,
                   // scrollDirection: Axis.vertical,
                   // physics: AlwaysScrollableScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
-                    print('widget.model name ${widget.model[index].uname} ${widget.model.length}');
-                    print('widget.model email ${widget.model[index].email}');
-                    print('widget.model email ${widget.model[index].email}');
                     return InkWell(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => EnquiryForm(vendor_Id: widget.model?[index].id)));
+
+                      },
                       child: Card(
                         margin: const EdgeInsets.all(10),
                         shape: RoundedRectangleBorder(
@@ -108,7 +146,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                                   width: 100,
                                   child:
                                   Image.network(
-                                      "${widget.model[index].profileImage ?? ''}",fit: BoxFit.fill,)),
+                                      "${widget.model?[index].profileImage ?? ''}",fit: BoxFit.fill,)),
                               const SizedBox(
                                 height: 15,
                               ),
@@ -131,7 +169,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                                         SizedBox(
                                             width: 120,
                                             child: Text(
-                                                "${widget.model[index].uname}",
+                                                "${widget.model?[index].uname}",
                                                 overflow:
                                                 TextOverflow.ellipsis)),
                                       ],
@@ -144,9 +182,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                                         const SizedBox(width: 3),
                                         SizedBox(
                                           width: 180,
-
                                           child: Text(
-                                              "${widget.model[index].address}",overflow: TextOverflow.ellipsis,),
+                                              "${widget.model?[index].address}",overflow: TextOverflow.ellipsis,),
                                         ),
                                       ],
                                     ),

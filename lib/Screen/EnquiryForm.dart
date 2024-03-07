@@ -9,7 +9,8 @@ import '../Helper/Color.dart';
 import '../api/api_services.dart';
 
 class EnquiryForm extends StatefulWidget {
-  const EnquiryForm({Key? key}) : super(key: key);
+  final String? vendor_Id;
+  const EnquiryForm({Key? key, this.vendor_Id}) : super(key: key);
 
   @override
   State<EnquiryForm> createState() => _EnquiryFormState();
@@ -22,22 +23,21 @@ class _EnquiryFormState extends State<EnquiryForm> {
   TextEditingController messageCtr = TextEditingController();
 
   bool load = false;
-  enquirySend() async{
+  enquirySend() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? userId = preferences.getString('userId');
-    String? vendor_id = preferences.getString("vendor_id");
     print("Enquiry Sumbit Successfullyyyyyyy");
     var headers = {
       'Cookie': 'ci_session=88d269d5bf30ff6f1a646d5b9653424dd6bc7552'
     };
-    var request = http.MultipartRequest('POST', Uri.parse('${ApiService.submitquery}'));
+    var request = http.MultipartRequest('POST', Uri.parse(ApiService.submitquery));
     request.fields.addAll({
       'name': namectr.text,
       'user_id': '$userId',
       'mobile': mobileCtr.text,
       'email': emailCtr.text,
       'message': messageCtr.text,
-      'vendor_id': '${vendor_id.toString()}'
+      'vendor_id': widget.vendor_Id.toString()
     });
     print("Enquiry Formmm parameter${request.fields}");
     request.headers.addAll(headers);
@@ -103,7 +103,7 @@ class _EnquiryFormState extends State<EnquiryForm> {
                               controller: namectr,
                               decoration: InputDecoration(
                                   hintText: "Name",
-                                  prefixIcon: const Icon(Icons.person),
+                                  prefixIcon: const Icon(Icons.person, color: colors.secondary,),
                                   border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10))
                               ),
@@ -122,8 +122,9 @@ class _EnquiryFormState extends State<EnquiryForm> {
                               keyboardType: TextInputType.number,
                               controller: mobileCtr,
                               decoration: InputDecoration(
+                                counterText: "",
                                   hintText: "Mobile",
-                                  prefixIcon: const Icon(Icons.phone),
+                                  prefixIcon: const Icon(Icons.phone,  color: colors.secondary,),
                                   border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10))
                               ),
@@ -139,8 +140,9 @@ class _EnquiryFormState extends State<EnquiryForm> {
                               keyboardType: TextInputType.emailAddress,
                               controller: emailCtr,
                               decoration: InputDecoration(
+                                counterText: "",
                                   hintText: "Email",
-                                  prefixIcon: const Icon(Icons.email),
+                                  prefixIcon: const Icon(Icons.email,  color: colors.secondary,),
                                   border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10))
                               ),
@@ -157,8 +159,8 @@ class _EnquiryFormState extends State<EnquiryForm> {
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10)),
-                                hintText: "Message",
-                                prefixIcon: Icon(Icons.inbox),
+                                hintText: "Type To Service Category Message Is Here",
+                                prefixIcon: const Icon(Icons.inbox,  color: colors.secondary,),
                               ),
                               validator: (value){
                                 if(value==null||value.isEmpty) {

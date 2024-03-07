@@ -8,7 +8,7 @@
 PRODUCT_NAME = doctorapp
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.invitation
+PRODUCT_BUNDLE_IDENTIFIER = com.invitation.design
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 com.invitation. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2023 com.invitation.design. All rights reserved.

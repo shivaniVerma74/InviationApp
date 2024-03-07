@@ -442,7 +442,10 @@ import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:doctorapp/Helper/Color.dart';
 import 'package:doctorapp/Screen/CardScreen.dart';
+import 'package:doctorapp/Screen/DownloadCard.dart';
 import 'package:doctorapp/Screen/Histroy.dart';
+import 'package:doctorapp/Screen/InviteScreen.dart';
+import 'package:doctorapp/Screen/SavedCard.dart';
 import 'package:doctorapp/api/api_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -453,6 +456,7 @@ import 'package:http/http.dart' as http;
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../New_model/AllCategoryModel.dart';
+import '../New_model/AllNewCategoryModel.dart';
 import '../New_model/Check_plan_model.dart';
 import '../New_model/EventListModel.dart';
 import '../New_model/GetCountingModel.dart';
@@ -463,9 +467,8 @@ import '../New_model/NewCategoryModel.dart';
 import '../New_model/SavedCardModel.dart';
 import '../New_model/TemplateForm.dart';
 import '../New_model/TemplatesModel.dart';
-import '../SubscriptionPlan/addPosterScreen.dart';
-import '../SubscriptionPlan/subscription_plan.dart';
 import '../widgets/widgets/commen_slider.dart';
+import 'AllCards.dart';
 import 'EventDetails.dart';
 import 'Events.dart';
 import 'MyEnquiry.dart';
@@ -539,6 +542,7 @@ class _HomeScreenState extends State<HomeScreen> {
       print(response.reasonPhrase);
     }
   }
+
   @override
   void initState() {
     super.initState();
@@ -557,10 +561,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _handlePaymentSuccess(PaymentSuccessResponse response) async {
     Fluttertoast.showToast(msg: "Card Saved successfully");
-      setState(() {
-       currentIndex = 2;
-       });
-     // purchaseCard();
+    setState(() {
+      currentIndex = 2;
+    });
+    // purchaseCard();
     //  Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
   }
 
@@ -568,8 +572,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Fluttertoast.showToast(msg: "Payment cancelled by user");
   }
 
-  void _handleExternalWallet(ExternalWalletResponse response) {
-  }
+  void _handleExternalWallet(ExternalWalletResponse response) {}
 
   String? cityID;
   getCity_id() async {
@@ -578,7 +581,8 @@ class _HomeScreenState extends State<HomeScreen> {
     print("citiee in homeee pageee $cityID");
   }
 
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
 
   Future<Null> _refresh() {
     return callApi();
@@ -622,14 +626,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   NewCategoryModel? weddingCardList;
   NewCategoryModel? birthDayCardList;
-  AllCategoryModel? allCategoriesModel;
+  AllNewCategoryModel? allNewCategoriesModel;
   getCategory() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     print("Get category APiiii");
     var headers = {
       'Cookie': 'ci_session=967018c55118c57e9b50bc9d10a91f021f6744e1'
     };
-    var request = http.MultipartRequest('POST', Uri.parse(ApiService.categories));
+    var request =
+        http.MultipartRequest('POST', Uri.parse(ApiService.categories));
 
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
@@ -646,8 +651,10 @@ class _HomeScreenState extends State<HomeScreen> {
         // Navigator.push(context, MaterialPageRoute(builder: (context)=>SubscriptionPlan()));
       }
       setState(() {
-        weddingCardList!.data!.removeWhere((element) => element.cName != "Wedding Card");
-        birthDayCardList!.data!.removeWhere((element) => element.cName != "Birthday Card");
+        weddingCardList!.data!
+            .removeWhere((element) => element.cName != "Wedding Card");
+        birthDayCardList!.data!
+            .removeWhere((element) => element.cName != "Birthday Card");
       });
       print(weddingCardList);
     } else {
@@ -655,25 +662,22 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-
   allCategory() async {
     var headers = {
       'Cookie': 'ci_session=967018c55118c57e9b50bc9d10a91f021f6744e1'
     };
     var request =
-    http.MultipartRequest('POST', Uri.parse(ApiService.categories));
-    request.fields.addAll({
-      'cat_type': '1'
-    });
+        http.MultipartRequest('POST', Uri.parse(ApiService.categories));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       var result = await response.stream.bytesToString();
-      final jsonResponse = AllCategoryModel.fromJson(json.decode(result));
+      final jsonResponse = AllNewCategoryModel.fromJson(json.decode(result));
       print('categoriess responsee $jsonResponse');
       setState(() {
-        allCategoriesModel = jsonResponse;
-        print("alll catetetetetety ${allCategoriesModel?.data?.first.cName}");
+        allNewCategoriesModel = jsonResponse;
+        print(
+            "alll catetetetetety ${allNewCategoriesModel?.data?.first.cName}");
       });
     } else {
       print(response.reasonPhrase);
@@ -684,7 +688,6 @@ class _HomeScreenState extends State<HomeScreen> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.setString('LocalId', id);
   }
-
 
   void _showReligionDialog(BuildContext context) {
     showDialog(
@@ -747,12 +750,88 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 10,
                   ),
                   customTabbar(),
+                  customTabBar()
                   // SizedBox(height: 100,),
                 ],
               ),
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  customTabBar() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox(
+        child: GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                childAspectRatio: 0.75),
+            itemCount: allNewCategoriesModel?.data?.length ?? 0,
+            itemBuilder: (_, index) {
+              return InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      //   return BookingDetails(
+                      //   model: allCategoriesModel?.data?[index].temp,
+                      //   ind: index,
+                      // );
+                      return AllCardsView(
+                          cardName: allNewCategoriesModel!.data![index].cName
+                              .toString(),
+                          cat_id:
+                              allNewCategoriesModel!.data![index].id.toString(),
+                          sub_Id: allNewCategoriesModel!
+                              .data![index].subCategories
+                              .toString());
+                    }),
+                  );
+                },
+                child: Container(
+                  clipBehavior: Clip.hardEdge,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                          color: colors.black54,
+                          // spreadRadius: 0.5,
+                          blurRadius: 1,
+                          offset: Offset(0, 1)),
+                    ],
+                  ),
+                  child:
+                      // Image.asset(
+                      //   "assets/images/weddingtwo.png",
+                      //   fit: BoxFit.fill,
+                      // ),
+                      Column(
+                    //  mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.network(
+                        "${allNewCategoriesModel?.data?[index].img}",
+                        fit: BoxFit.fill,
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        "${allNewCategoriesModel?.data?[index].cName}",
+                        style: const TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w400),
+                      ),
+                      // const SizedBox(height: 4),
+                    ],
+                  ),
+                ),
+              );
+            }),
       ),
     );
   }
@@ -788,8 +867,8 @@ class _HomeScreenState extends State<HomeScreen> {
     var headers = {
       'Cookie': 'ci_session=e6545df7c1714023144b9f63cc94cd2118c2e751'
     };
-    var request = http.MultipartRequest(
-        'POST', Uri.parse(ApiService.geteventmanagers));
+    var request =
+        http.MultipartRequest('POST', Uri.parse(ApiService.geteventmanagers));
     request.fields.addAll({'city_id': city_id.toString()});
     print("City id in event manager page ${request.fields}");
     request.headers.addAll(headers);
@@ -819,14 +898,16 @@ class _HomeScreenState extends State<HomeScreen> {
   customTabbar() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-     children: [
+      children: [
         Row(
-        children: [
+          children: [
             InkWell(
               onTap: () {
                 setState(() {
                   currentIndex = 1;
                 });
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SavedCardScreen()));
               },
               child: Container(
                 height: 90,
@@ -844,16 +925,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(4)
-                      ),
+                          borderRadius: BorderRadius.circular(4)),
                       child: Column(
                         children: [
                           Image.asset(
-                            "assets/images/cardimage.png",
-                            height: 30,
-                            width: 30,
+                            "assets/images/save.png",
+                            height: 50,
+                            width: 50,
                           ),
-                          const SizedBox(height: 6),
+                          // const SizedBox(height: 6),
                           Text(
                             'Saved',
                             style: TextStyle(
@@ -866,7 +946,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-
                     Divider(
                       thickness: 4,
                       color: currentIndex == 1
@@ -879,14 +958,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             InkWell(
               onTap: () {
-
                 print("");
                 setState(() {
-                  // Navigator.of(context).push(MaterialPageRoute(
-                  //   builder: (context) => NextPage(),
-                  // ));
                   currentIndex = 2;
                 });
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => DownloadCads()));
               },
               child: Container(
                 height: 90,
@@ -896,103 +973,106 @@ class _HomeScreenState extends State<HomeScreen> {
                     //     ? colors.primary
                     //     : Colors.white,
                     // border: Border.all(color: colors.primary),
-                    borderRadius: BorderRadius.circular(5)),
+                    borderRadius: BorderRadius.circular(5),
+                ),
                 child:
-                  // padding: const EdgeInsets.only(top: 1, left: 30, right: 10),
-                  Column(
-                    children: [
-                      Container(
-                        width: 90,
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(4)
-                        ),
-                        child: Column(
-                          children: [
-                            Image.asset(
-                              "assets/images/booking.png",
-                              height: 30,
-                              width: 30,
+                    // padding: const EdgeInsets.only(top: 1, left: 30, right: 10),
+                    Column(
+                  children: [
+                    Container(
+                      width: 90,
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(4)),
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            "assets/images/download.png",
+                            height: 50,
+                            width: 50,
+                          ),
+                          // const SizedBox(height: 5),
+                          Text(
+                            'Downloaded',
+                            style: TextStyle(
+                              color: currentIndex == 2
+                                  ? colors.secondary
+                                  : colors.blackTemp,
+                              fontSize: 12,
                             ),
-                            const SizedBox(height: 5),
-                            Text(
-                              'Downloaded',
-                              style: TextStyle(
-                                color: currentIndex == 2 ? colors.secondary : colors.blackTemp, fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      Divider(
-                        thickness: 4,
-                        color: currentIndex == 2 ? colors.secondary : Colors.white.withOpacity(0),
-                      ),
-                    ],
-                  ),
-
+                    ),
+                    Divider(
+                      thickness: 4,
+                      color: currentIndex == 2
+                          ? colors.secondary
+                          : Colors.white.withOpacity(0),
+                    ),
+                  ],
+                ),
               ),
             ),
             InkWell(
               onTap: () {
                 setState(() {
-                  // Navigator.of(context).push(MaterialPageRoute(
-                  //   builder: (context) => NextPage(),
-                  // ));
                   currentIndex = 3;
                 });
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const InviteScreen()));
               },
               child: Container(
                 height: 90,
-                width: MediaQuery.of(context).size.width/3,
+                width: MediaQuery.of(context).size.width / 3,
                 decoration: BoxDecoration(
-                    // color: currentIndex == 2
-                    //     ? colors.primary
-                    //     : Colors.white,
-                    // border: Border.all(color: colors.primary),
-                    borderRadius: BorderRadius.circular(5),
+                  // color: currentIndex == 2
+                  //     ? colors.primary
+                  //     : Colors.white,
+                  // border: Border.all(color: colors.primary),
+                  borderRadius: BorderRadius.circular(5),
                 ),
                 child:
-                  //padding: const EdgeInsets.only(top: 1, left: 30, right: 10),
-                  Column(
-                    children: [
-                      Container(
-                        width: 90,
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(4)
-                        ),
-                        child: Column(
-                          children: [
-                            Image.asset(
-                              "assets/images/eventimage.png",
-                              height: 30,
-                              width: 30,
+                    //padding: const EdgeInsets.only(top: 1, left: 30, right: 10),
+                    Column(
+                  children: [
+                    Container(
+                      width: 90,
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(4)),
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            "assets/images/invite.png",
+                            height: 50,
+                            width: 50,
+                          ),
+                          // const SizedBox(height: 5),
+                          Text(
+                            'Invite',
+                            style: TextStyle(
+                              color: currentIndex == 3
+                                  ? colors.secondary
+                                  : colors.blackTemp,
+                              fontSize: 12,
                             ),
-                            const SizedBox(height: 5),
-                            Text(
-                              'Invite',
-                              style: TextStyle(
-                                color: currentIndex == 3
-                                    ? colors.secondary
-                                    : colors.blackTemp,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      Divider(
-                        thickness: 4,
-                        color: currentIndex == 3
-                            ? colors.secondary
-                            : Colors.white.withOpacity(0),
-                      ),
-                    ],
-                  ),
-
+                    ),
+                    Divider(
+                      thickness: 4,
+                      color: currentIndex == 3
+                          ? colors.secondary
+                          : Colors.white.withOpacity(0),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -1013,12 +1093,9 @@ class _HomeScreenState extends State<HomeScreen> {
         // const SizedBox(
         //   height: 20,
         // ),
-        currentIndex == 1
-            ? myCard()
-            : currentIndex == 2
-               ? getCategories()
-                // ?
-                : Container(child: const Center(child: Text("No Data Available"))),
+        // currentIndex == 1 ? Navigator.push(context, MaterialPageRoute(builder: (context) => SavedCardScreen())) : currentIndex == 2 ? Navigator.push(context, MaterialPageRoute(builder: (context) => DownloadCads()))
+        // : Navigator.push(context, MaterialPageRoute(builder: (context) => InviteScreen()));
+        // Container(child: const Center(child: Text("No Data Available"))),
       ],
     );
   }
@@ -1032,7 +1109,7 @@ class _HomeScreenState extends State<HomeScreen> {
       'Cookie': 'ci_session=de18d172f08f4702a5883be1ed7a82cdccd37f64'
     };
     var request =
-    http.MultipartRequest('POST', Uri.parse(ApiService.savedcard));
+        http.MultipartRequest('POST', Uri.parse(ApiService.savedcard));
     request.fields.addAll({'user_id': '$userId'});
     print("rrrrrr ${request.fields}");
     request.headers.addAll(headers);
@@ -1063,23 +1140,27 @@ class _HomeScreenState extends State<HomeScreen> {
         // const SizedBox(height: 20),
         DropdownButton<String>(
           hint: const Text("Select Religion"),
-           value: selectedReligion,
+          value: selectedReligion,
           // icon: const Icon(Icons.arrow_downward),
           iconSize: 24,
           elevation: 16,
           style: const TextStyle(color: Colors.deepPurple),
           onChanged: (String? newValue) {
-            if(newValue != null) {
+            if (newValue != null) {
               setState(() {
-              selectedReligion = newValue;
-              Navigator.pop(context);
-              _showReligionDialog(context);
-
-            });
+                selectedReligion = newValue;
+                Navigator.pop(context);
+                _showReligionDialog(context);
+              });
             }
           },
-          items: <String>['Christianity', 'Islam', 'Hinduism', 'Buddhism', 'Judaism']
-              .map<DropdownMenuItem<String>>((String value) {
+          items: <String>[
+            'Christianity',
+            'Islam',
+            'Hinduism',
+            'Buddhism',
+            'Judaism'
+          ].map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(value),
@@ -1096,36 +1177,40 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    primary: colors.secondary,
-                    fixedSize: const Size(100, 32)
-                ),
+                    primary: colors.secondary, fixedSize: const Size(100, 32)),
                 onPressed: () {
-                  if(selectedReligion != null){
+                  if (selectedReligion != null) {
                     Navigator.pop(context);
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=> const WeddingForm()));
-
-                  }
-                  else{
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const WeddingForm()));
+                  } else {
                     Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Please Select Religion"),backgroundColor: Colors.red,)
-                    );
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Please Select Religion"),
+                      backgroundColor: Colors.red,
+                    ));
                   }
                 },
                 child: const Padding(
-                  padding:  EdgeInsets.all(4.0),
-                  child:  Text("Submit",),
+                  padding: EdgeInsets.all(4.0),
+                  child: Text(
+                    "Submit",
+                  ),
                 )),
-            const SizedBox(width: 32,),
+            const SizedBox(
+              width: 32,
+            ),
             ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: colors.secondary,
-                    fixedSize: const Size(100, 32)),
-                onPressed: () {
-
-                },
+                style: ElevatedButton.styleFrom(
+                    primary: colors.secondary, fixedSize: const Size(100, 32)),
+                onPressed: () {},
                 child: const Padding(
-                  padding:  EdgeInsets.all(4.0),
-                  child:  Text("Skip",),
+                  padding: EdgeInsets.all(4.0),
+                  child: Text(
+                    "Skip",
+                  ),
                 )),
           ],
         ),
@@ -1134,52 +1219,56 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   myCard() {
-    return savedCardModel?.status == false ? const Text("No Card Found")
-        : savedCardModel?.data?.length == null || savedCardModel?.data?.length == ""
-        ? const Center(
-        child: CircularProgressIndicator(
-        color: colors.secondary),
-    ): ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: savedCardModel?.data?.length,
-        itemBuilder: (context, i) {
-          return templateCard1(i);
-        });
+    return savedCardModel?.status == false
+        ? const Text("No Card Found")
+        : savedCardModel?.data?.length == null ||
+                savedCardModel?.data?.length == ""
+            ? const Center(
+                child: CircularProgressIndicator(color: colors.secondary),
+              )
+            : ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: savedCardModel?.data?.length,
+                itemBuilder: (context, i) {
+                  return templateCard1(i);
+                });
   }
 
-  templateCardGestures({String? text, Icon? icon, VoidCallback? onTap}){
-
+  templateCardGestures({String? text, Icon? icon, VoidCallback? onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Column(
         children: [
           icon!,
-          const SizedBox(height: 2,),
-          Text(text!, style: const TextStyle(color: colors.secondary,fontSize: 16),)
+          const SizedBox(
+            height: 2,
+          ),
+          Text(
+            text!,
+            style: const TextStyle(color: colors.secondary, fontSize: 16),
+          )
         ],
       ),
     );
-
-
-
   }
 
-   templateCard1(int i){
+  templateCard1(int i) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: Container(
         padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          gradient: LinearGradient(
-              colors: [Colors.white.withOpacity(0.05),Colors.white.withOpacity(0.1),Colors.white.withOpacity(0.05)]
-          )),
-
+            borderRadius: BorderRadius.circular(16),
+            gradient: LinearGradient(colors: [
+              Colors.white.withOpacity(0.05),
+              Colors.white.withOpacity(0.1),
+              Colors.white.withOpacity(0.05)
+            ])),
         child: Column(
           children: [
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 _showReligionDialog(context);
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => const WeddingForm()));
               },
@@ -1192,38 +1281,43 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Image.network(
-                                      "${savedCardModel?.data?[i].image}", fit: BoxFit.fill,
-                                    ),
+                  "${savedCardModel?.data?[i].image}",
+                  fit: BoxFit.fill,
+                ),
               ),
             ),
-            const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                   templateCardGestures(
-                     text: 'Save',
-                     icon: const Icon(Icons.download,color: colors.secondary,),
-                     onTap: (){
-                       openCheckout(300);
-                     }
-                   ),
-                templateCardGestures(
-                    text: 'invite',
-                    icon: const Icon(Icons.share,color: colors.secondary),
-                    onTap: (){
-                    share();
-                    }
-                )
-              ],),
+                  templateCardGestures(
+                      text: 'Save',
+                      icon: const Icon(
+                        Icons.download,
+                        color: colors.secondary,
+                      ),
+                      onTap: () {
+                        openCheckout(300);
+                      }),
+                  templateCardGestures(
+                      text: 'invite',
+                      icon: const Icon(Icons.share, color: colors.secondary),
+                      onTap: () {
+                        share();
+                      })
+                ],
+              ),
             )
           ],
         ),
       ),
     );
-   }
+  }
   // templateCard(int index) {
   //   GlobalKey keyList = GlobalKey();
   //   return Column(
@@ -1310,7 +1404,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int? pricerazorpayy;
   void openCheckout(amount) async {
     double res = double.parse(amount.toString());
-    pricerazorpayy= int.parse(res.toStringAsFixed(0)) * 100;
+    pricerazorpayy = int.parse(res.toStringAsFixed(0)) * 100;
     print("checking razorpay price ${pricerazorpayy.toString()}");
     print("checking razorpay price ${pricerazorpayy.toString()}");
     // Navigator.of(context).pop();
@@ -1318,7 +1412,7 @@ class _HomeScreenState extends State<HomeScreen> {
       'key': 'rzp_test_1DP5mmOlF5G5ag',
       'amount': "$pricerazorpayy",
       'name': 'Invitation',
-      'image':'assets/images/homeimage.png',
+      'image': 'assets/images/homeimage.png',
       'description': 'Invitation',
     };
     try {
@@ -1327,6 +1421,7 @@ class _HomeScreenState extends State<HomeScreen> {
       debugPrint('Error: e');
     }
   }
+
   Future<void> share() async {
     await FlutterShare.share(
         title: 'Atithi',
@@ -1548,14 +1643,17 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const WeddingForm()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const WeddingForm()));
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        image: const DecorationImage(
-                            image: AssetImage("assets/images/wddingimg.png"),
-                            fit: BoxFit.fill),
+                      borderRadius: BorderRadius.circular(12),
+                      image: const DecorationImage(
+                          image: AssetImage("assets/images/wddingimg.png"),
+                          fit: BoxFit.fill),
                     ),
                     //    padding: EdgeInsets.all(20),
                     // child: Image.asset('assets/images/wddingimg.png'),
@@ -1565,7 +1663,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               }),
-           const Card(
+          const Card(
             elevation: 0,
             child: ListTile(
               title: Text(
@@ -1581,9 +1679,10 @@ class _HomeScreenState extends State<HomeScreen> {
           GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: birthDayCardList?.data == null ? 0
+              itemCount: birthDayCardList?.data == null
+                  ? 0
                   : birthDayCardList?.data?[0].templates!.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 mainAxisExtent: MediaQuery.of(context).size.height * 0.28,
                 crossAxisCount: 2,
                 mainAxisSpacing: 20.0,
@@ -1595,23 +1694,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 return InkWell(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>  Form_Screen(
-                                image: birthDayCardList?.data?[index].templates![index].image,
-                                temp_Id: birthDayCardList?.data?[index].templates![index].id
-                            ),
-                        ),
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Form_Screen(
+                            image: birthDayCardList
+                                ?.data?[index].templates![index].image,
+                            temp_Id: birthDayCardList
+                                ?.data?[index].templates![index].id),
+                      ),
                     );
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        image: DecorationImage(
-                            image: NetworkImage(
-                              birthDayCardList?.data?[index].templates![index].preview ?? '',
-                            ),
-                            fit: BoxFit.fill),
+                      borderRadius: BorderRadius.circular(15),
+                      image: DecorationImage(
+                          image: NetworkImage(
+                            birthDayCardList
+                                    ?.data?[index].templates![index].preview ??
+                                '',
+                          ),
+                          fit: BoxFit.fill),
                     ),
                   ),
                 );
@@ -1624,37 +1726,37 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget templateView2(Templates templates, int i) {
-    print("templates $templatesModel");
-    return Container(
-      height: MediaQuery.of(context).size.height / 2.3,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
-        itemCount: 1,
-        itemBuilder: (BuildContext context, int index) {
-          return InkWell(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const WeddingForm()));
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(1),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                    child:
-                        // Image.network(templates.preview ?? '', fit: BoxFit.fill)
-                        i == 0
-                            ? Image.asset("assets/images/wddingimg.png")
-                            : Image.network("${templates.preview}",
-                                fit: BoxFit.fill)),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
+  // Widget templateView2(Templates templates, int i) {
+  //   print("templates $templatesModel");
+  //   return Container(
+  //     height: MediaQuery.of(context).size.height / 2.3,
+  //     child: ListView.builder(
+  //       scrollDirection: Axis.horizontal,
+  //       shrinkWrap: true,
+  //       itemCount: 1,
+  //       itemBuilder: (BuildContext context, int index) {
+  //         return InkWell(
+  //           onTap: () {
+  //             Navigator.push(context, MaterialPageRoute(builder: (context) => const WeddingForm()));
+  //           },
+  //           child: Padding(
+  //             padding: const EdgeInsets.all(1),
+  //             child: Padding(
+  //               padding: const EdgeInsets.all(8.0),
+  //               child: Container(
+  //                   child:
+  //                       // Image.network(templates.preview ?? '', fit: BoxFit.fill)
+  //                       i == 0
+  //                           ? Image.asset("assets/images/wddingimg.png")
+  //                           : Image.network("${templates.preview}",
+  //                               fit: BoxFit.fill)),
+  //             ),
+  //           ),
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
 
   templateView() {
     return Container(
@@ -1733,28 +1835,28 @@ class _HomeScreenState extends State<HomeScreen> {
   //     // );
   // }
 
-
-  getCategories(){
-    return savedCardModel?.status == false ? Text("No Card Found")
+  getCategories() {
+    return savedCardModel?.status == false
+        ? Text("No Card Found")
         : savedCardModel?.data?.length == null ||
-        savedCardModel?.data?.length == ""
-        ? const Center(
-      child: CircularProgressIndicator(
-        color: colors.secondary,
-      ),
-    )
-        : ListView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: savedCardModel?.data?.length,
-        itemBuilder: (context, i) {
-          return downloadCard1(i);
-            // downloadCard(i);
-        });
+                savedCardModel?.data?.length == ""
+            ? const Center(
+                child: CircularProgressIndicator(
+                  color: colors.secondary,
+                ),
+              )
+            : ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: savedCardModel?.data?.length,
+                itemBuilder: (context, i) {
+                  return downloadCard1(i);
+                  // downloadCard(i);
+                });
   }
+
   downloadFile(String url, String filename) async {
     FileDownloader.downloadFile(
-
         url: url,
         name: filename,
         onDownloadCompleted: (path) {
@@ -1768,7 +1870,6 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 const Text('Card downloaded successfully'),
                 TextButton(onPressed: () {}, child: const Text("View"))
-
               ],
             ),
           );
@@ -1776,14 +1877,16 @@ class _HomeScreenState extends State<HomeScreen> {
           //This will be the path of the downloaded file
         });
   }
-  downloadCard1(int i){
+
+  downloadCard1(int i) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         children: [
           GestureDetector(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const WeddingForm()));
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const WeddingForm()));
             },
             child: Container(
               clipBehavior: Clip.hardEdge,
@@ -1794,11 +1897,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Image.network(
-                "${savedCardModel?.data?[i].image}", fit: BoxFit.fill,
+                "${savedCardModel?.data?[i].image}",
+                fit: BoxFit.fill,
               ),
             ),
           ),
-          const SizedBox(height: 10,),
+          const SizedBox(
+            height: 10,
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Row(
@@ -1812,17 +1918,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 // ),
                 templateCardGestures(
                     text: 'Download',
-                    icon: const Icon(Icons.download,color: colors.secondary,),
-                    onTap: (){
-                      downloadFile(savedCardModel!.data![i].image.toString(), "Invitation_Card");
-                    }
-                ),
+                    icon: const Icon(
+                      Icons.download,
+                      color: colors.secondary,
+                    ),
+                    onTap: () {
+                      downloadFile(savedCardModel!.data![i].image.toString(),
+                          "Invitation_Card");
+                    }),
                 templateCardGestures(
                     text: 'invite',
-                    icon: const Icon(Icons.share,color: colors.secondary),
-                    onTap: (){}
-                )
-              ],),
+                    icon: const Icon(Icons.share, color: colors.secondary),
+                    onTap: () {})
+              ],
+            ),
           )
         ],
       ),
@@ -1913,10 +2022,6 @@ class _HomeScreenState extends State<HomeScreen> {
   //   );
   // }
 
-
-
-
-
   // getCategories(){
   //   return Container(
   //     height: MediaQuery.of(context).size.height/1.2,
@@ -1963,13 +2068,12 @@ class _HomeScreenState extends State<HomeScreen> {
   //   );
   // }
 
-
   myEnquiry() {
     return eventListModel?.status == false
         ? Center(
             child: Text("No Booking Found "),
           )
-          :Column(
+        : Column(
             children: [
               eventListModel == null
                   ? Center(

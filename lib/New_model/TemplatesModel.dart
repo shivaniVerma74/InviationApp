@@ -58,69 +58,93 @@ TemplatesModel copyWith({  String? responseCode,
 
 class Data {
   Data({
-      String? id, 
-      String? title, 
-      String? description, 
-      String? template, 
-      dynamic html, 
-      String? preview, 
-      String? image,}){
+    String? categoryId,
+    String? subCategoryId,
+    String? id,
+    String? title,
+    String? description,
+    String? template,
+    dynamic html,
+    String? preview,
+    String? price,
+    String? image,}){
+    _categoryId = categoryId;
+    _subCategoryId = subCategoryId;
     _id = id;
     _title = title;
     _description = description;
     _template = template;
     _html = html;
     _preview = preview;
+    _price = price;
     _image = image;
-}
+  }
 
   Data.fromJson(dynamic json) {
+    _categoryId = json['category_id'];
+    _subCategoryId = json['sub_category_id'];
     _id = json['id'];
     _title = json['title'];
     _description = json['description'];
     _template = json['template'];
     _html = json['html'];
     _preview = json['preview'];
+    _price = json['price'];
     _image = json['image'];
   }
+  String? _categoryId;
+  String? _subCategoryId;
   String? _id;
   String? _title;
   String? _description;
   String? _template;
   dynamic _html;
   String? _preview;
+  String? _price;
   String? _image;
-Data copyWith({  String? id,
-  String? title,
-  String? description,
-  String? template,
-  dynamic html,
-  String? preview,
-  String? image,
-}) => Data(  id: id ?? _id,
-  title: title ?? _title,
-  description: description ?? _description,
-  template: template ?? _template,
-  html: html ?? _html,
-  preview: preview ?? _preview,
-  image: image ?? _image,
-);
+  Data copyWith({  String? categoryId,
+    String? subCategoryId,
+    String? id,
+    String? title,
+    String? description,
+    String? template,
+    dynamic html,
+    String? preview,
+    String? price,
+    String? image,
+  }) => Data(  categoryId: categoryId ?? _categoryId,
+    subCategoryId: subCategoryId ?? _subCategoryId,
+    id: id ?? _id,
+    title: title ?? _title,
+    description: description ?? _description,
+    template: template ?? _template,
+    html: html ?? _html,
+    preview: preview ?? _preview,
+    price: price ?? _price,
+    image: image ?? _image,
+  );
+  String? get categoryId => _categoryId;
+  String? get subCategoryId => _subCategoryId;
   String? get id => _id;
   String? get title => _title;
   String? get description => _description;
   String? get template => _template;
   dynamic get html => _html;
   String? get preview => _preview;
+  String? get price => _price;
   String? get image => _image;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    map['category_id'] = _categoryId;
+    map['sub_category_id'] = _subCategoryId;
     map['id'] = _id;
     map['title'] = _title;
     map['description'] = _description;
     map['template'] = _template;
     map['html'] = _html;
     map['preview'] = _preview;
+    map['price'] = _price;
     map['image'] = _image;
     return map;
   }
